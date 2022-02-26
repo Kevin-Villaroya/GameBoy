@@ -10,14 +10,15 @@ class Processor{
     private:
         Memory memory;
         Registers registers;
-        uint8_t rom[CARTRIGBE_SIZE];
 
         Instruction* fetch();
 
-        Instruction* decode(unsigned char);
+        Instruction* decodeAndLoad(unsigned char);
         bool execute(Instruction&);
+
+        bool startupSequence();
     public:
-        Processor(uint8_t instr[CARTRIGBE_SIZE]);
+        Processor(char* path);
         bool run();
 };
 

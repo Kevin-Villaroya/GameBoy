@@ -1,32 +1,53 @@
 #include "Processor.h"
+#include "InstructionFactory.h"
+#include "startupException/StartupException.h"
+#include <iostream>
 
-Processor::Processor(uint8_t rom[CARTRIGBE_SIZE]){
-    for(int i = 0; i < CARTRIGBE_SIZE; i++){
-        this->rom[i] = rom[i];
-    }
+Processor::Processor(char* path) : memory(path){
 }
 
 Instruction* Processor::fetch(){
-    unsigned char instrByte = this->rom[this->registers.getPC()];
+    this->registers.incrementPc(12);
 
-    Instruction* currentInstr = this->decode(instrByte);
+    unsigned char instrByte = this->memory[this->registers.getPC()];
+
+    Instruction* currentInstr = this->decodeAndLoad(instrByte);
     this->registers.incrementPc(currentInstr->getSize());
 
     return currentInstr;
 }
 
-Instruction* Processor::decode(unsigned char instr){
-    
+Instruction* Processor::decodeAndLoad(unsigned char byteInstr){
+    Instruction* instr = InstructionFactory::forCode(byteInstr);
+    instr->setParameters(this->memory);
+
+    return instr;
 }
 
 bool Processor::execute(Instruction& instr){
     return instr.execute();
 }
 
+bool Processor::startupSequence(){
+    //TODO
+    return true;
+}
+
 bool Processor::run(){
-    while (true)
-    {
-        Instruction* instr = this->fetch();
-        this->execute(*instr);
-    }
+    bool canBoot = this->startupSequence();
+
+    if(canBoot){
+        this->memory.init();
+        this->registers.init(this->memory);
+        this->registers.setPC(0x100);
+
+        while (true)
+        {
+            Instruction* instr = this->fetch();
+            this->execute(*instr);
+            //display
+        }
+    }else{
+        throw startupSequence();
+    }  
 }

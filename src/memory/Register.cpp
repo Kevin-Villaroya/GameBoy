@@ -1,6 +1,23 @@
 #include "Registers.h"
+#include <iostream>
 
-void Registers::incrementPc(unsigned char incr){
+void Registers::init(Memory ram){
+    this->setA(ram[0x01]);
+    this->setF(ram[0xB0]);
+
+    this->setB(ram[0x0013]);
+    this->setC(ram[0x0014]);
+
+    this->setD(ram[0x00D8]);
+    this->setE(ram[0x00D9]);
+
+    this->setH(ram[0x014D]);
+    this->setL(ram[0x014E]);
+
+    this->setSP(ram[0xFFFE]);
+}
+
+void Registers::incrementPc(unsigned short incr){
     this->pc += incr;
 }
 
@@ -68,11 +85,31 @@ unsigned short Registers::getHL(){
     return hl;
 }
 
-unsigned char Registers::getSP(){
+void Registers::setAF(unsigned short af){
+    this->f = af;
+    this->a = af >> 8;
+}
+
+void Registers::setBC(unsigned short bc){
+    this->b = bc;
+    this->c = bc >> 8;
+}
+
+void Registers::setDE(unsigned short de){
+    this->d = de;
+    this->e = de >> 8;
+}
+
+void Registers::setHL(unsigned short hl){
+    this->h = hl;
+    this->l = hl >> 8;
+}
+
+unsigned short Registers::getSP(){
     return this->sp;
 }
 
-unsigned char Registers::getPC(){
+unsigned short Registers::getPC(){
     return this->pc;
 }
 

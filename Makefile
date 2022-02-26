@@ -1,4 +1,4 @@
-CFLAG = -Wall -ansi -std=c++17 -lstdc++fs -Wno-psabi
+CFLAG = -Wall -ansi -pedantic -std=c++11 -lstdc++fs -Wno-psabi
 CLIB=
 
 CC = g++

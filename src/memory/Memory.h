@@ -3,12 +3,22 @@
 
 #include <cstdint>
 
-#define CARTRIGBE_SIZE 32000
-
+#define CARTRIGBE_SIZE 32768
+#define RAM_SIZE 65536
 
 class Memory{
     private:
-        uint8_t memory[65536];
+        unsigned char memory[RAM_SIZE];
+
+        void resetMemory();
+        void setMemory();
+    
+    public:
+        Memory(char* path);
+
+        void init();
+        unsigned char get(unsigned short pos);
+        unsigned char operator[](unsigned short);
 };
 
 #endif

@@ -1,8 +1,10 @@
 #ifndef __REGISTER_H__
 #define __REGISTER_H__
 
+#include "Memory.h"
+
 class Registers {
-public:
+private:
     //registers in cpu
 	unsigned char a;
     unsigned char b;
@@ -17,7 +19,10 @@ public:
 	unsigned short sp;
 	unsigned short pc;
 
-    void incrementPc(unsigned char);
+public:
+    void init(Memory ram);
+
+    void incrementPc(unsigned short);
 
     unsigned char getA();
     unsigned char getB();
@@ -33,8 +38,13 @@ public:
     unsigned short getDE();
     unsigned short getHL();
 
-    unsigned char getSP();
-    unsigned char getPC();
+    void setAF(unsigned short af);
+    void setBC(unsigned short bc);
+    void setDE(unsigned short de);
+    void setHL(unsigned short hl);
+
+    unsigned short getSP();
+    unsigned short getPC();
 
     void setA(unsigned char);
     void setB(unsigned char);
