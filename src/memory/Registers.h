@@ -2,6 +2,27 @@
 #define __REGISTER_H__
 
 #include "Memory.h"
+#include <string>
+
+enum class RegisterName{
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    L,
+    H
+};
+
+enum class DoubleRegisterName{
+    AF,
+    BC,
+    DE,
+    HL,
+    PC,
+    SP
+};
 
 class Registers {
 private:
@@ -18,6 +39,8 @@ private:
     //registers pointer
 	unsigned short sp;
 	unsigned short pc;
+
+    unsigned char flags;
 
 public:
     void init(Memory ram);
@@ -38,13 +61,29 @@ public:
     unsigned short getDE();
     unsigned short getHL();
 
+    unsigned short getSP();
+    unsigned short getPC();
+
+    unsigned char getRegister(RegisterName);
+    unsigned short getDoubleRegister(DoubleRegisterName);
+
+    bool isFlagZ();
+    bool isFlagN();
+    bool isFlagH();
+    bool isFlagC();
+
+    void setFlagZ(bool value);
+    void setFlagN(bool value);   
+    void setFlagH(bool value);
+    void setFlagC(bool value);
+
     void setAF(unsigned short af);
     void setBC(unsigned short bc);
     void setDE(unsigned short de);
     void setHL(unsigned short hl);
 
-    unsigned short getSP();
-    unsigned short getPC();
+    void setRegister(RegisterName, unsigned char);
+    void setDoubleRegister(DoubleRegisterName, unsigned short);
 
     void setA(unsigned char);
     void setB(unsigned char);

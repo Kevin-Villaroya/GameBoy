@@ -2,14 +2,17 @@
 #define __INSTRUCTION_H__
 
 #include "../../memory/Memory.h"
+#include "../../memory/Registers.h"
 
 class Instruction{
     private:
         
     public:
-        virtual bool execute() = 0;
-        virtual unsigned char getSize() = 0;
-        virtual void setParameters(Memory) = 0;
+        virtual void execute(Memory& ram, Registers& registers) = 0;
+        virtual unsigned int getSize() = 0;
+        virtual unsigned int getTiming() = 0;
+        virtual void setParameters(const Memory&, unsigned short) = 0;
+        virtual ~Instruction(){}
 };
 
 #endif

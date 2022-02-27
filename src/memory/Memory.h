@@ -17,8 +17,9 @@ class Memory{
         Memory(char* path);
 
         void init();
-        unsigned char get(unsigned short pos);
-        unsigned char operator[](unsigned short);
+        unsigned char get(unsigned short pos) const;
+        unsigned char operator[](unsigned short) const;
+        unsigned short getDouble(unsigned short pos) const;
 };
 
 #endif

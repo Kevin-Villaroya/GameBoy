@@ -14,12 +14,12 @@ class Processor{
         Instruction* fetch();
 
         Instruction* decodeAndLoad(unsigned char);
-        bool execute(Instruction&);
+        void execute(Instruction&);
 
         bool startupSequence();
     public:
         Processor(char* path);
-        bool run();
+        void run();
 };
 
 #endif

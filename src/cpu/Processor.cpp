@@ -7,8 +7,6 @@ Processor::Processor(char* path) : memory(path){
 }
 
 Instruction* Processor::fetch(){
-    this->registers.incrementPc(12);
-
     unsigned char instrByte = this->memory[this->registers.getPC()];
 
     Instruction* currentInstr = this->decodeAndLoad(instrByte);
@@ -19,13 +17,13 @@ Instruction* Processor::fetch(){
 
 Instruction* Processor::decodeAndLoad(unsigned char byteInstr){
     Instruction* instr = InstructionFactory::forCode(byteInstr);
-    instr->setParameters(this->memory);
+    instr->setParameters(this->memory, this->registers.getPC() + 1);
 
     return instr;
 }
 
-bool Processor::execute(Instruction& instr){
-    return instr.execute();
+void Processor::execute(Instruction& instr){
+    instr.execute(this->memory, this->registers);
 }
 
 bool Processor::startupSequence(){
@@ -33,7 +31,7 @@ bool Processor::startupSequence(){
     return true;
 }
 
-bool Processor::run(){
+void Processor::run(){
     bool canBoot = this->startupSequence();
 
     if(canBoot){
@@ -46,6 +44,8 @@ bool Processor::run(){
             Instruction* instr = this->fetch();
             this->execute(*instr);
             //display
+
+            delete instr;
         }
     }else{
         throw startupSequence();

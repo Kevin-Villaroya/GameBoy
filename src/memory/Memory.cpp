@@ -36,20 +36,30 @@ void Memory::init(){
     this->setMemory();
 }
 
-unsigned char Memory::get(unsigned short pos){
+unsigned char Memory::get(unsigned short pos) const{
     return this->memory[pos];
 }
 
-unsigned char Memory::operator[](unsigned short pos){
+unsigned char Memory::operator[](unsigned short pos)const {
     return this->memory[pos];
 }
 
 void Memory::resetMemory(){
     unsigned char value = this->memory[0x00];
 
-    for(int i = 0; i < RAM_SIZE; i++){
+    for(int i = CARTRIGBE_SIZE + 1; i < RAM_SIZE; i++){
         this->memory[i] = value;
     }
+}
+
+unsigned short Memory::getDouble(unsigned short pos) const{
+    unsigned short value;
+    
+    value = this->memory[pos];
+    value = value << 8;
+    value = value | this->memory[pos + 1];
+
+    return value;
 }
 
 void Memory::setMemory(){
