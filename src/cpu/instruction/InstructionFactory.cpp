@@ -8,6 +8,12 @@
 #include "opcode/load/LoadImmediateToDoubleRegister.h"
 #include "opcode/push/PushDoubleRegisterToStack.h"
 #include "opcode/pop/PopStackToDoubleRegister.h"
+#include "opcode/add/AddRegisterToA.h"
+#include "opcode/add/AddImmediateToA.h"
+#include "opcode/add/AddDoubleRegisterToA.h"
+#include "opcode/add/AddCarryRegisterToA.h"
+#include "opcode/add/AddCarryDoubleRegisterToA.h"
+#include "opcode/add/AddCarryImmediateToA.h"
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -151,6 +157,42 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
             return new PopStackToDoubleRegister(DoubleRegisterName::DE);
         case 0xE1:
             return new PopStackToDoubleRegister(DoubleRegisterName::HL);
+        case 0x87:
+            return new AddRegisterToA(RegisterName::A);
+        case 0x80:
+            return new AddRegisterToA(RegisterName::B);
+        case 0x81:
+            return new AddRegisterToA(RegisterName::C);
+        case 0x82:
+            return new AddRegisterToA(RegisterName::D);
+        case 0x83:
+            return new AddRegisterToA(RegisterName::E);
+        case 0x84:
+            return new AddRegisterToA(RegisterName::H);
+        case 0x85:
+            return new AddRegisterToA(RegisterName::L);
+        case 0x86:
+            return new AddDoubleRegisterToA(DoubleRegisterName::HL);
+        case 0xC6:
+            return new AddImmediateToA();
+        case 0x8F:
+            return new AddCarryRegisterToA(RegisterName::A);
+        case 0x88:
+            return new AddCarryRegisterToA(RegisterName::B);
+        case 0x89:
+            return new AddCarryRegisterToA(RegisterName::C);
+        case 0x8A:
+            return new AddCarryRegisterToA(RegisterName::D);
+        case 0x8B:
+            return new AddCarryRegisterToA(RegisterName::E);
+        case 0x8C:
+            return new AddCarryRegisterToA(RegisterName::H);
+        case 0x8D:
+            return new AddCarryRegisterToA(RegisterName::L);
+        case 0x8E:
+            return new AddCarryDoubleRegisterToA(DoubleRegisterName::HL);
+        case 0xCE:
+            return new AddCarryImmediateToA();
         default:
             throw UnknownInstructionException(byteInstr);
     }
