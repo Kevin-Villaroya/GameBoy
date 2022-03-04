@@ -40,6 +40,10 @@ unsigned char Memory::get(unsigned short pos) const{
     return this->memory[pos];
 }
 
+void Memory::set(unsigned short pos, unsigned char value){
+    this->memory[pos] = value;
+}
+
 unsigned char Memory::operator[](unsigned short pos)const {
     return this->memory[pos];
 }
