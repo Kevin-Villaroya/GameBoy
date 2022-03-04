@@ -6,6 +6,8 @@
 #include "opcode/inc/IncrementRegister.h"
 #include "opcode/load/LoadRegisterToRegister.h"
 #include "opcode/load/LoadImmediateToDoubleRegister.h"
+#include "opcode/push/PushDoubleRegisterToStack.h"
+#include "opcode/pop/PopStackToDoubleRegister.h"
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -133,6 +135,22 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
             return new LoadImmediateToDoubleRegister(DoubleRegisterName::HL);
         case 0x31:
             return new LoadImmediateToDoubleRegister(DoubleRegisterName::SP);
+        case 0xF5:
+            return new PushDoubleRegisterToStack(DoubleRegisterName::AF);
+        case 0xC5:
+            return new PushDoubleRegisterToStack(DoubleRegisterName::BC);
+        case 0xD5:
+            return new PushDoubleRegisterToStack(DoubleRegisterName::DE);
+        case 0xE5:
+            return new PushDoubleRegisterToStack(DoubleRegisterName::HL);
+        case 0xF1:
+            return new PopStackToDoubleRegister(DoubleRegisterName::AF);
+        case 0xC1:
+            return new PopStackToDoubleRegister(DoubleRegisterName::BC);
+        case 0xD1:
+            return new PopStackToDoubleRegister(DoubleRegisterName::DE);
+        case 0xE1:
+            return new PopStackToDoubleRegister(DoubleRegisterName::HL);
         default:
             throw UnknownInstructionException(byteInstr);
     }
