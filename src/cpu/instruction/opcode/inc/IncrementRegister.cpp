@@ -7,11 +7,11 @@ void IncrementRegister::execute(Memory& ram, Registers& registers){
 
     unsigned char value = registers.getRegister(this->registerName) + 1;
 
-    bool byte3After = registers.getRegister(this->registerName) & 0b00001000;
+    bool byte3After = value & 0b00001000;
 
     registers.setRegister(this->registerName, value);
 
-    if(byte3Before & !byte3After){
+    if(byte3Before && !byte3After){
         registers.setH(1);
     }else{
         registers.setH(0);
