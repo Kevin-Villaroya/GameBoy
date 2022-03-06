@@ -10,9 +10,7 @@ void AddImmediateToA::execute(Memory& ram, Registers& registers){
     else
         registers.setFlagZ(0);
     
-    if(((aValue&(1<<4))==16) != (((aValue+this->parameter)&(1<<4))==0))
-        registers.setFlagH(1);
-    else if(((this->parameter&(1<<4))==16) != (((aValue+this->parameter)&(1<<4))==0))
+    if(((aValue&0b00001111)+(this->parameter&0b00001111)) > 0b00001111)
         registers.setFlagH(1);
     else
         registers.setFlagH(0);

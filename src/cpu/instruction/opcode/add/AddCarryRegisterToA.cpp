@@ -11,9 +11,7 @@ void AddCarryRegisterToA::execute(Memory& ram, Registers& registers){
     else
         registers.setFlagZ(0);
     
-    if(((aValue&(1<<4))==16) != (((aValue+regCarryValue)&(1<<4))==0))
-        registers.setFlagH(1);
-    else if(((regCarryValue&(1<<4))==16) != (((aValue+regCarryValue)&(1<<4))==0))
+    if(((aValue&0b00001111)+(regCarryValue&0b00001111)) > 0b00001111)
         registers.setFlagH(1);
     else
         registers.setFlagH(0);

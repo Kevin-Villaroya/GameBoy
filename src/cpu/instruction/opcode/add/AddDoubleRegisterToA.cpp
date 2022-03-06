@@ -11,9 +11,7 @@ void AddDoubleRegisterToA::execute(Memory& ram, Registers& registers){
     else
         registers.setFlagZ(0);
     
-    if(((aValue&(1<<4))==16) != (((aValue+regValue)&(1<<4))==0))
-        registers.setFlagH(1);
-    else if(((regValue&(1<<4))==16) != (((aValue+regValue)&(1<<4))==0))
+    if(((aValue&0b00001111)+(regValue&0b00001111)) > 0b00001111)
         registers.setFlagH(1);
     else
         registers.setFlagH(0);
