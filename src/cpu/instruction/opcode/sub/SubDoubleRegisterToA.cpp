@@ -1,10 +1,10 @@
-#include "SubCarryDoubleRegisterToA.h"
+#include "SubDoubleRegisterToA.h"
 
-SubCarryDoubleRegisterToA::SubCarryDoubleRegisterToA(DoubleRegisterName d):doubleRegName(d){}
+SubDoubleRegisterToA::SubDoubleRegisterToA(DoubleRegisterName d):doubleRegName(d){}
 
-void SubCarryDoubleRegisterToA::execute(Memory& ram, Registers& registers){
+void SubDoubleRegisterToA::execute(Memory& ram, Registers& registers){
     unsigned char regValue = registers.getDoubleRegister(this->doubleRegName);
-    unsigned char aValue = registers.getA()+(registers.isFlagC()?1:0);
+    unsigned char aValue = registers.getA();
 
     if(regValue-aValue == 0)
         registers.setFlagZ(1);
@@ -24,13 +24,13 @@ void SubCarryDoubleRegisterToA::execute(Memory& ram, Registers& registers){
     registers.setFlagN(1);
 }
 
-unsigned int SubCarryDoubleRegisterToA::getSize(){
+unsigned int SubDoubleRegisterToA::getSize(){
     return 1;
 }
 
-unsigned int SubCarryDoubleRegisterToA::getTiming(){
+unsigned int SubDoubleRegisterToA::getTiming(){
     return 8;
 }
 
-void SubCarryDoubleRegisterToA::setParameters(const Memory&, unsigned short v){
+void SubDoubleRegisterToA::setParameters(const Memory&, unsigned short v){
 }
