@@ -14,6 +14,12 @@
 #include "opcode/add/AddCarryRegisterToA.h"
 #include "opcode/add/AddCarryDoubleRegisterToA.h"
 #include "opcode/add/AddCarryImmediateToA.h"
+#include "opcode/sub/SubRegisterToA.h"
+#include "opcode/sub/SubDoubleRegisterToA.h"
+#include "opcode/sub/SubImmediateToA.h"
+#include "opcode/sub/SubCarryRegisterToA.h"
+#include "opcode/sub/SubCarryDoubleRegisterToA.h"
+#include "opcode/sub/SubCarryImmediateToA.h"
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -193,6 +199,42 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
             return new AddCarryDoubleRegisterToA(DoubleRegisterName::HL);
         case 0xCE:
             return new AddCarryImmediateToA();
+        case 0x97:
+            return new SubRegisterToA(RegisterName::A);
+        case 0x90:
+            return new SubRegisterToA(RegisterName::B);
+        case 0x91:
+            return new SubRegisterToA(RegisterName::C);
+        case 0x92:
+            return new SubRegisterToA(RegisterName::D);
+        case 0x93:
+            return new SubRegisterToA(RegisterName::E);
+        case 0x94:
+            return new SubRegisterToA(RegisterName::H);
+        case 0x95:
+            return new SubRegisterToA(RegisterName::L);
+        case 0x96:
+            return new SubDoubleRegisterToA(DoubleRegisterName::HL);
+        case 0xD6:
+            return new SubImmediateToA();
+        case 0x9F:
+            return new SubCarryRegisterToA(RegisterName::A);
+        case 0x98:
+            return new SubCarryRegisterToA(RegisterName::B);
+        case 0x99:
+            return new SubCarryRegisterToA(RegisterName::C);
+        case 0x9A:
+            return new SubCarryRegisterToA(RegisterName::D);
+        case 0x9B:
+            return new SubCarryRegisterToA(RegisterName::E);
+        case 0x9C:
+            return new SubCarryRegisterToA(RegisterName::H);
+        case 0x9D:
+            return new SubCarryRegisterToA(RegisterName::L);    
+        case 0x9E:
+            return new SubCarryDoubleRegisterToA(DoubleRegisterName::HL);
+        case 0xDE:
+            return new SubCarryImmediateToA();
         default:
             throw UnknownInstructionException(byteInstr);
     }
