@@ -20,6 +20,18 @@
 #include "opcode/sub/SubCarryRegisterToA.h"
 #include "opcode/sub/SubCarryDoubleRegisterToA.h"
 #include "opcode/sub/SubCarryImmediateToA.h"
+#include "opcode/and/AndRegisterToA.h"
+#include "opcode/and/AndDoubleRegisterToA.h"
+#include "opcode/and/AndImmediateToA.h"
+#include "opcode/or/OrRegisterToA.h"
+#include "opcode/or/OrDoubleRegisterToA.h"
+#include "opcode/or/OrImmediateToA.h"
+#include "opcode/xor/XorRegisterToA.h"
+#include "opcode/xor/XorDoubleRegisterToA.h"
+#include "opcode/xor/XorImmediateToA.h"
+#include "opcode/cp/CpRegisterToA.h"
+#include "opcode/cp/CpDoubleRegisterToA.h"
+#include "opcode/cp/CpImmediateToA.h"
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -235,6 +247,78 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
             return new SubCarryDoubleRegisterToA(DoubleRegisterName::HL);
         case 0xDE:
             return new SubCarryImmediateToA();
+        case 0xA7:
+            return new AndRegisterToA(RegisterName::A);
+        case 0xA0:
+            return new AndRegisterToA(RegisterName::B);
+        case 0xA1:
+            return new AndRegisterToA(RegisterName::C);
+        case 0xA2:
+            return new AndRegisterToA(RegisterName::D);
+        case 0xA3:
+            return new AndRegisterToA(RegisterName::E);
+        case 0xA4:
+            return new AndRegisterToA(RegisterName::H);
+        case 0xA5:
+            return new AndRegisterToA(RegisterName::L);
+        case 0xA6:
+            return new AndDoubleRegisterToA(DoubleRegisterName::HL);
+        case 0xE6:
+            return new AndImmediateToA();
+        case 0xB7:
+            return new OrRegisterToA(RegisterName::A);
+        case 0xB0:
+            return new OrRegisterToA(RegisterName::B);
+        case 0xB1:
+            return new OrRegisterToA(RegisterName::C);
+        case 0xB2:
+            return new OrRegisterToA(RegisterName::D);
+        case 0xB3:
+            return new OrRegisterToA(RegisterName::E);
+        case 0xB4:
+            return new OrRegisterToA(RegisterName::H);
+        case 0xB5:
+            return new OrRegisterToA(RegisterName::L);
+        case 0xB6:
+            return new OrDoubleRegisterToA(DoubleRegisterName::HL);
+        case 0xF6:
+            return new OrImmediateToA();
+        case 0xAF:
+            return new XorRegisterToA(RegisterName::A);
+        case 0xA8:
+            return new XorRegisterToA(RegisterName::B);
+        case 0xA9:
+            return new XorRegisterToA(RegisterName::C);
+        case 0xAA:
+            return new XorRegisterToA(RegisterName::D);
+        case 0xAB:
+            return new XorRegisterToA(RegisterName::E);
+        case 0xAC:
+            return new XorRegisterToA(RegisterName::H);
+        case 0xAD:
+            return new XorRegisterToA(RegisterName::L);
+        case 0xAE:
+            return new XorDoubleRegisterToA(DoubleRegisterName::HL);
+        case 0xEE:
+            return new XorImmediateToA();
+        case 0xBF:
+            return new CpRegisterToA(RegisterName::A);
+        case 0xB8:
+            return new CpRegisterToA(RegisterName::B);
+        case 0xB9:
+            return new CpRegisterToA(RegisterName::C);
+        case 0xBA:
+            return new CpRegisterToA(RegisterName::D);
+        case 0xBB:
+            return new CpRegisterToA(RegisterName::E);
+        case 0xBC:
+            return new CpRegisterToA(RegisterName::H);
+        case 0xBD:
+            return new CpRegisterToA(RegisterName::L);
+        case 0xBE:
+            return new CpDoubleRegisterToA(DoubleRegisterName::HL);
+        case 0xFE:
+            return new CpImmediateToA();
         default:
             throw UnknownInstructionException(byteInstr);
     }
