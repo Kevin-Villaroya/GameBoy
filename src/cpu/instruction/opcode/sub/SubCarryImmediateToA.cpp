@@ -11,14 +11,14 @@ void SubCarryImmediateToA::execute(Memory& ram, Registers& registers){;
         registers.setFlagZ(0);
     
     if((aValue&0b00001111) < (this->parameter&0b00001111))
-        registers.setFlagH(0);
-    else
         registers.setFlagH(1);
+    else
+        registers.setFlagH(0);
 
     if(aValue < this->parameter)
-        registers.setFlagC(0);
-    else
         registers.setFlagC(1);
+    else
+        registers.setFlagC(0);
     
     registers.setFlagN(1);
 }

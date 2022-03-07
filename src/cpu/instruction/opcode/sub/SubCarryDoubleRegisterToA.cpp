@@ -12,14 +12,14 @@ void SubCarryDoubleRegisterToA::execute(Memory& ram, Registers& registers){
         registers.setFlagZ(0);
     
     if((aValue&0b00001111) < (regValue&0b00001111))
-        registers.setFlagH(0);
-    else
         registers.setFlagH(1);
+    else
+        registers.setFlagH(0);
 
     if(aValue < regValue)
-        registers.setFlagC(0);
-    else
         registers.setFlagC(1);
+    else
+        registers.setFlagC(0);
     
     registers.setFlagN(1);
 }
