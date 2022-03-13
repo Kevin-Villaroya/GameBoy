@@ -186,23 +186,23 @@ void Registers::setFlagC(bool value){
 }
 
 void Registers::setAF(unsigned short af){
-    this->f = af;
     this->a = af >> 8;
+    this->f = af;
 }
 
 void Registers::setBC(unsigned short bc){
-    this->b = bc;
-    this->c = bc >> 8;
+    this->b = bc >> 8;
+    this->c = bc;
 }
 
 void Registers::setDE(unsigned short de){
-    this->d = de;
-    this->e = de >> 8;
+    this->d = de >> 8;
+    this->e = de;
 }
 
 void Registers::setHL(unsigned short hl){
-    this->h = hl;
-    this->l = hl >> 8;
+    this->h = hl >> 8;
+    this->l = hl;
 }
 
 void Registers::setRegister(RegisterName registerName, unsigned char value){
