@@ -34,8 +34,24 @@
 #include "opcode/cp/CpImmediateToA.h"
 #include "opcode/add/AddDoubleRegisterToHL.h"
 #include "opcode/add/AddImmediateToSP.h"
-
-
+#include "opcode/swap/SwapRegister.h"
+#include "opcode/swap/SwapHL.h"
+#include "opcode/daa/DaaToA.h"
+#include "opcode/cpl/CplToA.h"
+#include "opcode/cpl/CplCarryFlag.h"
+#include "opcode/set/SetCarryFlag.h"
+#include "opcode/rl/RlCarryA.h"
+#include "opcode/rl/RlA.h"
+#include "opcode/rr/RrCarryA.h"
+#include "opcode/rr/RrA.h"
+#include "opcode/rl/RlCarryRegister.h"
+#include "opcode/rl/RlCarryHL.h"
+#include "opcode/rl/RlRegister.h"
+#include "opcode/rl/RlHL.h"
+#include "opcode/rr/RrCarryRegister.h"
+#include "opcode/rr/RrCarryHL.h"
+#include "opcode/rr/RrRegister.h"
+#include "opcode/rr/RrHL.h"
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -333,6 +349,102 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
             return new AddDoubleRegisterToHL(DoubleRegisterName::SP);
         case 0xE8:
             return new AddImmediateToSP();
+        case 0xCB37:
+            return new SwapRegister(RegisterName::A);
+        case 0xCB30:
+            return new SwapRegister(RegisterName::B);
+        case 0xCB31:
+            return new SwapRegister(RegisterName::C);
+        case 0xCB32:
+            return new SwapRegister(RegisterName::D);
+        case 0xCB33:
+            return new SwapRegister(RegisterName::E);
+        case 0xCB34:
+            return new SwapRegister(RegisterName::H);
+        case 0xCB35:
+            return new SwapRegister(RegisterName::L);
+        case 0xCB36:
+            return new SwapHL();
+        case 0x27:
+            return new DaaToA();
+        case 0x2F:
+            return new CplToA();
+        case 0x3F:
+            return new CplCarryFlag();
+        case 0x37:
+            return new SetCarryFlag();
+        case 0x07:
+            return new RlCarryA();
+        case 0x17:
+            return new RlA();
+        case 0x0F:
+            return new RrCarryA();
+        case 0x1F:
+            return new RrA();
+        case 0xCB07:
+            return new RlCarryRegister(RegisterName::A);
+        case 0xCB00:
+            return new RlCarryRegister(RegisterName::B);
+        case 0xCB01:
+            return new RlCarryRegister(RegisterName::C);
+        case 0xCB02:
+            return new RlCarryRegister(RegisterName::D);
+        case 0xCB03:
+            return new RlCarryRegister(RegisterName::E);
+        case 0xCB04:
+            return new RlCarryRegister(RegisterName::H);
+        case 0xCB05:
+            return new RlCarryRegister(RegisterName::L);
+        case 0xCB06:
+            return new RlCarryHL();
+        case 0xCB17:
+            return new RlRegister(RegisterName::A);
+        case 0xCB10:
+            return new RlRegister(RegisterName::B);
+        case 0xCB11:
+            return new RlRegister(RegisterName::C);
+        case 0xCB12:
+            return new RlRegister(RegisterName::D);
+        case 0xCB13:
+            return new RlRegister(RegisterName::E);
+        case 0xCB14:
+            return new RlRegister(RegisterName::H);
+        case 0xCB15:
+            return new RlRegister(RegisterName::L);
+        case 0xCB16:
+            return new RlHL();
+        case 0xCB0F:
+            return new RrCarryRegister(RegisterName::A);
+        case 0xCB08:
+            return new RrCarryRegister(RegisterName::B);
+        case 0xCB09:
+            return new RrCarryRegister(RegisterName::C);
+        case 0xCB0A:
+            return new RrCarryRegister(RegisterName::D);
+        case 0xCB0B:
+            return new RrCarryRegister(RegisterName::E);
+        case 0xCB0C:
+            return new RrCarryRegister(RegisterName::H);
+        case 0xCB0D:
+            return new RrCarryRegister(RegisterName::L);
+        case 0xCB0E:
+            return new RrCarryHL();
+        case 0xCB1F:
+            return new RrRegister(RegisterName::A);
+        case 0xCB18:
+            return new RrRegister(RegisterName::B);
+        case 0xCB19:
+            return new RrRegister(RegisterName::C);
+        case 0xCB1A:
+            return new RrRegister(RegisterName::D);
+        case 0xCB1B:
+            return new RrRegister(RegisterName::E);
+        case 0xCB1C:
+            return new RrRegister(RegisterName::H);
+        case 0xCB1D:
+            return new RrRegister(RegisterName::L);
+        case 0xCB1E:
+            return new RrHL();
         default:
             throw UnknownInstructionException(byteInstr);
     }
