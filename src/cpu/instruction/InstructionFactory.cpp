@@ -10,28 +10,32 @@
 #include "opcode/pop/PopStackToDoubleRegister.h"
 #include "opcode/add/AddRegisterToA.h"
 #include "opcode/add/AddImmediateToA.h"
-#include "opcode/add/AddDoubleRegisterToA.h"
+#include "opcode/add/AddHLToA.h"
 #include "opcode/add/AddCarryRegisterToA.h"
-#include "opcode/add/AddCarryDoubleRegisterToA.h"
+#include "opcode/add/AddCarryHLToA.h"
 #include "opcode/add/AddCarryImmediateToA.h"
 #include "opcode/sub/SubRegisterToA.h"
-#include "opcode/sub/SubDoubleRegisterToA.h"
+#include "opcode/sub/SubHLToA.h"
 #include "opcode/sub/SubImmediateToA.h"
 #include "opcode/sub/SubCarryRegisterToA.h"
-#include "opcode/sub/SubCarryDoubleRegisterToA.h"
+#include "opcode/sub/SubCarryHLToA.h"
 #include "opcode/sub/SubCarryImmediateToA.h"
 #include "opcode/and/AndRegisterToA.h"
-#include "opcode/and/AndDoubleRegisterToA.h"
+#include "opcode/and/AndHLToA.h"
 #include "opcode/and/AndImmediateToA.h"
 #include "opcode/or/OrRegisterToA.h"
-#include "opcode/or/OrDoubleRegisterToA.h"
+#include "opcode/or/OrHLToA.h"
 #include "opcode/or/OrImmediateToA.h"
 #include "opcode/xor/XorRegisterToA.h"
-#include "opcode/xor/XorDoubleRegisterToA.h"
+#include "opcode/xor/XorHLToA.h"
 #include "opcode/xor/XorImmediateToA.h"
 #include "opcode/cp/CpRegisterToA.h"
-#include "opcode/cp/CpDoubleRegisterToA.h"
+#include "opcode/cp/CpHLToA.h"
 #include "opcode/cp/CpImmediateToA.h"
+#include "opcode/add/AddDoubleRegisterToHL.h"
+#include "opcode/add/AddImmediateToSP.h"
+
+
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -190,7 +194,7 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         case 0x85:
             return new AddRegisterToA(RegisterName::L);
         case 0x86:
-            return new AddDoubleRegisterToA(DoubleRegisterName::HL);
+            return new AddHLToA();
         case 0xC6:
             return new AddImmediateToA();
         case 0x8F:
@@ -208,7 +212,7 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         case 0x8D:
             return new AddCarryRegisterToA(RegisterName::L);
         case 0x8E:
-            return new AddCarryDoubleRegisterToA(DoubleRegisterName::HL);
+            return new AddCarryHLToA();
         case 0xCE:
             return new AddCarryImmediateToA();
         case 0x97:
@@ -226,7 +230,7 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         case 0x95:
             return new SubRegisterToA(RegisterName::L);
         case 0x96:
-            return new SubDoubleRegisterToA(DoubleRegisterName::HL);
+            return new SubHLToA();
         case 0xD6:
             return new SubImmediateToA();
         case 0x9F:
@@ -244,7 +248,7 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         case 0x9D:
             return new SubCarryRegisterToA(RegisterName::L);    
         case 0x9E:
-            return new SubCarryDoubleRegisterToA(DoubleRegisterName::HL);
+            return new SubCarryHLToA();
         case 0xDE:
             return new SubCarryImmediateToA();
         case 0xA7:
@@ -262,7 +266,7 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         case 0xA5:
             return new AndRegisterToA(RegisterName::L);
         case 0xA6:
-            return new AndDoubleRegisterToA(DoubleRegisterName::HL);
+            return new AndHLToA();
         case 0xE6:
             return new AndImmediateToA();
         case 0xB7:
@@ -280,7 +284,7 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         case 0xB5:
             return new OrRegisterToA(RegisterName::L);
         case 0xB6:
-            return new OrDoubleRegisterToA(DoubleRegisterName::HL);
+            return new OrHLToA();
         case 0xF6:
             return new OrImmediateToA();
         case 0xAF:
@@ -298,7 +302,7 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         case 0xAD:
             return new XorRegisterToA(RegisterName::L);
         case 0xAE:
-            return new XorDoubleRegisterToA(DoubleRegisterName::HL);
+            return new XorHLToA();
         case 0xEE:
             return new XorImmediateToA();
         case 0xBF:
@@ -316,9 +320,19 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         case 0xBD:
             return new CpRegisterToA(RegisterName::L);
         case 0xBE:
-            return new CpDoubleRegisterToA(DoubleRegisterName::HL);
+            return new CpHLToA();
         case 0xFE:
             return new CpImmediateToA();
+        case 0x09:
+            return new AddDoubleRegisterToHL(DoubleRegisterName::BC);
+        case 0x19:
+            return new AddDoubleRegisterToHL(DoubleRegisterName::DE);
+        case 0x29:
+            return new AddDoubleRegisterToHL(DoubleRegisterName::HL);
+        case 0x39:
+            return new AddDoubleRegisterToHL(DoubleRegisterName::SP);
+        case 0xE8:
+            return new AddImmediateToSP();
         default:
             throw UnknownInstructionException(byteInstr);
     }
