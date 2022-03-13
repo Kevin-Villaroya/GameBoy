@@ -3,8 +3,8 @@
 SubCarryRegisterToA::SubCarryRegisterToA(RegisterName r) : registerName(r){}
 
 void SubCarryRegisterToA::execute(Memory& ram, Registers& registers){
-    unsigned char regValue = registers.getRegister(registerName);
-    unsigned char aValue = registers.getA()+(registers.isFlagC()?1:0);
+    unsigned char regValue = registers.getRegister(registerName)+(registers.isFlagC()?1:0);
+    unsigned char aValue = registers.getA();
 
     if(regValue-aValue == 0)
         registers.setFlagZ(1);

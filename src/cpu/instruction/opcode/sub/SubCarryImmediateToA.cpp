@@ -3,7 +3,8 @@
 SubCarryImmediateToA::SubCarryImmediateToA(){}
 
 void SubCarryImmediateToA::execute(Memory& ram, Registers& registers){;
-    unsigned char aValue = registers.getA()+(registers.isFlagC()?1:0);
+    unsigned char aValue = registers.getA();
+    this->parameter += registers.isFlagC()?1:0;
 
     if(this->parameter-aValue == 0)
         registers.setFlagZ(1);
