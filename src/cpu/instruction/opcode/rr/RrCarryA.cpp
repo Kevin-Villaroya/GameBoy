@@ -1,12 +1,13 @@
-#include "RrA.h"
+#include "RrCarryA.h"
 
-RrA::RrA(){}
+RrCarryA::RrCarryA(){}
 
-void RrA::execute(Memory& ram, Registers& registers){
+void RrCarryA::execute(Memory& ram, Registers& registers){
     unsigned char aValue = registers.getA();
     unsigned char valueOf0bit = aValue&0b00000001;
     aValue >>= 1;
-    aValue += (registers.isFlagC()?1:0)<<7;
+    aValue += valueOf0bit<<7;
+
     if(aValue == 0)
         registers.setFlagZ(1);
     else   
@@ -17,13 +18,13 @@ void RrA::execute(Memory& ram, Registers& registers){
     registers.setA(aValue);
 }
 
-unsigned int RrA::getSize(){
+unsigned int RrCarryA::getSize(){
     return 1;
 }
 
-unsigned int RrA::getTiming(){
+unsigned int RrCarryA::getTiming(){
     return 4;
 }
 
-void RrA::setParameters(const Memory&, unsigned short v){
+void RrCarryA::setParameters(const Memory&, unsigned short v){
 }
