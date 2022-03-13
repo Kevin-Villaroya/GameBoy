@@ -28,6 +28,6 @@ unsigned int AddImmediateToSP::getTiming(){
     return 16;
 }
 
-void AddImmediateToSP::setParameters(const Memory&, char v){
+void AddImmediateToSP::setParameters(const Memory&, unsigned short v){
     this->parameter = v;
 }
