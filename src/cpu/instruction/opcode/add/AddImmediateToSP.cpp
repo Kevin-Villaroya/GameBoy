@@ -3,21 +3,34 @@
 AddImmediateToSP::AddImmediateToSP(){}
 
 void AddImmediateToSP::execute(Memory& ram, Registers& registers){
-    unsigned char aValue = registers.getSP();
+    unsigned short spValue = registers.getSP();
 
     registers.setFlagZ(0);
-    
-    if(((aValue&0b00001111)+(this->parameter&0b00001111)) > 0b00001111)
-        registers.setFlagH(1);
-    else
-        registers.setFlagH(0);
-
-    if(aValue > (aValue+this->parameter))
-        registers.setFlagC(1);
-    else
-        registers.setFlagC(0);
-
     registers.setFlagN(0);
+    
+    if(this->parameter < 0){
+        if(((spValue&0b11111111) < (this->parameter&0b11111111)))
+            registers.setFlagH(1);
+        else
+            registers.setFlagH(0);
+        if(spValue > this->parameter)
+            registers.setFlagC(1);
+        else
+            registers.setFlagC(0);
+    }
+    else{
+        if(((spValue&0b11111111)+(this->parameter&0b11111111)) > 0b11111111)
+            registers.setFlagH(1);
+        else
+            registers.setFlagH(0);
+
+        if(spValue > (spValue+this->parameter))
+            registers.setFlagC(1);
+        else
+            registers.setFlagC(0);
+    }
+
+    
 }
 
 unsigned int AddImmediateToSP::getSize(){
