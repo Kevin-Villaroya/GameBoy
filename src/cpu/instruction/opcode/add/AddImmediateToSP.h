@@ -12,7 +12,7 @@ class AddImmediateToSP : public Instruction{
         void execute(Memory& ram, Registers& registers) override;
         unsigned int getSize() override;
         unsigned int getTiming() override;
-        void setParameters(const Memory&, char);
+        void setParameters(const Memory&, unsigned short) override;
 };
 
 #endif 
