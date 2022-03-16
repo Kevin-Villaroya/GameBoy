@@ -540,6 +540,9 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         case 0x2E:
         	return new LoadImmediateToRegister(RegisterName::L);
         	
+        case 0x3E:
+        	return new LoadImmediateToRegister(RegisterName::A);
+        	
         case 0x18:
         	return new JumpUnconditionalRelativeImmediate();
         	

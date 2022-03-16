@@ -5,7 +5,7 @@
 
 class LoadImmediateToRegister : public Instruction{
     private:
-        unsigned short parameter;
+        unsigned char parameter;
         RegisterName registerName;
 	
     public:
