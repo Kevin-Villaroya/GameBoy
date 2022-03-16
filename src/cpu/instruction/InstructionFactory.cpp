@@ -59,6 +59,7 @@
 #include "opcode/dec/DecrementHL.h"
 #include "opcode/load/LoadImmediateToRegister.h"
 #include "opcode/jmp/JumpUnconditionalRelativeImmediate.h"
+#include "opcode/inc/IncrementDoubleRegister.h"
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -547,6 +548,18 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         	
         case 0x77:
         	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::A);
+        	
+        case 0x03:
+        	return new IncrementDoubleRegister(DoubleRegisterName::BC);
+        	
+        case 0x13:
+        	return new IncrementDoubleRegister(DoubleRegisterName::DE);
+        	
+        case 0x23:
+        	return new IncrementDoubleRegister(DoubleRegisterName::HL);
+        	
+        case 0x33:
+        	return new IncrementDoubleRegister(DoubleRegisterName::SP);
         	
         default:
             throw UnknownInstructionException(byteInstr);
