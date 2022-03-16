@@ -47,30 +47,30 @@ public:
 
     void incrementPc(unsigned short);
 
-    unsigned char getA();
-    unsigned char getB();
-    unsigned char getC();
-    unsigned char getD();
-    unsigned char getE();
-    unsigned char getF();
-    unsigned char getL();
-    unsigned char getH();
+    unsigned char getA() const;
+    unsigned char getB() const;
+    unsigned char getC() const;
+    unsigned char getD() const;
+    unsigned char getE() const;
+    unsigned char getF() const;
+    unsigned char getL() const;
+    unsigned char getH() const;
 
-    unsigned short getAF();
-    unsigned short getBC();
-    unsigned short getDE();
-    unsigned short getHL();
+    unsigned short getAF() const;
+    unsigned short getBC() const;
+    unsigned short getDE() const;
+    unsigned short getHL() const;
 
-    unsigned short getSP();
-    unsigned short getPC();
+    unsigned short getSP() const;
+    unsigned short getPC() const;
 
-    unsigned char getRegister(RegisterName);
-    unsigned short getDoubleRegister(DoubleRegisterName);
+    unsigned char getRegister(RegisterName) const;
+    unsigned short getDoubleRegister(DoubleRegisterName) const;
 
-    bool isFlagZ();
-    bool isFlagN();
-    bool isFlagH();
-    bool isFlagC();
+    bool isFlagZ() const;
+    bool isFlagN() const;
+    bool isFlagH() const;
+    bool isFlagC() const;
 
     void setFlagZ(bool value);
     void setFlagN(bool value);   

@@ -22,39 +22,39 @@ void Registers::incrementPc(unsigned short incr){
     this->pc += incr;
 }
 
-unsigned char Registers::getA(){
+unsigned char Registers::getA() const{
     return this->a;
 }
 
-unsigned char Registers::getB(){
+unsigned char Registers::getB() const{
     return this->b;
 }
 
-unsigned char Registers::getC(){
+unsigned char Registers::getC() const{
     return this->c;
 }
 
-unsigned char Registers::getD(){
+unsigned char Registers::getD() const{
     return this->d;
 }
 
-unsigned char Registers::getE(){
+unsigned char Registers::getE() const{
     return this->e;
 }
 
-unsigned char Registers::getF(){
+unsigned char Registers::getF() const{
     return this->f;
 }
 
-unsigned char Registers::getL(){
+unsigned char Registers::getL() const{
     return this->l;
 }
 
-unsigned char Registers::getH(){
+unsigned char Registers::getH() const{
     return this->h;
 }
 
-unsigned short Registers::getAF(){
+unsigned short Registers::getAF() const{
     unsigned short af = this->getA();
     af = af << 8;
     af |= this->getF();
@@ -62,7 +62,7 @@ unsigned short Registers::getAF(){
     return af;
 }
 
-unsigned short Registers::getBC(){
+unsigned short Registers::getBC() const{
     unsigned short bc = this->getB();
     bc = bc << 8;
     bc |= this->getC();
@@ -70,7 +70,7 @@ unsigned short Registers::getBC(){
     return bc;
 }
 
-unsigned short Registers::getDE(){
+unsigned short Registers::getDE() const{
     unsigned short de = this->getD();
     de = de << 8;
     de |= this->getE();
@@ -78,7 +78,7 @@ unsigned short Registers::getDE(){
     return de;
 }
 
-unsigned short Registers::getHL(){
+unsigned short Registers::getHL() const{
     unsigned short hl = this->getH();
     hl = hl << 8;
     hl |= this->getL();
@@ -86,15 +86,15 @@ unsigned short Registers::getHL(){
     return hl;
 }
 
-unsigned short Registers::getSP(){
+unsigned short Registers::getSP() const{
     return this->sp;
 }
 
-unsigned short Registers::getPC(){
+unsigned short Registers::getPC() const{
     return this->pc;
 }
 
-unsigned char Registers::getRegister(RegisterName registerName){
+unsigned char Registers::getRegister(RegisterName registerName) const{
     switch (registerName){
     case RegisterName::A :
         return this->getA();
@@ -118,7 +118,7 @@ unsigned char Registers::getRegister(RegisterName registerName){
     }
 }
 
-unsigned short Registers::getDoubleRegister(DoubleRegisterName registerName){
+unsigned short Registers::getDoubleRegister(DoubleRegisterName registerName) const{
     switch (registerName){
     case DoubleRegisterName::AF:
         return this->getAF();
@@ -137,19 +137,19 @@ unsigned short Registers::getDoubleRegister(DoubleRegisterName registerName){
     }
 }
 
-bool Registers::isFlagZ(){
+bool Registers::isFlagZ() const{
     return this->flags & 0b10000000;
 }
 
-bool Registers::isFlagN(){
+bool Registers::isFlagN() const{
     return this->flags & 0b01000000;
 }
 
-bool Registers::isFlagH(){
+bool Registers::isFlagH() const{
     return this->flags & 0b00100000;
 }
 
-bool Registers::isFlagC(){
+bool Registers::isFlagC() const{
     return this->flags & 0b00010000;
 }
 

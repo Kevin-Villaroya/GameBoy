@@ -63,6 +63,8 @@
 #include "opcode/call/CallUnconditional.h"
 #include "opcode/load/LoadAToImmediateAddress.h"
 #include "opcode/ret/ReturnUnconditional.h"
+#include "opcode/jmp/JumpConditionalImmediate.h"
+#include "condition/InstructionCondition.h"
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -575,6 +577,18 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         
         case 0xC9:
         	return new ReturnUnconditional();
+        	
+        case 0xC2:
+        	return new JumpConditionalImmediate(InstructionCondition::NZ);
+        	
+        case 0xCA:
+        	return new JumpConditionalImmediate(InstructionCondition::Z);
+        	
+        case 0xD2:
+        	return new JumpConditionalImmediate(InstructionCondition::NC);
+        	
+        case 0xDA:
+        	return new JumpConditionalImmediate(InstructionCondition::C);
         	
         default:
             throw UnknownInstructionException(byteInstr);
