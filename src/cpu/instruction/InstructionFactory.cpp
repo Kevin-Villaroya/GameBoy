@@ -58,6 +58,7 @@
 #include "opcode/dec/DecrementRegister.h"
 #include "opcode/dec/DecrementHL.h"
 #include "opcode/load/LoadImmediateToRegister.h"
+#include "opcode/jmp/JumpUnconditionalRelativeImmediate.h"
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -534,6 +535,9 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         	
         case 0x2E:
         	return new LoadImmediateToRegister(RegisterName::L);
+        	
+        case 0x18:
+        	return new JumpUnconditionalRelativeImmediate();
         	
         default:
             throw UnknownInstructionException(byteInstr);
