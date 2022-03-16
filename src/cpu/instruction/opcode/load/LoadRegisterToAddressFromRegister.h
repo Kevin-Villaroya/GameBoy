@@ -1,15 +1,16 @@
-#ifndef __LOAD_REGISTER_TO_HL_H__
-#define __LOAD_REGISTER_TO_HL_H__
+#ifndef __LOAD_REGISTER_TO_ADDRESS_FROM_REGISTER_H__
+#define __LOAD_REGISTER_TO_ADDRESS_FROM_REGISTER_H__
 
 #include "../../Instruction.h"
 
-class LoadRegisterToHL : public Instruction
+class LoadRegisterToAddressFromRegister : public Instruction
 {
 	private:
+		DoubleRegisterName addr;
 		RegisterName src;
 
 	public:
-		LoadRegisterToHL(RegisterName);
+		LoadRegisterToAddressFromRegister(DoubleRegisterName, RegisterName);
 
 		void execute(Memory& ram, Registers& registers) override;
 		unsigned int getSize() override;

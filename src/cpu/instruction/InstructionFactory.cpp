@@ -54,7 +54,7 @@
 #include "opcode/rr/RrHL.h"
 #include "opcode/inc/IncrementHL.h"
 #include "opcode/load/LoadHLToRegister.h"
-#include "opcode/load/LoadRegisterToHL.h"
+#include "opcode/load/LoadRegisterToAddressFromRegister.h"
 #include "opcode/dec/DecrementRegister.h"
 #include "opcode/dec/DecrementHL.h"
 #include "opcode/load/LoadImmediateToRegister.h"
@@ -477,22 +477,22 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         	return new LoadHLToRegister(RegisterName::L);
         	
         case 0x70:
-        	return new LoadRegisterToHL(RegisterName::B);
+        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::B);
         	
         case 0x71:
-        	return new LoadRegisterToHL(RegisterName::C);
+        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::C);
         	
         case 0x72:
-        	return new LoadRegisterToHL(RegisterName::D);
+        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::D);
         	
         case 0x73:
-        	return new LoadRegisterToHL(RegisterName::E);
+        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::E);
         	
         case 0x74:
-        	return new LoadRegisterToHL(RegisterName::H);
+        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::H);
         	
 		case 0x75:
-        	return new LoadRegisterToHL(RegisterName::L);
+        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::L);
         	
         case 0x3D:
         	return new DecrementRegister(RegisterName::A);
@@ -538,6 +538,15 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         	
         case 0x18:
         	return new JumpUnconditionalRelativeImmediate();
+        	
+        case 0x02:
+        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::BC, RegisterName::A);
+        	
+    	case 0x12:
+        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::DE, RegisterName::A);
+        	
+        case 0x77:
+        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::A);
         	
         default:
             throw UnknownInstructionException(byteInstr);
