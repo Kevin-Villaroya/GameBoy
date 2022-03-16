@@ -61,6 +61,7 @@
 #include "opcode/jmp/JumpUnconditionalRelativeImmediate.h"
 #include "opcode/inc/IncrementDoubleRegister.h"
 #include "opcode/call/CallUnconditional.h"
+#include "opcode/load/LoadAToImmediateAddress.h"
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -564,6 +565,9 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         	
         case 0xCD:
         	return new CallUnconditional();
+        	
+        case 0xE0:
+        	return new LoadAToImmediateAddress();
         	
         default:
             throw UnknownInstructionException(byteInstr);
