@@ -1,7 +1,7 @@
 #ifndef __LOAD_IMMEDIATE_TO_DOUBLE_REGISTER_H__
 #define __LOAD_IMMEDIATE_TO_DOUBLE_REGISTER_H__
 
-#include "../Instruction.h"
+#include "../../Instruction.h"
 
 class LoadImmediateToDoubleRegister : public Instruction{
     private:

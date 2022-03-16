@@ -57,6 +57,7 @@
 #include "opcode/load/LoadRegisterToHL.h"
 #include "opcode/dec/DecrementRegister.h"
 #include "opcode/dec/DecrementHL.h"
+#include "opcode/load/LoadImmediateToRegister.h"
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -515,6 +516,24 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         	
         case 0x35:
         	return new DecrementHL();
+        	
+        case 0x06:
+        	return new LoadImmediateToRegister(RegisterName::B);
+        	
+        case 0x0E:
+        	return new LoadImmediateToRegister(RegisterName::C);
+        	
+        case 0x16:
+        	return new LoadImmediateToRegister(RegisterName::D);
+        	
+        case 0x1E:
+        	return new LoadImmediateToRegister(RegisterName::E);
+        	
+        case 0x26:
+        	return new LoadImmediateToRegister(RegisterName::H);
+        	
+        case 0x2E:
+        	return new LoadImmediateToRegister(RegisterName::L);
         	
         default:
             throw UnknownInstructionException(byteInstr);

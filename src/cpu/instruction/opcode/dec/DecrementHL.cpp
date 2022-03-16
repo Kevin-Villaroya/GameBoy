@@ -21,7 +21,7 @@ void DecrementHL::execute(Memory& ram, Registers& registers){
         registers.setFlagZ(0);
     }
 
-    registers.setFlagN(0);
+    registers.setFlagN(true);
 
 }
 

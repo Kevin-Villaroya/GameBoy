@@ -1,7 +1,7 @@
 #ifndef __DECREMENT_REGISTER_H__
 #define __DECREMENT_REGISTER_H__
 
-#include "../Instruction.h"
+#include "../../Instruction.h"
 
 class DecrementRegister : public Instruction{
     private:

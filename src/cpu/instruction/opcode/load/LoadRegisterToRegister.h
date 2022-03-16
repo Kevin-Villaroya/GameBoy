@@ -1,7 +1,7 @@
 #ifndef __LOAD_REGISTER_TO_REGISTER_H__
 #define __LOAD_REGISTER_TO_REGISTER_H__
 
-#include "../Instruction.h"
+#include "../../Instruction.h"
 
 class LoadRegisterToRegister : public Instruction{
     private:
