@@ -55,6 +55,8 @@
 #include "opcode/inc/IncrementHL.h"
 #include "opcode/load/LoadHLToRegister.h"
 #include "opcode/load/LoadRegisterToHL.h"
+#include "opcode/dec/DecrementRegister.h"
+#include "opcode/dec/DecrementHL.h"
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -489,6 +491,30 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         	
 		case 0x75:
         	return new LoadRegisterToHL(RegisterName::L);
+        	
+        case 0x3D:
+        	return new DecrementRegister(RegisterName::A);
+        	
+        case 0x05:
+        	return new DecrementRegister(RegisterName::B);
+        	
+        case 0x0D:
+        	return new DecrementRegister(RegisterName::C);
+        	
+        case 0x15:
+        	return new DecrementRegister(RegisterName::D);
+        	
+        case 0x1D:
+        	return new DecrementRegister(RegisterName::E);
+        	
+        case 0x25:
+        	return new DecrementRegister(RegisterName::H);
+        	
+        case 0x2D:
+        	return new DecrementRegister(RegisterName::H);
+        	
+        case 0x35:
+        	return new DecrementHL();
         	
         default:
             throw UnknownInstructionException(byteInstr);
