@@ -23,6 +23,8 @@ void AddHLToA::execute(Memory& ram, Registers& registers){
         registers.setFlagC(0);
     
     registers.setFlagN(0);
+    
+    registers.setA(addValue + aValue);
 }
 
 unsigned int AddHLToA::getSize(){

@@ -17,9 +17,14 @@ class Processor{
         void execute(Instruction&);
 
         bool startupSequence();
+	
+		const std::string getNameForCartridgeType(unsigned char);	
+	
     public:
         Processor(char* path);
+	
         void run();
+		void printMetadata();
 };
 
 #endif

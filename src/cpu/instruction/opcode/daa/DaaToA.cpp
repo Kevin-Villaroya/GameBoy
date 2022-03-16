@@ -1,28 +1,43 @@
 #include "DaaToA.h"
 
+/**
+ * Check the BCD format validity after standard binary operation (ADD, SUB, ...)
+ */
 DaaToA::DaaToA(){}
 
 void DaaToA::execute(Memory& ram, Registers& registers){
     unsigned char aValue = registers.getA();
-
-    if((aValue&0b00001111 > 9) || (registers.isFlagH())){
-        aValue += 6;
-    }
-    if(((aValue>>4)>9) || (registers.isFlagC())){
-        if(aValue+0b01100000 < aValue)
-            registers.setFlagC(1);
-        else    
-            registers.setFlagC(0);
-        aValue = aValue+0b01100000;
-    }
-
-    if(aValue == 0)
-        registers.setFlagZ(1);
-    else    
-        registers.setFlagZ(0);
-    registers.setFlagH(0);
-
-    registers.setA(aValue);
+	
+	unsigned char correction = 0;
+	bool flagC = false;
+	
+	if(registers.isFlagH() || (!registers.isFlagN() && (aValue & 0b1111) > 9)) {
+		correction = 0b00000110;
+	}
+	
+	if(registers.isFlagC() || (!registers.isFlagN() && aValue > 0b10011001)) {
+		correction |= 0b01100000;
+		flagC = true;
+	}
+	
+	if(registers.isFlagN()) {
+		aValue -= correction;
+	}
+	else {
+		aValue += correction;
+	}
+	
+	if(aValue == 0) {
+		registers.setFlagZ(true);
+	}
+	else {
+		registers.setFlagZ(false);
+	}
+	
+	registers.setFlagC(flagC);
+	registers.setFlagH(false);
+	
+	registers.setA(aValue);
 }
 
 unsigned int DaaToA::getSize(){

@@ -5,10 +5,11 @@ CplToA::CplToA(){}
 void CplToA::execute(Memory& ram, Registers& registers){
     unsigned char aValue = registers.getA();
 
-    aValue = aValue^0b11111111;
+    aValue = aValue ^ 0b11111111;
 
-    registers.setFlagH(1);
     registers.setFlagN(1);
+    registers.setFlagH(1);
+
     registers.setA(aValue);
 }
 

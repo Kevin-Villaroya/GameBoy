@@ -4,17 +4,29 @@ RrCarryA::RrCarryA(){}
 
 void RrCarryA::execute(Memory& ram, Registers& registers){
     unsigned char aValue = registers.getA();
-    unsigned char valueOf0bit = aValue&0b00000001;
-    aValue >>= 1;
-    aValue += valueOf0bit<<7;
-
-    if(aValue == 0)
-        registers.setFlagZ(1);
-    else   
-        registers.setFlagZ(0);
-    registers.setFlagN(0);
+	bool firstBit = aValue & 0b00000001;
+	
+	aValue >>= 1;
+	
+	if(firstBit) {
+		aValue |= 0b10000000;
+		registers.setFlagC(true);
+	}
+	else {
+		aValue &= 0b01111111;
+		registers.setFlagC(false);
+	}
+	
+	if(aValue == 0) {
+		registers.setFlagZ(true);
+	}
+	else {
+		registers.setFlagZ(false);
+	}
+	
     registers.setFlagH(0);
-    registers.setFlagC(valueOf0bit);
+    registers.setFlagN(0);
+    
     registers.setA(aValue);
 }
 

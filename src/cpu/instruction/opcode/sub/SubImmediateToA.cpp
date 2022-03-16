@@ -10,7 +10,7 @@ void SubImmediateToA::execute(Memory& ram, Registers& registers){
     else
         registers.setFlagZ(0);
     
-    if((aValue&0b00001111) < (this->parameter&0b00001111))
+    if((aValue & 0b00001111) < (this->parameter & 0b00001111))
         registers.setFlagH(1);
     else
         registers.setFlagH(0);
@@ -21,6 +21,8 @@ void SubImmediateToA::execute(Memory& ram, Registers& registers){
         registers.setFlagC(0);
     
     registers.setFlagN(1);
+    
+    registers.setA(aValue - this->parameter);
 }
 
 unsigned int SubImmediateToA::getSize(){
@@ -31,6 +33,6 @@ unsigned int SubImmediateToA::getTiming(){
     return 8;
 }
 
-void SubImmediateToA::setParameters(const Memory&, unsigned short v){
-    this->parameter = v;
+void SubImmediateToA::setParameters(const Memory& memory, unsigned short pc){
+    this->parameter = memory[pc];
 }

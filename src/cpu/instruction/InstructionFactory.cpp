@@ -52,6 +52,7 @@
 #include "opcode/rr/RrCarryHL.h"
 #include "opcode/rr/RrRegister.h"
 #include "opcode/rr/RrHL.h"
+#include "opcode/inc/IncrementHL.h"
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -73,6 +74,8 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
             return new IncrementRegister(RegisterName::E);
         case 0x3c:
             return new IncrementRegister(RegisterName::A);
+     	case 0x34:
+            return new IncrementHL();
         case 0x40:
             return new LoadRegisterToRegister(RegisterName::B, RegisterName::B);
         case 0x50:
@@ -349,7 +352,7 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
             return new AddDoubleRegisterToHL(DoubleRegisterName::SP);
         case 0xE8:
             return new AddImmediateToSP();
-        case 0xCB37:
+        /*case 0xCB37:
             return new SwapRegister(RegisterName::A);
         case 0xCB30:
             return new SwapRegister(RegisterName::B);
@@ -364,7 +367,7 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         case 0xCB35:
             return new SwapRegister(RegisterName::L);
         case 0xCB36:
-            return new SwapHL();
+            return new SwapHL();*/
         case 0x27:
             return new DaaToA();
         case 0x2F:
@@ -381,7 +384,7 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
             return new RrCarryA();
         case 0x1F:
             return new RrA();
-        case 0xCB07:
+        /*case 0xCB07:
             return new RlCarryRegister(RegisterName::A);
         case 0xCB00:
             return new RlCarryRegister(RegisterName::B);
@@ -444,7 +447,7 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         case 0xCB1D:
             return new RrRegister(RegisterName::L);
         case 0xCB1E:
-            return new RrHL();
+            return new RrHL();*/
         default:
             throw UnknownInstructionException(byteInstr);
     }

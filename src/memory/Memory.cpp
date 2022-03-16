@@ -8,25 +8,17 @@ Memory::Memory(char* path){
 
     int current = 0;
 
-    unsigned short beginName = 0x134;
-    unsigned short lastName = 0x142;
-
-    std::string name;
-
     while (romFile.good()) {
-        char character = romFile.get();
-
-        this->memory[current] = character;
-
-
-        if(current >= beginName && current <= lastName){
-            name += character;
-        }
-        
-        current++;
+    	if(current < CARTRIGBE_SIZE) {
+		    char character = romFile.get();
+		    this->memory[current] = character;        
+		    current++;
+	   	}
+	   	else {
+	   		std::cerr << "Trying to load more data than a standard cartridge rom" << std::endl;
+	   		break;
+	   	}
     }
-
-    std::cout << "the game " << name << " has been successfully loaded" << std::endl;
 
     romFile.close();
 }
@@ -46,6 +38,10 @@ void Memory::set(unsigned short pos, unsigned char value){
 
 unsigned char Memory::operator[](unsigned short pos)const {
     return this->memory[pos];
+}
+
+unsigned char& Memory::operator[](unsigned short pos) {
+	return this->memory[pos];
 }
 
 void Memory::resetMemory(){

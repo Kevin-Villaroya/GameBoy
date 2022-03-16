@@ -10,6 +10,8 @@ int main(int argc, char* argv[]){
     }
 
     Processor cpu(argv[1]);
+    
+    cpu.printMetadata();
 
     try{
         cpu.run();

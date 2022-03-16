@@ -7,11 +7,10 @@ void PushDoubleRegisterToStack::execute(Memory& ram, Registers& registers){
     unsigned short doubleRegVal = registers.getDoubleRegister(doubleRegName);
     unsigned char leftRegVal = doubleRegVal >> 8;
     unsigned char rightRegVal = doubleRegVal;
-    ram.set(spValue, rightRegVal);
-    spValue--;
-    ram.set(spValue, leftRegVal);
-    spValue--;
-    registers.setSP(spValue);
+    
+    ram.set(spValue-1, leftRegVal);
+    ram.set(spValue-2, rightRegVal);
+    registers.setSP(spValue-2);
 }
 
 unsigned int PushDoubleRegisterToStack::getSize(){

@@ -2,3 +2,5 @@
 build/
 GameBoy
 *.gb
+
+*.fuse*

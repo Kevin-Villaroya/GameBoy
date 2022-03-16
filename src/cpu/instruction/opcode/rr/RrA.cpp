@@ -4,16 +4,34 @@ RrA::RrA(){}
 
 void RrA::execute(Memory& ram, Registers& registers){
     unsigned char aValue = registers.getA();
-    unsigned char valueOf0bit = aValue&0b00000001;
-    aValue >>= 1;
-    aValue += (registers.isFlagC()?1:0)<<7;
-    if(aValue == 0)
-        registers.setFlagZ(1);
-    else   
-        registers.setFlagZ(0);
-    registers.setFlagN(0);
+	bool firstBit = aValue & 0b00000001;
+	
+	aValue >>= 1;
+	
+	if(registers.isFlagC()) {
+		aValue |= 0b10000000;
+	}
+	else {
+		aValue &= 0b01111111;
+	}
+	
+	if(firstBit) {
+		registers.setFlagC(true);
+	}
+	else {
+		registers.setFlagC(false);
+	}
+	
+	if(aValue == 0) {
+		registers.setFlagZ(true);
+	}
+	else {
+		registers.setFlagZ(false);
+	}
+	
     registers.setFlagH(0);
-    registers.setFlagC(valueOf0bit);
+    registers.setFlagN(0);
+    
     registers.setA(aValue);
 }
 

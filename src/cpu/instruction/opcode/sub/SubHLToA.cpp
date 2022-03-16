@@ -12,7 +12,7 @@ void SubHLToA::execute(Memory& ram, Registers& registers){
     else
         registers.setFlagZ(0);
     
-    if((aValue&0b00001111) < (toSubValue&0b00001111))
+    if((aValue & 0b00001111) < (toSubValue & 0b00001111))
         registers.setFlagH(1);
     else
         registers.setFlagH(0);
@@ -23,6 +23,8 @@ void SubHLToA::execute(Memory& ram, Registers& registers){
         registers.setFlagC(0);
     
     registers.setFlagN(1);
+    
+    registers.setA(aValue - toSubValue);
 }
 
 unsigned int SubHLToA::getSize(){

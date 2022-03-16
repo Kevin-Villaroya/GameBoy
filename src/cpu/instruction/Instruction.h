@@ -11,7 +11,7 @@ class Instruction{
         virtual void execute(Memory& ram, Registers& registers) = 0;
         virtual unsigned int getSize() = 0;
         virtual unsigned int getTiming() = 0;
-        virtual void setParameters(const Memory&, unsigned short) = 0;
+        virtual void setParameters(const Memory&, unsigned short pc) = 0;
         virtual ~Instruction(){}
 };
 

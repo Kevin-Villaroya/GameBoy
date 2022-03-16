@@ -4,16 +4,34 @@ RlA::RlA(){}
 
 void RlA::execute(Memory& ram, Registers& registers){
     unsigned char aValue = registers.getA();
-    unsigned char valueOf7bit = aValue>>7;
-    aValue <<= 1;
-    aValue += registers.isFlagC()?1:0;
-    if(aValue == 0)
-        registers.setFlagZ(1);
-    else   
-        registers.setFlagZ(0);
-    registers.setFlagN(0);
+	bool lastBit = aValue & 0b10000000;
+	
+	aValue <<= 1;
+	
+	if(registers.isFlagC()) {
+		aValue |= 0b00000001;
+	}
+	else {
+		aValue &= 0b11111110;
+	}
+	
+	if(lastBit) {
+		registers.setFlagC(true);
+	}
+	else {
+		registers.setFlagC(false);
+	}
+	
+	if(aValue == 0) {
+		registers.setFlagZ(true);
+	}
+	else {
+		registers.setFlagZ(false);
+	}
+	
     registers.setFlagH(0);
-    registers.setFlagC(valueOf7bit);
+    registers.setFlagN(0);
+    
     registers.setA(aValue);
 }
 

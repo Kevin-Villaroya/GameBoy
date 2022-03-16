@@ -20,6 +20,7 @@ class Memory{
         unsigned char get(unsigned short pos) const;
         void set(unsigned short, unsigned char);
         unsigned char operator[](unsigned short) const;
+		unsigned char& operator[](unsigned short);
         unsigned short getDouble(unsigned short pos) const;
 };
 

@@ -4,7 +4,7 @@ AddCarryHLToA::AddCarryHLToA(){}
 
 void AddCarryHLToA::execute(Memory& ram, Registers& registers){
     unsigned short hlValue = registers.getDoubleRegister(DoubleRegisterName::HL);
-    unsigned char addValue = ram.get(hlValue)+(registers.isFlagC()?1:0);
+    unsigned char addValue = ram.get(hlValue) + (registers.isFlagC() ? 1 : 0);
     unsigned char aValue = registers.getA();
 
     if(addValue+aValue == 0)
@@ -12,7 +12,7 @@ void AddCarryHLToA::execute(Memory& ram, Registers& registers){
     else
         registers.setFlagZ(0);
     
-    if(((aValue&0b00001111)+(addValue&0b00001111)) > 0b00001111)
+    if(((aValue & 0b00001111) + (addValue & 0b00001111)) > 0b00001111)
         registers.setFlagH(1);
     else
         registers.setFlagH(0);
@@ -23,6 +23,8 @@ void AddCarryHLToA::execute(Memory& ram, Registers& registers){
         registers.setFlagC(0);
     
     registers.setFlagN(0);
+    
+    registers.setA(addValue + aValue);
 }
 
 unsigned int AddCarryHLToA::getSize(){

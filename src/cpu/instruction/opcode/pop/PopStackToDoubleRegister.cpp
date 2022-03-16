@@ -4,12 +4,13 @@ PopStackToDoubleRegister::PopStackToDoubleRegister(DoubleRegisterName r):doubleR
 
 void PopStackToDoubleRegister::execute(Memory& ram, Registers& registers){
     unsigned short spValue = registers.getSP();
-    unsigned short doubleRegVal = ram.get(spValue);
-    spValue++;
+    unsigned short doubleRegVal = 0;
+    
+    doubleRegVal = ram.get(spValue+1);
     doubleRegVal <<= 8;
     doubleRegVal += ram.get(spValue);
-    spValue++;
-    registers.setSP(spValue);
+    
+    registers.setSP(spValue+2);
     registers.setDoubleRegister(doubleRegName, doubleRegVal);
 }
 

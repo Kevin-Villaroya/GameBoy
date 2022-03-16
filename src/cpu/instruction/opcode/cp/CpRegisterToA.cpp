@@ -10,8 +10,10 @@ void CpRegisterToA::execute(Memory& ram, Registers& registers){
         registers.setFlagZ(1);
     else 
         registers.setFlagZ(0);
+    
     registers.setFlagN(1);
-    if((aVal&0b00001111) < (regVal&0b00001111))
+    
+    if((aVal & 0b00001111) < (regVal & 0b00001111))
         registers.setFlagH(1);
     else
         registers.setFlagH(0);

@@ -6,17 +6,19 @@ void AddDoubleRegisterToHL::execute(Memory& ram, Registers& registers){
     unsigned short regValue = registers.getDoubleRegister(this->doubleRegName);
     unsigned short aValue = registers.getHL();
     
-    if(((aValue&0b0000000011111111)+(regValue&0b0000000011111111)) > 0b0000000011111111)
+    if(((aValue & 0b0000000011111111) + (regValue & 0b0000000011111111)) > 0b0000000011111111)
         registers.setFlagH(1);
     else
         registers.setFlagH(0);
 
-    if(aValue > (aValue+regValue))
+    if(aValue > (aValue + regValue))
         registers.setFlagC(1);
     else
         registers.setFlagC(0);
     
     registers.setFlagN(0);
+    
+    registers.setHL(regValue + aValue);
 }
 
 unsigned int AddDoubleRegisterToHL::getSize(){
