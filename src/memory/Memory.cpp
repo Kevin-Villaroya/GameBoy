@@ -9,7 +9,7 @@ Memory::Memory(char* path){
     int current = 0;
 
     while (romFile.good()) {
-    	if(current < CARTRIGBE_SIZE) {
+    	if(current <= CARTRIGBE_SIZE) {
 		    char character = romFile.get();
 		    this->memory[current] = character;        
 		    current++;
