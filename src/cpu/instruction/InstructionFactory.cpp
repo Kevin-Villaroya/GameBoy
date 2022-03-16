@@ -54,6 +54,7 @@
 #include "opcode/rr/RrHL.h"
 #include "opcode/inc/IncrementHL.h"
 #include "opcode/load/LoadHLToRegister.h"
+#include "opcode/load/LoadRegisterToHL.h"
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -470,6 +471,24 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         	
         case 0x6E:
         	return new LoadHLToRegister(RegisterName::L);
+        	
+        case 0x70:
+        	return new LoadRegisterToHL(RegisterName::B);
+        	
+        case 0x71:
+        	return new LoadRegisterToHL(RegisterName::C);
+        	
+        case 0x72:
+        	return new LoadRegisterToHL(RegisterName::D);
+        	
+        case 0x73:
+        	return new LoadRegisterToHL(RegisterName::E);
+        	
+        case 0x74:
+        	return new LoadRegisterToHL(RegisterName::H);
+        	
+		case 0x75:
+        	return new LoadRegisterToHL(RegisterName::L);
         	
         default:
             throw UnknownInstructionException(byteInstr);
