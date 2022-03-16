@@ -60,6 +60,7 @@
 #include "opcode/load/LoadImmediateToRegister.h"
 #include "opcode/jmp/JumpUnconditionalRelativeImmediate.h"
 #include "opcode/inc/IncrementDoubleRegister.h"
+#include "opcode/call/CallUnconditional.h"
 
 Instruction* InstructionFactory::forCode(unsigned char byteInstr){
     switch(byteInstr){
@@ -560,6 +561,9 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         	
         case 0x33:
         	return new IncrementDoubleRegister(DoubleRegisterName::SP);
+        	
+        case 0xCD:
+        	return new CallUnconditional();
         	
         default:
             throw UnknownInstructionException(byteInstr);
