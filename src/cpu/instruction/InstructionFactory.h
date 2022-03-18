@@ -5,9 +5,10 @@
 
 class InstructionFactory{
     private:
-        
+        static Instruction* forCodeCb(unsigned char byteInstr);
     public:
-        static Instruction* forCode(unsigned char byteInstr);
+        static Instruction* forCode(const Memory& memory ,unsigned short pc);
+        
 };
 
 #endif
