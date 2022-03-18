@@ -510,9 +510,6 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
         	
         case 0xDA:
         	return new JumpConditionalImmediate(InstructionCondition::C);
-        	
-        case 0xc9:
-	    	return new ReturnUnconditional();
         
         case 0xCB:
         	return InstructionFactory::forCodeCb(memory[pc + 1]);
