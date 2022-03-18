@@ -5,12 +5,13 @@ SwapHL::SwapHL(){}
 void SwapHL::execute(Memory& ram, Registers& registers){
     unsigned short hlValue = registers.getDoubleRegister(DoubleRegisterName::HL);
     unsigned char memValue = ram.get(hlValue);
-    unsigned char nMemValue = (memValue>>4)+(memValue&0b11110000);
+    unsigned char nMemValue = (memValue >> 4) + (memValue << 4);
 
     if(nMemValue == 0)
         registers.setFlagZ(1);
     else    
         registers.setFlagZ(0);
+        
     registers.setFlagN(0);
     registers.setFlagH(0);
     registers.setFlagC(0);

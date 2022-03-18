@@ -13,7 +13,7 @@ class Processor{
 
         Instruction* fetch();
 
-        Instruction* decodeAndLoad(unsigned char);
+        Instruction* decodeAndLoad();
         void execute(Instruction&);
 
         bool startupSequence();

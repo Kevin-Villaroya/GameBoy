@@ -3,14 +3,11 @@
 
 #include "../../Instruction.h"
 
-class ReturnUnconditional : public Instruction
-{
-	public:
-		void execute(Memory& ram, Registers& registers) override;
-		unsigned int getSize() override;
-		unsigned int getTiming() override;
-		void setParameters(const Memory&, unsigned short) override;
-
+class ReturnUnconditional : public Instruction{
+    public:
+        void execute(Memory&, Registers&) override;
+        unsigned int getSize() override;
+        unsigned int getTiming() override;
+        void setParameters(const Memory&, unsigned short) override;
 };
-
 #endif

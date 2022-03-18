@@ -1,23 +1,23 @@
 #include "ReturnUnconditional.h"
 
-void ReturnUnconditional::execute(Memory& ram, Registers& registers) {
+void ReturnUnconditional::execute(Memory& ram, Registers& registers){
 	unsigned short sp = registers.getSP();
+	unsigned short pc;
 	
-	unsigned short returnAddress = ram[sp + 1];
-	returnAddress <<= 8;
-	returnAddress += ram[sp];
+	pc = ram[sp + 1];
+	pc <<= 8;
+	pc += ram[sp];
 	
-	registers.setPC(returnAddress);
 	registers.setSP(sp + 2);
+	registers.setPC(pc);
 }
 
-unsigned int ReturnUnconditional::getSize() {
+unsigned int ReturnUnconditional::getSize(){
 	return 1;
 }
 
-unsigned int ReturnUnconditional::getTiming() {
-	return 8;
+unsigned int ReturnUnconditional::getTiming(){
+ return 16;
 }
 
-void ReturnUnconditional::setParameters(const Memory& memory, unsigned short pc) {
-}
+void ReturnUnconditional::setParameters(const Memory&, unsigned short){}

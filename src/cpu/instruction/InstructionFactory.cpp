@@ -66,7 +66,9 @@
 #include "opcode/jmp/JumpConditionalImmediate.h"
 #include "condition/InstructionCondition.h"
 
-Instruction* InstructionFactory::forCode(unsigned char byteInstr){
+Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc){
+	unsigned char byteInstr = memory[pc];
+	
     switch(byteInstr){
         case 0xc3:
             return new JumpUnconditionalImmediate();
@@ -364,22 +366,6 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
             return new AddDoubleRegisterToHL(DoubleRegisterName::SP);
         case 0xE8:
             return new AddImmediateToSP();
-        /*case 0xCB37:
-            return new SwapRegister(RegisterName::A);
-        case 0xCB30:
-            return new SwapRegister(RegisterName::B);
-        case 0xCB31:
-            return new SwapRegister(RegisterName::C);
-        case 0xCB32:
-            return new SwapRegister(RegisterName::D);
-        case 0xCB33:
-            return new SwapRegister(RegisterName::E);
-        case 0xCB34:
-            return new SwapRegister(RegisterName::H);
-        case 0xCB35:
-            return new SwapRegister(RegisterName::L);
-        case 0xCB36:
-            return new SwapHL();*/
         case 0x27:
             return new DaaToA();
         case 0x2F:
@@ -395,72 +381,7 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         case 0x0F:
             return new RrCarryA();
         case 0x1F:
-            return new RrA();
-        /*case 0xCB07:
-            return new RlCarryRegister(RegisterName::A);
-        case 0xCB00:
-            return new RlCarryRegister(RegisterName::B);
-        case 0xCB01:
-            return new RlCarryRegister(RegisterName::C);
-        case 0xCB02:
-            return new RlCarryRegister(RegisterName::D);
-        case 0xCB03:
-            return new RlCarryRegister(RegisterName::E);
-        case 0xCB04:
-            return new RlCarryRegister(RegisterName::H);
-        case 0xCB05:
-            return new RlCarryRegister(RegisterName::L);
-        case 0xCB06:
-            return new RlCarryHL();
-        case 0xCB17:
-            return new RlRegister(RegisterName::A);
-        case 0xCB10:
-            return new RlRegister(RegisterName::B);
-        case 0xCB11:
-            return new RlRegister(RegisterName::C);
-        case 0xCB12:
-            return new RlRegister(RegisterName::D);
-        case 0xCB13:
-            return new RlRegister(RegisterName::E);
-        case 0xCB14:
-            return new RlRegister(RegisterName::H);
-        case 0xCB15:
-            return new RlRegister(RegisterName::L);
-        case 0xCB16:
-            return new RlHL();
-        case 0xCB0F:
-            return new RrCarryRegister(RegisterName::A);
-        case 0xCB08:
-            return new RrCarryRegister(RegisterName::B);
-        case 0xCB09:
-            return new RrCarryRegister(RegisterName::C);
-        case 0xCB0A:
-            return new RrCarryRegister(RegisterName::D);
-        case 0xCB0B:
-            return new RrCarryRegister(RegisterName::E);
-        case 0xCB0C:
-            return new RrCarryRegister(RegisterName::H);
-        case 0xCB0D:
-            return new RrCarryRegister(RegisterName::L);
-        case 0xCB0E:
-            return new RrCarryHL();
-        case 0xCB1F:
-            return new RrRegister(RegisterName::A);
-        case 0xCB18:
-            return new RrRegister(RegisterName::B);
-        case 0xCB19:
-            return new RrRegister(RegisterName::C);
-        case 0xCB1A:
-            return new RrRegister(RegisterName::D);
-        case 0xCB1B:
-            return new RrRegister(RegisterName::E);
-        case 0xCB1C:
-            return new RrRegister(RegisterName::H);
-        case 0xCB1D:
-            return new RrRegister(RegisterName::L);
-        case 0xCB1E:
-            return new RrHL();*/
-            
+            return new RrA();            
         case 0x7E:
         	return new LoadHLToRegister(RegisterName::A);
         	
@@ -590,7 +511,100 @@ Instruction* InstructionFactory::forCode(unsigned char byteInstr){
         case 0xDA:
         	return new JumpConditionalImmediate(InstructionCondition::C);
         	
+        case 0xc9:
+	    	return new ReturnUnconditional();
+        
+        case 0xCB:
+        	return InstructionFactory::forCodeCb(memory[pc + 1]);
+        	
         default:
             throw UnknownInstructionException(byteInstr);
+	}
+}
+    
+Instruction* InstructionFactory::forCodeCb(unsigned char byteInstr){
+	switch(byteInstr){
+		case 0x07:
+	        return new RlCarryRegister(RegisterName::A);
+	    case 0x00:
+	        return new RlCarryRegister(RegisterName::B);
+	    case 0x01:
+	        return new RlCarryRegister(RegisterName::C);
+	    case 0x02:
+	        return new RlCarryRegister(RegisterName::D);
+	    case 0x03:
+	        return new RlCarryRegister(RegisterName::E);
+	    case 0x04:
+	        return new RlCarryRegister(RegisterName::H);
+	    case 0x05:
+	        return new RlCarryRegister(RegisterName::L);
+	    case 0x06:
+	        return new RlCarryHL();
+	    case 0x17:
+	        return new RlRegister(RegisterName::A);
+	    case 0x10:
+	        return new RlRegister(RegisterName::B);
+	    case 0x11:
+	        return new RlRegister(RegisterName::C);
+	    case 0x12:
+	        return new RlRegister(RegisterName::D);
+	    case 0x13:
+	        return new RlRegister(RegisterName::E);
+	    case 0x14:
+	        return new RlRegister(RegisterName::H);
+	    case 0x15:
+	        return new RlRegister(RegisterName::L);
+	    case 0x16:
+	        return new RlHL();
+	    case 0x0F:
+	        return new RrCarryRegister(RegisterName::A);
+	    case 0x08:
+	        return new RrCarryRegister(RegisterName::B);
+	    case 0x09:
+	        return new RrCarryRegister(RegisterName::C);
+	    case 0x0A:
+	        return new RrCarryRegister(RegisterName::D);
+	    case 0x0B:
+	        return new RrCarryRegister(RegisterName::E);
+	    case 0x0C:
+	        return new RrCarryRegister(RegisterName::H);
+	    case 0x0D:
+	        return new RrCarryRegister(RegisterName::L);
+	    case 0x0E:
+	        return new RrCarryHL();
+	    case 0x1F:
+	        return new RrRegister(RegisterName::A);
+	    case 0x18:
+	        return new RrRegister(RegisterName::B);
+	    case 0x19:
+	        return new RrRegister(RegisterName::C);
+	    case 0x1A:
+	        return new RrRegister(RegisterName::D);
+	    case 0x1B:
+	        return new RrRegister(RegisterName::E);
+	    case 0x1C:
+	        return new RrRegister(RegisterName::H);
+	    case 0x1D:
+	        return new RrRegister(RegisterName::L);
+	    case 0x1E:
+	        return new RrHL();
+	    case 0x37:
+	        return new SwapRegister(RegisterName::A);
+	    case 0x30:
+	        return new SwapRegister(RegisterName::B);
+	    case 0x31:
+	        return new SwapRegister(RegisterName::C);
+	    case 0x32:
+	        return new SwapRegister(RegisterName::D);
+	    case 0x33:
+	        return new SwapRegister(RegisterName::E);
+	    case 0x34:
+	        return new SwapRegister(RegisterName::H);
+	    case 0x35:
+	        return new SwapRegister(RegisterName::L);
+	    case 0x36:
+	     	return new SwapHL();
+	    default:
+        	throw UnknownInstructionException(0xCB00 + byteInstr);       
     }
 }

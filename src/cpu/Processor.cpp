@@ -7,16 +7,14 @@ Processor::Processor(char* path) : memory(path){
 }
 
 Instruction* Processor::fetch(){
-    unsigned char instrByte = this->memory[this->registers.getPC()];
-
-    Instruction* currentInstr = this->decodeAndLoad(instrByte);
+    Instruction* currentInstr = this->decodeAndLoad();
     this->registers.incrementPc(currentInstr->getSize());
 
     return currentInstr;
 }
 
-Instruction* Processor::decodeAndLoad(unsigned char byteInstr){
-    Instruction* instr = InstructionFactory::forCode(byteInstr);
+Instruction* Processor::decodeAndLoad(){
+    Instruction* instr = InstructionFactory::forCode(this->memory, this->registers.getPC());
     instr->setParameters(this->memory, this->registers.getPC() + 1);
 
     return instr;
