@@ -1,6 +1,6 @@
 #include "JumpConditionalImmediate.h"
 
-JumpConditionalImmediate::JumpConditionalImmediate(std::function<bool(const Memory&, const Registers&)> test) : test(test) {}
+JumpConditionalImmediate::JumpConditionalImmediate(Condition test) : test(test) {}
 
 void JumpConditionalImmediate::execute(Memory& ram, Registers& registers){
 	if(this->test(ram, registers))

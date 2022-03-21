@@ -20,5 +20,5 @@ unsigned int CallUnconditional::getTiming() {
 }
 
 void CallUnconditional::setParameters(const Memory& memory, unsigned short pc) {
-	this->address = memory[pc];
+	this->address = memory.getDouble(pc);
 }

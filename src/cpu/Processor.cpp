@@ -120,8 +120,7 @@ void Processor::run(){
         this->registers.init(this->memory);
         this->registers.setPC(0x100);
 
-        while (true)
-        {
+        while (true){
             Instruction* instr = this->fetch();
             this->execute(*instr);
             //display

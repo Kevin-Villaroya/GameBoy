@@ -2,15 +2,15 @@
 #define __JUMP_CONDITIONAL_IMMEDIATE_H__
 
 #include "../../Instruction.h"
-#include <functional>
+#include "../../condition/InstructionCondition.h"
 
 class JumpConditionalImmediate : public Instruction{
 	private:
-		std::function<bool(const Memory&, const Registers&)> test;
+		Condition test;
 		unsigned short address;
 	
     public:
-		JumpConditionalImmediate(std::function<bool(const Memory&, const Registers&)> test);
+		  JumpConditionalImmediate(Condition test);
 	
         void execute(Memory& ram, Registers& registers) override;
         unsigned int getSize() override;

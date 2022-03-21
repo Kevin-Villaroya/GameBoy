@@ -65,6 +65,7 @@
 #include "opcode/ret/ReturnUnconditional.h"
 #include "opcode/jmp/JumpConditionalImmediate.h"
 #include "condition/InstructionCondition.h"
+#include "opcode/call/CallConditional.h"
 
 Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc){
 	unsigned char byteInstr = memory[pc];
@@ -511,6 +512,18 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
         case 0xDA:
         	return new JumpConditionalImmediate(InstructionCondition::C);
         
+        case 0xCC:
+            return new CallConditional(InstructionCondition::Z);
+
+        case 0xDC:
+            return new CallConditional(InstructionCondition::C);
+
+        case 0xC4:
+            return new CallConditional(InstructionCondition::NZ);
+
+        case 0xD4:
+            return new CallConditional(InstructionCondition::NC);
+
         case 0xCB:
         	return InstructionFactory::forCodeCb(memory[pc + 1]);
         	
