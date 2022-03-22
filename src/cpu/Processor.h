@@ -11,6 +11,9 @@ class Processor{
         Memory memory;
         Registers registers;
 
+        Instruction* instruction;
+        unsigned int ticksDelayed;
+
         Instruction* fetch();
 
         Instruction* decodeAndLoad();
@@ -23,6 +26,7 @@ class Processor{
     public:
         Processor(char* path);
 	
+        void tick();
         void run();
 		void printMetadata();
 };

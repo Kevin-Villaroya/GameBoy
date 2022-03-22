@@ -4,6 +4,16 @@
 #include <iostream>
 
 Processor::Processor(char* path) : memory(path){
+	bool canBoot = this->startupSequence();
+	this->ticksDelayed = 0;
+
+    if(canBoot){
+        this->memory.init();
+        this->registers.init(this->memory);
+        this->registers.setPC(0x100);
+    }else{
+        throw startupSequence();
+    }
 }
 
 Instruction* Processor::fetch(){
@@ -112,24 +122,19 @@ const std::string Processor::getNameForCartridgeType(unsigned char type) {
 	}
 }
 
-void Processor::run(){
-    bool canBoot = this->startupSequence();
+void Processor::tick(){
+	if(this->ticksDelayed == 0){
+		this->instruction = this->fetch();
+	}
 
-    if(canBoot){
-        this->memory.init();
-        this->registers.init(this->memory);
-        this->registers.setPC(0x100);
+	this->ticksDelayed++;
 
-        while (true){
-            Instruction* instr = this->fetch();
-            this->execute(*instr);
-            //display
+	if(this->ticksDelayed >= this->instruction->getTiming()){
+    	this->execute(*this->instruction);
+    	this->ticksDelayed = 0;
 
-            delete instr;
-        }
-    }else{
-        throw startupSequence();
-    }  
+    	delete this->instruction;
+	}
 }
 
 void Processor::printMetadata() {

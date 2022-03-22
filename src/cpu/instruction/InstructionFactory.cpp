@@ -1,3 +1,4 @@
+#include <iostream>
 #include "InstructionFactory.h"
 #include "instructionError/UnknownInstructionException.h"
 
@@ -69,7 +70,7 @@
 
 Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc){
 	unsigned char byteInstr = memory[pc];
-	
+    
     switch(byteInstr){
         case 0xc3:
             return new JumpUnconditionalImmediate();
@@ -528,7 +529,7 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
         	return InstructionFactory::forCodeCb(memory[pc + 1]);
         	
         default:
-            throw UnknownInstructionException(byteInstr);
+            throw UnknownInstructionException(0x00 + byteInstr);
 	}
 }
     

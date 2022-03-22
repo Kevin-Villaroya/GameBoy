@@ -1,6 +1,5 @@
 #include <iostream>
-#include "cpu/Processor.h"
-#include "cpu/instruction/instructionError/UnknownInstructionException.h"
+#include "console/Console.h"
 
 int main(int argc, char* argv[]){
 
@@ -9,16 +8,7 @@ int main(int argc, char* argv[]){
         return 1;
     }
 
-    Processor cpu(argv[1]);
-    
-    cpu.printMetadata();
+    Console gameboy(argv[1]);
 
-    try{
-        cpu.run();
-    }catch(UnknownInstructionException &error){
-        std::cerr << error.what() << std::endl;
-        return 1;
-    }
-
-    return 0;
+    return gameboy.run();
 }
