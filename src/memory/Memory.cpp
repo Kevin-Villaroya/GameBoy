@@ -45,10 +45,8 @@ unsigned char& Memory::operator[](unsigned short pos) {
 }
 
 void Memory::resetMemory(){
-    unsigned char value = this->memory[0x00];
-
     for(int i = CARTRIGBE_SIZE + 1; i < RAM_SIZE; i++){
-        this->memory[i] = value;
+        this->memory[i] = 0;
     }
 }
 

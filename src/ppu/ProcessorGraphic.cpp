@@ -54,7 +54,6 @@ void ProcessorGraphic::pixelTransfer(Memory& ram){
     }
 
     if(this->x == 160){
-        //std::cout << "go HBlank" << std::endl;
         this->screen->HBlank();
         this->currentState = ProcessorGraphicState::HBlank;
     }
