@@ -75,9 +75,14 @@
 #include "opcode/load/LoadFromRelativeAddressToRegister.h"
 #include "opcode/load/LoadFromRegisterToRelativeAddress.h"
 #include "opcode/di/DI.h"
+#include "opcode/load/LoadRegisterToImmediateAddress.h"
+#include "opcode/load/LoadFromImmediateRelativeAddressToRegister.h"
 
 Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc){
 	unsigned char byteInstr = memory[pc];
+
+    //std::cout << "pc: " << pc << std::endl;
+    //std::cout << "instr: " << (unsigned short)byteInstr << std::endl;
 
     switch(byteInstr){
         case 0xc3:
@@ -552,7 +557,7 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             return new JumpConditionalRelativeImmediate(InstructionCondition::C);
 
         case 0xF2:
-            
+            std::cout << "si pas la je baise louis" << std::endl;
             return new LoadFromRelativeAddressToRegister(RegisterName::A, RegisterName::C);        
 
         case 0xE2:
@@ -566,6 +571,12 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
 
         case 0xF3:
             return new DI();
+
+        case 0xEA:
+            return new LoadRegisterToImmediateAddress(RegisterName::A);
+
+        case 0xF0:
+            return new LoadFromImmediateRelativeAddressToRegister(RegisterName::A);
 
         case 0xCB:
         	return InstructionFactory::forCodeCb(memory[pc + 1]);

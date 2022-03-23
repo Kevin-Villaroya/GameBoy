@@ -17,5 +17,9 @@ void Terminal::HBlank(){
 }
 
 void Terminal::VBlank(){
-    std::cout<< "\033[2J";
+    //std::cout<< "\033[2J";
+    std::cout << std::endl;
+    std::cout << std::endl;
+    std::cout << std::endl;
+    std::cout << std::endl;
 }

@@ -1,4 +1,5 @@
 #include "PixelFetcher.h"
+#include <iostream>
 
 void PixelFetcher::tick(Memory& ram){
     this->ticks++;
@@ -32,6 +33,7 @@ void PixelFetcher::start(unsigned short tileMapRowAddr, unsigned char tileLine){
     this->tileIndex = 0;
     this->mapAddr = tileMapRowAddr;
     this->tileLine = tileLine;
+    this->ticks = 0;
 
     this->currentState = PixelFetcherState::ReadTileId;
 

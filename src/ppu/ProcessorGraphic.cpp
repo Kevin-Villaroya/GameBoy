@@ -1,10 +1,11 @@
 #include "ProcessorGraphic.h"
+#include <iostream>
 
 ProcessorGraphic::ProcessorGraphic(){
     this->x = 0;
     this->ticks = 0;
-    this->LY = 0; //TODO maybe take this value in the memory
     this->screen = new Terminal();
+    this->currentState = ProcessorGraphicState::OAMSearch;
 }
 
 void ProcessorGraphic::tick(Memory& ram){
@@ -12,7 +13,7 @@ void ProcessorGraphic::tick(Memory& ram){
 
     switch (this->currentState){
         case ProcessorGraphicState::OAMSearch:
-            this->oamSearch();
+            this->oamSearch(ram);
             
             break;
 
@@ -21,11 +22,11 @@ void ProcessorGraphic::tick(Memory& ram){
             break;
 
         case ProcessorGraphicState::HBlank:
-            this->hBlank();
+            this->hBlank(ram);
             break;
 
         case ProcessorGraphicState::VBlank:
-            this->vBlank();
+            this->vBlank(ram);
             break;
 
         default:
@@ -33,14 +34,14 @@ void ProcessorGraphic::tick(Memory& ram){
     }
 }
 
-void ProcessorGraphic::oamSearch(){
-    this->x = 0;
-    unsigned char tileLine = this->LY % 8;
-    unsigned short tileMapRowAddr = 0x9800 + ((this->LY / 8) * 32);
-
-    this->fetcher.start(tileMapRowAddr, tileLine);
-
+void ProcessorGraphic::oamSearch(Memory& ram){
     if(this->ticks == 40){
+        this->x = 0;
+        unsigned char tileLine = this->getLY(ram) % 8;
+        unsigned short tileMapRowAddr = 0x9800 + ((this->getLY(ram) / 8) * 32);
+
+        //std::cout << "go pixel" << std::endl;
+        this->fetcher.start(tileMapRowAddr, tileLine);
         this->currentState = ProcessorGraphicState::PixelTransfer;
     }
 }
@@ -54,37 +55,49 @@ void ProcessorGraphic::pixelTransfer(Memory& ram){
     }
 
     if(this->x == 160){
+        //std::cout << "go HBlank" << std::endl;
         this->screen->HBlank();
         this->currentState = ProcessorGraphicState::HBlank;
     }
 }
 
-void ProcessorGraphic::hBlank(){
+void ProcessorGraphic::hBlank(Memory& ram){
      if(this->ticks == 456){
         this->ticks = 0;
-        this->LY++;
+        this->setLY(ram, this->getLY(ram) + 1);
 
-        if(this->LY == 144){
+        if(this->getLY(ram) == 144){
+            std::cout << "go VBlank" << std::endl;
             this->screen->VBlank();
             this->currentState = ProcessorGraphicState::VBlank;
         }else{
+            //std::cout << "go OAMSearch" << std::endl;
             this->currentState = ProcessorGraphicState::OAMSearch;
         }
     }
 }
 
-void ProcessorGraphic::vBlank(){
+void ProcessorGraphic::vBlank(Memory& ram){
     if(this->ticks >= 10){
         if(this->ticks == 456){
             this->ticks = 0;
-            this->LY++;
+            this->setLY(ram, this->getLY(ram) + 1);
 
-            if(this->LY == 153){
-                this->LY = 0;
+            if(this->getLY(ram) == 153){
+                this->setLY(ram, 0);
+                //std::cout << "go OAMSearch" << std::endl;
                 this->currentState = ProcessorGraphicState::OAMSearch;
             }
         }
     }
+}
+
+unsigned char ProcessorGraphic::getLY(Memory& ram){
+    return ram[0xff44];
+}
+
+void ProcessorGraphic::setLY(Memory& ram, unsigned char value){
+    ram.set(0xFF44, value);
 }
 
 ProcessorGraphic::~ProcessorGraphic(){

@@ -22,19 +22,19 @@ private:
 
 	ProcessorGraphicState currentState;
 
-	// Number of lines displayed
-	unsigned int LY;
-
 	// Tick associated to the current line being drawed
 	unsigned int ticks;
 
 	// Number of pixels displayed in the current line
 	unsigned int x;
 
-	void oamSearch();
+	void oamSearch(Memory& ram);
 	void pixelTransfer(Memory& ram);
-	void vBlank();
-	void hBlank();
+	void vBlank(Memory& ram);
+	void hBlank(Memory& ram);
+
+	unsigned char getLY(Memory& ram);
+	void setLY(Memory& ram, unsigned char value);
 public:
 	ProcessorGraphic();
 	~ProcessorGraphic();
