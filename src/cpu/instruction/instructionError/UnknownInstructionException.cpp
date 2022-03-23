@@ -2,12 +2,12 @@
 
 #include <sstream>
 
-std::string UnknownInstructionException::createErrorMessage(unsigned char byteInstr){
+std::string UnknownInstructionException::createErrorMessage(unsigned char byteInstr, std::string message){
     std::stringstream ss;
-    ss << "unknown instruction: " << unsigned(byteInstr);
+    ss << "unknown instruction: " << unsigned(byteInstr) << " " << message;
 
     return ss.str();
 }
 
-UnknownInstructionException::UnknownInstructionException(unsigned char byteInstr) : runtime_error(UnknownInstructionException::createErrorMessage(byteInstr)){   
+UnknownInstructionException::UnknownInstructionException(unsigned char byteInstr, std::string message) : runtime_error(UnknownInstructionException::createErrorMessage(byteInstr, message)){   
 }

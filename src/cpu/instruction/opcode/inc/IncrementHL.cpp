@@ -10,9 +10,9 @@ void IncrementHL::execute(Memory& ram, Registers& registers){
     ram[valueAddress] = value;
 
     if(byte3Before && !byte3After){
-        registers.setH(1);
+        registers.setFlagH(1);
     }else{
-        registers.setH(0);
+        registers.setFlagH(0);
     }
 
     if(value == 0){

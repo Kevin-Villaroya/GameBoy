@@ -18,5 +18,5 @@ unsigned int JumpConditionalImmediate::getTiming(){
 }
 
 void JumpConditionalImmediate::setParameters(const Memory& memory, unsigned short pc){
-	this->address = memory[pc];
+	this->address = memory.getDouble(pc);
 }

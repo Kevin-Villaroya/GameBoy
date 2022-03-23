@@ -55,9 +55,9 @@ void Memory::resetMemory(){
 unsigned short Memory::getDouble(unsigned short pos) const{
     unsigned short value;
     
-    value = this->memory[pos];
+    value = this->memory[pos + 1];
     value = value << 8;
-    value = value | this->memory[pos + 1];
+    value = value | this->memory[pos];
 
     return value;
 }

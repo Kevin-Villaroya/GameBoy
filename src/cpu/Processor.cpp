@@ -10,7 +10,7 @@ Processor::Processor(char* path) : memory(path){
     if(canBoot){
         this->memory.init();
         this->registers.init(this->memory);
-        this->registers.setPC(0x100);
+        this->registers.setPC(0x000);
     }else{
         throw startupSequence();
     }
@@ -107,15 +107,7 @@ const std::string Processor::getNameForCartridgeType(unsigned char type) {
 		case 0x0F:
 			return "ROM+MBC3+TIMER+BATTERY";
 			
-		case 0x10:
-			return "ROM+MBC3+TIMER+RAM+BATTERY";
-			
-		case 0x11:
-			return "ROM+MBC3";
-			
-		case 0xFF:
-			return "HuDson HuC-1";
-			
+		case 0x10:this->fetch();
 		default:
 		case 0x00:
 			return "ROM Only";
@@ -155,4 +147,8 @@ void Processor::printMetadata() {
 	std::cout << " - Using Super GameBoy functions : " << (isSGB == 0x03 ? "True" : "False") << std::endl;
 	std::cout << " - Cartridge Type : " << this->getNameForCartridgeType(cartridgeType) << std::endl;
 	std::cout << " - Localization : " << (localization == 0 ? "Japanese" : "Non-Japanese") << std::endl;
+}
+
+Memory& Processor::getMemory(){
+	return this->memory;
 }

@@ -1,79 +1,92 @@
 #include "ProcessorGraphic.h"
 
 ProcessorGraphic::ProcessorGraphic(){
-    this->VBlankTick = 0;
     this->x = 0;
     this->ticks = 0;
     this->LY = 0; //TODO maybe take this value in the memory
+    this->screen = new Terminal();
 }
 
-void ProcessorGraphic::tick(){
+void ProcessorGraphic::tick(Memory& ram){
+    this->ticks++;
+
     switch (this->currentState){
         case ProcessorGraphicState::OAMSearch:
-            this->collectSprite();
-            this->currentState = ProcessorGraphicState::PixelTransfer;
+            this->oamSearch();
+            
             break;
 
         case ProcessorGraphicState::PixelTransfer:
-            this->drawLine();
-            this->currentState = ProcessorGraphicState::HBlank;
+            this->pixelTransfer(ram);
             break;
 
         case ProcessorGraphicState::HBlank:
-            if(this->ticks == 456){
-                this->ticks = 0;
-                this->LY++;
-
-                if(this->LY == 144){
-                    this->currentState = ProcessorGraphicState::VBlank;
-                }else{
-                    this->currentState = ProcessorGraphicState::OAMSearch;
-                }
-            }
+            this->hBlank();
             break;
 
         case ProcessorGraphicState::VBlank:
-            if(this->VBlankTick == 10){
-                this->VBlankTick = 0;
-
-                if(this->ticks == 456){
-                this->ticks = 0;
-                this->LY++;
-
-                if(this->LY == 153){
-                    this->LY = 0;
-                    this->currentState = ProcessorGraphicState::OAMSearch;
-                }
-            }else{
-                this->VBlankTick++;
-            }
-
+            this->vBlank();
             break;
-            }
 
         default:
             break;
     }
-
-    this->ticks++;
 }
 
-void ProcessorGraphic::drawLine(){
-    // TODO: Fetch pixel data into our pixel FIFO.
-    // TODO: Put a pixel (if any) from the FIFO on screen.
-    // Check when the scanline is complete (160 pixels).
+void ProcessorGraphic::oamSearch(){
+    this->x = 0;
+    unsigned char tileLine = this->LY % 8;
+    unsigned short tileMapRowAddr = 0x9800 + ((this->LY / 8) * 32);
 
-    if(this->x == 160){
-        this->currentState = ProcessorGraphicState::HBlank;
-    }
-}
-
-void ProcessorGraphic::collectSprite(){
-    // In this state, the PPU would scan the OAM (Objects Attribute Memory)
-    // from 0xfe00 to 0xfe9f to mix sprite pixels in the current line later.
-    // This always takes 40 ticks.
+    this->fetcher.start(tileMapRowAddr, tileLine);
 
     if(this->ticks == 40){
         this->currentState = ProcessorGraphicState::PixelTransfer;
     }
+}
+
+void ProcessorGraphic::pixelTransfer(Memory& ram){
+    this->fetcher.tick(ram);
+
+    if(this->fetcher.hasPixel()){
+        this->screen->write(this->fetcher.popPixel());
+        this->x++;
+    }
+
+    if(this->x == 160){
+        this->screen->HBlank();
+        this->currentState = ProcessorGraphicState::HBlank;
+    }
+}
+
+void ProcessorGraphic::hBlank(){
+     if(this->ticks == 456){
+        this->ticks = 0;
+        this->LY++;
+
+        if(this->LY == 144){
+            this->screen->VBlank();
+            this->currentState = ProcessorGraphicState::VBlank;
+        }else{
+            this->currentState = ProcessorGraphicState::OAMSearch;
+        }
+    }
+}
+
+void ProcessorGraphic::vBlank(){
+    if(this->ticks >= 10){
+        if(this->ticks == 456){
+            this->ticks = 0;
+            this->LY++;
+
+            if(this->LY == 153){
+                this->LY = 0;
+                this->currentState = ProcessorGraphicState::OAMSearch;
+            }
+        }
+    }
+}
+
+ProcessorGraphic::~ProcessorGraphic(){
+    delete this->screen;
 }

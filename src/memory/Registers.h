@@ -42,6 +42,9 @@ private:
 
     unsigned char flags;
 
+    //Interrupt Master Enable Flag
+    bool IME;
+
 public:
     void init(Memory ram);
 
@@ -96,6 +99,11 @@ public:
 
     void setSP(unsigned short);
     void setPC(unsigned short);
+
+    void enbaleIME();
+    void disableIME();
+
+    bool isIME();
 };
 
 #endif

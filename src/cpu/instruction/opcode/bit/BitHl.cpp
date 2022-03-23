@@ -1,0 +1,23 @@
+#include "BitHl.h"
+
+BitHl::BitHl(unsigned char bit) : bit(bit){}
+
+void BitHl::execute(Memory& ram, Registers& registers){
+    unsigned char valueRegister = ram.get(registers.getHL());
+
+    registers.setFlagZ((valueRegister >> bit) & 0b00000001);
+    registers.setFlagN(0);
+    registers.setFlagH(1);
+}
+
+unsigned int BitHl::getSize(){
+    return 2;
+}
+
+unsigned int BitHl::getTiming(){
+    return 12;
+}
+
+void BitHl::setParameters(const Memory&, unsigned short){
+
+}

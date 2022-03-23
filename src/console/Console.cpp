@@ -15,6 +15,6 @@ bool Console::run(){
 	        return 1;
 	    }
 		
-		this->ppu.tick();
+		this->ppu.tick(this->cpu.getMemory());
 	}
 }

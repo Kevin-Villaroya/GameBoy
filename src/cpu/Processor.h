@@ -29,6 +29,8 @@ class Processor{
         void tick();
         void run();
 		void printMetadata();
+
+        Memory& getMemory();
 };
 
 #endif

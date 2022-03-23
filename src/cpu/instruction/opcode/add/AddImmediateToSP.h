@@ -4,7 +4,7 @@
 
 class AddImmediateToSP : public Instruction{
     private:
-        char parameter;
+        signed char parameter;
 
     public:
         AddImmediateToSP();

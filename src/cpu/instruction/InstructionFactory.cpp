@@ -54,7 +54,7 @@
 #include "opcode/rr/RrRegister.h"
 #include "opcode/rr/RrHL.h"
 #include "opcode/inc/IncrementHL.h"
-#include "opcode/load/LoadHLToRegister.h"
+#include "opcode/load/LoadFromAddressToRegister.h"
 #include "opcode/load/LoadRegisterToAddressFromRegister.h"
 #include "opcode/dec/DecrementRegister.h"
 #include "opcode/dec/DecrementHL.h"
@@ -67,10 +67,18 @@
 #include "opcode/jmp/JumpConditionalImmediate.h"
 #include "condition/InstructionCondition.h"
 #include "opcode/call/CallConditional.h"
+#include "opcode/load/LoadARegisterToHlIncrement.h"
+#include "opcode/load/LoadARegisterToHlDecrement.h"
+#include "opcode/bit/Bit.h"
+#include "opcode/bit/BitHl.h"
+#include "opcode/jmp/JumpConditionalRelativeImmediate.h"
+#include "opcode/load/LoadFromRelativeAddressToRegister.h"
+#include "opcode/load/LoadFromRegisterToRelativeAddress.h"
+#include "opcode/di/DI.h"
 
 Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc){
 	unsigned char byteInstr = memory[pc];
-    
+
     switch(byteInstr){
         case 0xc3:
             return new JumpUnconditionalImmediate();
@@ -385,25 +393,25 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
         case 0x1F:
             return new RrA();            
         case 0x7E:
-        	return new LoadHLToRegister(RegisterName::A);
+        	return new LoadFromAddressToRegister(RegisterName::A, DoubleRegisterName::HL);
         	
         case 0x46:
-        	return new LoadHLToRegister(RegisterName::B);
+        	return new LoadFromAddressToRegister(RegisterName::B, DoubleRegisterName::HL);
         	
         case 0x4E:
-        	return new LoadHLToRegister(RegisterName::C);
+        	return new LoadFromAddressToRegister(RegisterName::C, DoubleRegisterName::HL);
         	
         case 0x56:
-        	return new LoadHLToRegister(RegisterName::D);
+        	return new LoadFromAddressToRegister(RegisterName::D, DoubleRegisterName::HL);
         	
         case 0x5E:
-        	return new LoadHLToRegister(RegisterName::E);
+        	return new LoadFromAddressToRegister(RegisterName::E, DoubleRegisterName::HL);
         	
         case 0x66:
-        	return new LoadHLToRegister(RegisterName::H);
+        	return new LoadFromAddressToRegister(RegisterName::H, DoubleRegisterName::HL);
         	
         case 0x6E:
-        	return new LoadHLToRegister(RegisterName::L);
+        	return new LoadFromAddressToRegister(RegisterName::L, DoubleRegisterName::HL);
         	
         case 0x70:
         	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::B);
@@ -524,12 +532,46 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
 
         case 0xD4:
             return new CallConditional(InstructionCondition::NC);
+        	
+        case 0x22:
+            return new LoadARegisterToHlIncrement();
+
+        case 0x32:
+            return new LoadARegisterToHlDecrement();
+
+        case 0x20:
+            return new JumpConditionalRelativeImmediate(InstructionCondition::NZ);
+
+        case 0x30:
+            return new JumpConditionalRelativeImmediate(InstructionCondition::NC);
+            
+        case 0x28:
+            return new JumpConditionalRelativeImmediate(InstructionCondition::Z);
+            
+        case 0x38:
+            return new JumpConditionalRelativeImmediate(InstructionCondition::C);
+
+        case 0xF2:
+            
+            return new LoadFromRelativeAddressToRegister(RegisterName::A, RegisterName::C);        
+
+        case 0xE2:
+            return new LoadFromRegisterToRelativeAddress(RegisterName::C, RegisterName::A);  
+
+        case 0x0A:
+            return new LoadFromAddressToRegister(RegisterName::A, DoubleRegisterName::BC);
+
+        case 0x1A:
+            return new LoadFromAddressToRegister(RegisterName::A, DoubleRegisterName::DE);
+
+        case 0xF3:
+            return new DI();
 
         case 0xCB:
         	return InstructionFactory::forCodeCb(memory[pc + 1]);
-        	
+
         default:
-            throw UnknownInstructionException(0x00 + byteInstr);
+            throw UnknownInstructionException(0x00 + byteInstr, "8 bit opcode");
 	}
 }
     
@@ -615,7 +657,135 @@ Instruction* InstructionFactory::forCodeCb(unsigned char byteInstr){
 	        return new SwapRegister(RegisterName::L);
 	    case 0x36:
 	     	return new SwapHL();
+        case 0x40:
+            return new Bit(0, RegisterName::B);
+        case 0x41:
+            return new Bit(0, RegisterName::C);
+        case 0x42:
+            return new Bit(0, RegisterName::D);
+        case 0x43:
+            return new Bit(0, RegisterName::E);
+        case 0x44:
+            return new Bit(0, RegisterName::H);
+        case 0x45:
+            return new Bit(0, RegisterName::L);
+        case 0x46:
+            return new BitHl(0);
+        case 0x47:
+            return new Bit(0, RegisterName::A);
+        case 0x48:
+            return new Bit(1, RegisterName::B);
+        case 0x49:
+            return new Bit(1, RegisterName::C);
+        case 0x4A:
+            return new Bit(1, RegisterName::D);
+        case 0x4B:
+            return new Bit(1, RegisterName::E);
+        case 0x4C:
+            return new Bit(1, RegisterName::H);
+        case 0x4D:
+            return new Bit(1, RegisterName::L);
+        case 0x4E:
+            return new BitHl(1);
+        case 0x4F:
+            return new Bit(1, RegisterName::A);
+        case 0x50:
+            return new Bit(2, RegisterName::B);
+        case 0x51:
+            return new Bit(2, RegisterName::C);
+        case 0x52:
+            return new Bit(2, RegisterName::D);
+        case 0x53:
+            return new Bit(2, RegisterName::E);
+        case 0x54:
+            return new Bit(2, RegisterName::H);
+        case 0x55:
+            return new Bit(2, RegisterName::L);
+        case 0x56:
+            return new BitHl(2);
+        case 0x57:
+            return new Bit(2, RegisterName::A);
+        case 0x58:
+            return new Bit(3, RegisterName::B);
+        case 0x59:
+            return new Bit(3, RegisterName::C);
+        case 0x5A:
+            return new Bit(3, RegisterName::D);
+        case 0x5B:
+            return new Bit(3, RegisterName::E);
+        case 0x5C:
+            return new Bit(3, RegisterName::H);
+        case 0x5D:
+            return new Bit(3, RegisterName::L);
+        case 0x5E:
+            return new BitHl(3);
+        case 0x5F:
+            return new Bit(3, RegisterName::A);
+        case 0x60:
+            return new Bit(4, RegisterName::B);
+        case 0x61:
+            return new Bit(4, RegisterName::C);
+        case 0x62:
+            return new Bit(4, RegisterName::D);
+        case 0x63:
+            return new Bit(4, RegisterName::E);
+        case 0x64:
+            return new Bit(4, RegisterName::H);
+        case 0x65:
+            return new Bit(4, RegisterName::L);
+        case 0x66:
+            return new BitHl(4);
+        case 0x67:
+            return new Bit(4, RegisterName::A);
+        case 0x68:
+            return new Bit(5, RegisterName::B);
+        case 0x69:
+            return new Bit(5, RegisterName::C);
+        case 0x6A:
+            return new Bit(5, RegisterName::D);
+        case 0x6B:
+            return new Bit(5, RegisterName::E);
+        case 0x6C:
+            return new Bit(5, RegisterName::H);
+        case 0x6D:
+            return new Bit(5, RegisterName::L);
+        case 0x6E:
+            return new BitHl(5);
+        case 0x6F:
+            return new Bit(5, RegisterName::A);
+        case 0x70:
+            return new Bit(6, RegisterName::B);
+        case 0x71:
+            return new Bit(6, RegisterName::C);
+        case 0x72:
+            return new Bit(6, RegisterName::D);
+        case 0x73:
+            return new Bit(6, RegisterName::E);
+        case 0x74:
+            return new Bit(6, RegisterName::H);
+        case 0x75:
+            return new Bit(6, RegisterName::L);
+        case 0x76:
+            return new BitHl(6);
+        case 0x77:
+            return new Bit(6, RegisterName::A);
+        case 0x78:
+            return new Bit(7, RegisterName::B);
+        case 0x79:
+            return new Bit(7, RegisterName::C);
+        case 0x7A:
+            return new Bit(7, RegisterName::D);
+        case 0x7B:
+            return new Bit(7, RegisterName::E);
+        case 0x7C:
+            return new Bit(7, RegisterName::H);
+        case 0x7D:
+            return new Bit(7, RegisterName::L);
+        case 0x7E:
+            return new BitHl(7);
+        case 0x7F:
+            return new Bit(7, RegisterName::A);
 	    default:
-        	throw UnknownInstructionException(0xCB00 + byteInstr);       
+        	throw UnknownInstructionException(0xCB00 + byteInstr, "16 bit opcode");       
     }
 }

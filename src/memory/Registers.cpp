@@ -286,3 +286,15 @@ void Registers::setSP(unsigned short sp){
 void Registers::setPC(unsigned short pc){
     this->pc = pc;
 }
+
+void Registers::enbaleIME(){
+    this->IME = true;
+}
+
+void Registers::disableIME(){
+    this->IME = false;
+}
+
+bool Registers::isIME(){
+    return this->IME;
+}

@@ -1,4 +1,5 @@
 #include "CallUnconditional.h"
+#include <iostream>
 
 void CallUnconditional::execute(Memory& ram, Registers& registers) {
 	unsigned short sp = registers.getSP();

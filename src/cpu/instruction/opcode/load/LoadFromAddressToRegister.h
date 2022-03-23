@@ -3,13 +3,14 @@
 
 #include "../../Instruction.h"
 
-class LoadHLToRegister : public Instruction
+class LoadFromAddressToRegister : public Instruction
 {
 	private:
 		RegisterName dest;
+		DoubleRegisterName src;
 
 	public:
-		LoadHLToRegister(RegisterName);
+		LoadFromAddressToRegister(RegisterName dest, DoubleRegisterName src);
 
 		void execute(Memory& ram, Registers& registers) override;
 		unsigned int getSize() override;

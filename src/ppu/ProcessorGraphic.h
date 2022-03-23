@@ -1,6 +1,10 @@
 #ifndef __PPU_H__
 #define __PPU_H__
 
+#include "PixelFetcher.h"
+#include "../display/Display.h"
+#include "../display/Terminal.h"
+
 enum class ProcessorGraphicState{
 	OAMSearch,
 	PixelTransfer,
@@ -13,6 +17,9 @@ private:
 	const unsigned int SIZE_SCREEN_X = 160;
 	const unsigned int SIZE_SCREEN_Y = 144;
 
+	PixelFetcher fetcher;
+	Display* screen;
+
 	ProcessorGraphicState currentState;
 
 	// Number of lines displayed
@@ -24,15 +31,15 @@ private:
 	// Number of pixels displayed in the current line
 	unsigned int x;
 
-	// tick passed in the state VBlank
-	unsigned int VBlankTick;
-
-	void drawLine();
-	void collectSprite();
+	void oamSearch();
+	void pixelTransfer(Memory& ram);
+	void vBlank();
+	void hBlank();
 public:
 	ProcessorGraphic();
+	~ProcessorGraphic();
 
-	void tick();
+	void tick(Memory& ram);
 };
 
 #endif
