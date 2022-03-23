@@ -43,7 +43,7 @@ void PixelFetcher::start(unsigned short tileMapRowAddr, unsigned char tileLine){
 }
 
 void PixelFetcher::readTileId(Memory& ram){
-    this->tileId = ram.get(this->mapAddr + this->tileIndex);
+    this->tileId = ram.get(this->mapAddr + ((unsigned short)this->tileIndex));
 
     this->currentState = PixelFetcherState::ReadTileData0;
 }
@@ -73,7 +73,7 @@ void PixelFetcher::readTileData1(Memory& ram){
         unsigned char value = (data >> bitPos) & 0b00000001;
 
         if(value == 1){
-            this->pixelData[bitPos] += 2;
+            this->pixelData[bitPos] |= ((data >> bitPos) & 0b00000001) << 1;
         }
     }
 

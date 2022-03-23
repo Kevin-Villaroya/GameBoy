@@ -17,7 +17,7 @@ private:
     unsigned int ticks;
     PixelFetcherState currentState;
 
-    unsigned short tileIndex;
+    unsigned char tileIndex;
     unsigned short mapAddr;
     unsigned char tileLine;
     unsigned char tileId;
