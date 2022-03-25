@@ -3,7 +3,7 @@
 #include "../cpu/instruction/instructionError/UnknownInstructionException.h"
 #include "../display/Window.h"
 
-Gameboy::Gameboy(char* path) : cpu(Processor(path)), view(new Window()), ppu(ProcessorGraphic(view)){
+Gameboy::Gameboy(char* path) : cpu(Processor(path)), view(new Window()), ppu(ProcessorGraphic(view, &cpu.getMemory())){
 	this->isRunning = true;
 	this->cpu.printMetadata();
 }
@@ -20,7 +20,7 @@ bool Gameboy::run(){
 	        return 1;
 	    }
 		
-		this->ppu.tick(this->cpu.getMemory());
+		this->ppu.tick();
 	}
 	return 0;
 }

@@ -18,6 +18,7 @@ private:
 
 	PixelFetcher fetcher;
 	Display* screen;
+	Memory* ram;
 
 	ProcessorGraphicState currentState;
 
@@ -27,18 +28,18 @@ private:
 	// Number of pixels displayed in the current line
 	unsigned int x;
 
-	void oamSearch(Memory& ram);
-	void pixelTransfer(Memory& ram);
-	void vBlank(Memory& ram);
-	void hBlank(Memory& ram);
+	void oamSearch();
+	void pixelTransfer();
+	void vBlank();
+	void hBlank();
 
-	unsigned char getLY(Memory& ram);
-	void setLY(Memory& ram, unsigned char value);
+	unsigned char getLY();
+	void setLY(unsigned char value);
 public:
-	ProcessorGraphic(Display* screen);
+	ProcessorGraphic(Display* screen, Memory* ram);
 	~ProcessorGraphic();
 
-	void tick(Memory& ram);
+	void tick();
 };
 
 #endif

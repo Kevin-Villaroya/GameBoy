@@ -1,31 +1,31 @@
 #include "ProcessorGraphic.h"
 #include <iostream>
 
-ProcessorGraphic::ProcessorGraphic(Display* screen) : screen(screen){
+ProcessorGraphic::ProcessorGraphic(Display* screen, Memory* ram) : screen(screen), ram(ram){
     this->x = 0;
     this->ticks = 0;
     this->currentState = ProcessorGraphicState::OAMSearch;
 }
 
-void ProcessorGraphic::tick(Memory& ram){
+void ProcessorGraphic::tick(){
     this->ticks++;
 
     switch (this->currentState){
         case ProcessorGraphicState::OAMSearch:
-            this->oamSearch(ram);
+            this->oamSearch();
             
             break;
 
         case ProcessorGraphicState::PixelTransfer:
-            this->pixelTransfer(ram);
+            this->pixelTransfer();
             break;
 
         case ProcessorGraphicState::HBlank:
-            this->hBlank(ram);
+            this->hBlank();
             break;
 
         case ProcessorGraphicState::VBlank:
-            this->vBlank(ram);
+            this->vBlank();
             break;
 
         default:
@@ -33,19 +33,19 @@ void ProcessorGraphic::tick(Memory& ram){
     }
 }
 
-void ProcessorGraphic::oamSearch(Memory& ram){
+void ProcessorGraphic::oamSearch(){
     if(this->ticks == 40){
         this->x = 0;
-        unsigned char tileLine = this->getLY(ram) % 8;
-        unsigned short tileMapRowAddr = 0x9800 + ((this->getLY(ram) / 8) * 32);
+        unsigned char tileLine = this->getLY() % 8;
+        unsigned short tileMapRowAddr = 0x9800 + ((this->getLY() / 8) * 32);
 
         this->fetcher.start(tileMapRowAddr, tileLine);
         this->currentState = ProcessorGraphicState::PixelTransfer;
     }
 }
 
-void ProcessorGraphic::pixelTransfer(Memory& ram){
-    this->fetcher.tick(ram);
+void ProcessorGraphic::pixelTransfer(){
+    this->fetcher.tick(*this->ram);
 
     if(this->fetcher.hasPixel()){
         this->screen->write(this->fetcher.popPixel());
@@ -58,12 +58,12 @@ void ProcessorGraphic::pixelTransfer(Memory& ram){
     }
 }
 
-void ProcessorGraphic::hBlank(Memory& ram){
+void ProcessorGraphic::hBlank(){
      if(this->ticks == 456){
         this->ticks = 0;
-        this->setLY(ram, this->getLY(ram) + 1);
+        this->setLY(this->getLY() + 1);
 
-        if(this->getLY(ram) == 144){
+        if(this->getLY() == 144){
             this->screen->VBlank();
             this->currentState = ProcessorGraphicState::VBlank;
         }else{
@@ -72,24 +72,24 @@ void ProcessorGraphic::hBlank(Memory& ram){
     }
 }
 
-void ProcessorGraphic::vBlank(Memory& ram){
+void ProcessorGraphic::vBlank(){
     if(this->ticks == 456){
         this->ticks = 0;
-        this->setLY(ram, this->getLY(ram) + 1);
+        this->setLY(this->getLY() + 1);
 
-        if(this->getLY(ram) == 153){
-            this->setLY(ram, 0);
+        if(this->getLY() == 153){
+            this->setLY(0);
             this->currentState = ProcessorGraphicState::OAMSearch;
         }
     }
 }
 
-unsigned char ProcessorGraphic::getLY(Memory& ram){
-    return ram[0xff44];
+unsigned char ProcessorGraphic::getLY(){
+    return ram->get(0xff44);
 }
 
-void ProcessorGraphic::setLY(Memory& ram, unsigned char value){
-    ram.set(0xFF44, value);
+void ProcessorGraphic::setLY(unsigned char value){
+    ram->set(0xFF44, value);
 }
 
 ProcessorGraphic::~ProcessorGraphic(){}
