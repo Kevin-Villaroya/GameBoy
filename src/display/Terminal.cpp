@@ -19,3 +19,7 @@ void Terminal::HBlank(){
 void Terminal::VBlank(){
     std::cout<< "\033[2J";
 }
+
+Event Terminal::fetchEvent(){
+    return Event::NONE;
+}

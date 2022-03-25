@@ -1,10 +1,9 @@
 #include "ProcessorGraphic.h"
 #include <iostream>
 
-ProcessorGraphic::ProcessorGraphic(){
+ProcessorGraphic::ProcessorGraphic(Display* screen) : screen(screen){
     this->x = 0;
     this->ticks = 0;
-    this->screen = new Terminal();
     this->currentState = ProcessorGraphicState::OAMSearch;
 }
 
@@ -65,7 +64,6 @@ void ProcessorGraphic::hBlank(Memory& ram){
         this->setLY(ram, this->getLY(ram) + 1);
 
         if(this->getLY(ram) == 144){
-            std::cout << "go VBlank" << std::endl;
             this->screen->VBlank();
             this->currentState = ProcessorGraphicState::VBlank;
         }else{
@@ -81,7 +79,6 @@ void ProcessorGraphic::vBlank(Memory& ram){
 
         if(this->getLY(ram) == 153){
             this->setLY(ram, 0);
-            //std::cout << "go OAMSearch" << std::endl;
             this->currentState = ProcessorGraphicState::OAMSearch;
         }
     }
@@ -95,6 +92,4 @@ void ProcessorGraphic::setLY(Memory& ram, unsigned char value){
     ram.set(0xFF44, value);
 }
 
-ProcessorGraphic::~ProcessorGraphic(){
-    delete this->screen;
-}
+ProcessorGraphic::~ProcessorGraphic(){}

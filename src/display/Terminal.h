@@ -10,9 +10,10 @@ private:
 public:
     Terminal();
 
-    void write(unsigned char color);
-    void HBlank();
-    void VBlank();
+    void write(unsigned char color) override;
+    void HBlank() override;
+    void VBlank() override;
+    Event fetchEvent() override;
 };
 
 #endif

@@ -3,7 +3,6 @@
 
 #include "PixelFetcher.h"
 #include "../display/Display.h"
-#include "../display/Terminal.h"
 
 enum class ProcessorGraphicState{
 	OAMSearch,
@@ -36,7 +35,7 @@ private:
 	unsigned char getLY(Memory& ram);
 	void setLY(Memory& ram, unsigned char value);
 public:
-	ProcessorGraphic();
+	ProcessorGraphic(Display* screen);
 	~ProcessorGraphic();
 
 	void tick(Memory& ram);

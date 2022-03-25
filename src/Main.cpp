@@ -1,5 +1,5 @@
 #include <iostream>
-#include "console/Console.h"
+#include "console/Gameboy.h"
 
 int main(int argc, char* argv[]){
 
@@ -8,7 +8,7 @@ int main(int argc, char* argv[]){
         return 1;
     }
 
-    Console gameboy(argv[1]);
+    Gameboy gameboy(argv[1]);
 
     return gameboy.run();
 }
