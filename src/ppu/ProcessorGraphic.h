@@ -35,6 +35,13 @@ private:
 
 	unsigned char getLY();
 	void setLY(unsigned char value);
+
+	unsigned char getLCDC();
+	void setLCDC(unsigned char value);
+
+	unsigned char getBGP();
+	void setBGP(unsigned char value);
+
 public:
 	ProcessorGraphic(Display* screen, Memory* ram);
 	~ProcessorGraphic();

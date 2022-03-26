@@ -48,7 +48,10 @@ void ProcessorGraphic::pixelTransfer(){
     this->fetcher.tick(*this->ram);
 
     if(this->fetcher.hasPixel()){
-        this->screen->write(this->fetcher.popPixel());
+        unsigned char pixelRaw = this->fetcher.popPixel();
+        unsigned char pixel = (this->getBGP() >> ((uint8_t)pixelRaw * 2)) & 3;
+
+        this->screen->write(pixel);
         this->x++;
     }
 
@@ -90,6 +93,22 @@ unsigned char ProcessorGraphic::getLY(){
 
 void ProcessorGraphic::setLY(unsigned char value){
     ram->set(0xFF44, value);
+}
+
+unsigned char ProcessorGraphic::getLCDC(){
+    return ram->get(0xff40);
+}
+
+void ProcessorGraphic::setLCDC(unsigned char value){
+    ram->set(0xff40, value);
+}
+
+unsigned char ProcessorGraphic::getBGP(){
+    return ram->get(0xff47);
+}
+
+void ProcessorGraphic::setBGP(unsigned char value){
+    ram->set(0xff47, value);
 }
 
 ProcessorGraphic::~ProcessorGraphic(){}
