@@ -17,9 +17,14 @@ Gameboy::Gameboy(char* path) : cpu(Processor(path)), view(new Window()), ppu(Pro
 }
 
 bool Gameboy::run(){
+	uint32_t delay = 0;
 	while(this->isRunning){
-		Event event = this->view->fetchEvent();
-		this->treatEvent(event);
+
+		if(delay + 20 <= SDL_GetTicks()){
+			Event event = this->view->fetchEvent();
+			this->treatEvent(event);
+			delay = SDL_GetTicks();
+		}
 
 		if(canTick){
 			try{

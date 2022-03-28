@@ -13,6 +13,7 @@ Window::Window(){
 
     this->initPalette();
     this->offset = 0;
+    this->time = 0;
 
     this->bufferTexture = (uint8_t*)malloc(INIT_SIZE_X_WINDOW * INIT_SIZE_Y_WINDOW * 4 * sizeof(uint8_t));
 }

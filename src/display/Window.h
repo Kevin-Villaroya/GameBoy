@@ -20,6 +20,8 @@ class Window : public Display{
 
         void initPalette();
         void setColorAt(unsigned int pos, uint8_t color);
+
+        uint64_t time;
     public:
         Window();
 

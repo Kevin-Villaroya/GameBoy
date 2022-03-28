@@ -7,6 +7,7 @@
 class Terminal : public Display{
 private:
     std::string palette[4];
+    uint64_t time;
 public:
     Terminal();
 

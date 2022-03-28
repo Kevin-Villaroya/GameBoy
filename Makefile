@@ -1,4 +1,4 @@
-CFLAG = -g -Wall -ansi -pedantic -std=c++17 -lstdc++fs -Wno-psabi
+CFLAG = -Wall -ansi -pedantic -std=c++17 -lstdc++fs -Wno-psabi
 CLIB = -lSDL2main -lSDL2
 
 CC = g++
