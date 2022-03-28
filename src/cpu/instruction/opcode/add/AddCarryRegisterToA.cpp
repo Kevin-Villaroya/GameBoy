@@ -37,3 +37,7 @@ unsigned int AddCarryRegisterToA::getTiming(){
 void AddCarryRegisterToA::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string AddCarryRegisterToA::toString(){
+    return "ACR A," + Registers::getRegisterName(this->registerName);
+}

@@ -36,3 +36,7 @@ unsigned int AddImmediateToA::getTiming(){
 void AddImmediateToA::setParameters(const Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
+
+std::string AddImmediateToA::toString(){
+    return "ADD A, " + (int)this->parameter;
+}

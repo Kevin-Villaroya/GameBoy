@@ -23,3 +23,7 @@ unsigned int CplToA::getTiming(){
 
 void CplToA::setParameters(const Memory&, unsigned short v){
 }
+
+std::string CplToA::toString(){
+    return "CCF";
+}

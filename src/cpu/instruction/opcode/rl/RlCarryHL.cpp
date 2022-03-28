@@ -29,3 +29,7 @@ unsigned int RlCarryHL::getTiming(){
 
 void RlCarryHL::setParameters(const Memory&, unsigned short v){
 }
+
+std::string RlCarryHL::toString(){
+    return "RLC (HL)";
+}

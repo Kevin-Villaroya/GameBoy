@@ -20,3 +20,7 @@ unsigned int JumpConditionalImmediate::getTiming(){
 void JumpConditionalImmediate::setParameters(const Memory& memory, unsigned short pc){
 	this->address = memory.getDouble(pc);
 }
+
+std::string JumpConditionalImmediate::toString(){
+    return "JP " + InstructionCondition::getConditionName(this->test) + ", " + std::to_string((int)this->address);
+}

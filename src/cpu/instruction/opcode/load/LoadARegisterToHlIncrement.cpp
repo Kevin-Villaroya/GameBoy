@@ -19,3 +19,7 @@ unsigned int LoadARegisterToHlIncrement::getTiming(){
 void LoadARegisterToHlIncrement::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string LoadARegisterToHlIncrement::toString(){
+    return "LD (HL+), A";
+}

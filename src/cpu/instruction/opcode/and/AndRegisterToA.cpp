@@ -27,3 +27,7 @@ unsigned int AndRegisterToA::getTiming(){
 
 void AndRegisterToA::setParameters(const Memory&, unsigned short){
 }
+
+std::string AndRegisterToA::toString(){
+    return "AND " + Registers::getRegisterName(this->registerName);
+}

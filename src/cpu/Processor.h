@@ -26,11 +26,13 @@ class Processor{
     public:
         Processor(char* path);
 	
-        void tick();
+        bool tick();
         void run();
 		void printMetadata();
 
         Memory& getMemory();
+
+        void dump();
 };
 
 #endif

@@ -34,3 +34,7 @@ unsigned int CpRegisterToA::getTiming(){
 
 void CpRegisterToA::setParameters(const Memory&, unsigned short){
 }
+
+std::string CpRegisterToA::toString(){
+    return "CP " + Registers::getRegisterName(this->registerName);
+}

@@ -1,3 +1,4 @@
+#include <iostream>
 #include "LoadImmediateToDoubleRegister.h"
 
 LoadImmediateToDoubleRegister::LoadImmediateToDoubleRegister(DoubleRegisterName registerName){
@@ -18,4 +19,8 @@ unsigned int LoadImmediateToDoubleRegister::getTiming(){
 
 void LoadImmediateToDoubleRegister::setParameters(const Memory& memory, unsigned short positionParameters){
     this->parameter = memory.getDouble(positionParameters);
+}
+
+std::string LoadImmediateToDoubleRegister::toString(){
+    return "LD " + Registers::getDoubleRegisterName(this->registerName) + ", " + std::to_string((int)this->parameter);
 }

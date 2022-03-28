@@ -36,3 +36,7 @@ unsigned int DecrementHL::getTiming(){
 void DecrementHL::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string DecrementHL::toString(){
+    return "DEC (HL)";
+}

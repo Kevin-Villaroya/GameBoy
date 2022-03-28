@@ -45,3 +45,7 @@ unsigned int RrA::getTiming(){
 
 void RrA::setParameters(const Memory&, unsigned short v){
 }
+
+std::string RrA::toString(){
+    return "RRA";
+}

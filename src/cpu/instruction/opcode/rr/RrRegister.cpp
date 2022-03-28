@@ -27,3 +27,7 @@ unsigned int RrRegister::getTiming(){
 
 void RrRegister::setParameters(const Memory&, unsigned short v){
 }
+
+std::string RrRegister::toString(){
+    return "RR " + Registers::getRegisterName(this->registerName);
+}

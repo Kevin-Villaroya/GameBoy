@@ -21,3 +21,7 @@ unsigned int Bit::getTiming(){
 void Bit::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string Bit::toString(){
+    return "BIT " + std::to_string(((int)this->bit)) + "," + Registers::getRegisterName(this->registerName);
+}

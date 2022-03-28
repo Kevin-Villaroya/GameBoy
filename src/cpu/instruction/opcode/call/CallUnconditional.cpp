@@ -23,3 +23,7 @@ unsigned int CallUnconditional::getTiming() {
 void CallUnconditional::setParameters(const Memory& memory, unsigned short pc) {
 	this->address = memory.getDouble(pc);
 }
+
+std::string CallUnconditional::toString(){
+    return "CALL " + std::to_string((int)this->address);
+}

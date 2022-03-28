@@ -13,6 +13,7 @@ class AddImmediateToA : public Instruction{
         unsigned int getSize() override;
         unsigned int getTiming() override;
         void setParameters(const Memory& memory, unsigned short pc) override;
+        std::string toString() override;
 };
 
 #endif 

@@ -31,3 +31,7 @@ unsigned int AddDoubleRegisterToHL::getTiming(){
 
 void AddDoubleRegisterToHL::setParameters(const Memory&, unsigned short v){
 }
+
+std::string AddDoubleRegisterToHL::toString(){
+    return "ADD HL," + Registers::getDoubleRegisterName(this->doubleRegName);
+}

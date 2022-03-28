@@ -19,3 +19,7 @@ unsigned int LoadARegisterToHlDecrement::getTiming(){
 void LoadARegisterToHlDecrement::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string LoadARegisterToHlDecrement::toString(){
+    return "LD (HL-), A";
+}

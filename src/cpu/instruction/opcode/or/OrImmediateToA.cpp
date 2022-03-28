@@ -28,3 +28,7 @@ unsigned int OrImmediateToA::getTiming(){
 void OrImmediateToA::setParameters(const Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
+
+std::string OrImmediateToA::toString(){
+    return "OR " + std::to_string((int)this->parameter);
+}

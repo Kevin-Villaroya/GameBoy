@@ -49,6 +49,8 @@ Event Window::fetchEvent(){
         case SDL_QUIT:
             return Event::QUIT;
             break;
+        case SDL_KEYDOWN:
+            return Event::TOUCH;
         default:
             return Event::NONE;
             break;

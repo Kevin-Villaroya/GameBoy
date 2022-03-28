@@ -38,3 +38,7 @@ unsigned int AddCarryImmediateToA::getTiming(){
 void AddCarryImmediateToA::setParameters(const Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
+
+std::string AddCarryImmediateToA::toString(){
+    return "ACR A," + (int)parameter;
+}

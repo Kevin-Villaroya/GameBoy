@@ -29,3 +29,7 @@ unsigned int XorHLToA::getTiming(){
 
 void XorHLToA::setParameters(const Memory&, unsigned short){
 }
+
+std::string XorHLToA::toString(){
+    return "XOR (HL)";
+}

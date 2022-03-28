@@ -3,6 +3,7 @@
 
 enum class Event{
     QUIT,
+    TOUCH,
     NONE
 };
 

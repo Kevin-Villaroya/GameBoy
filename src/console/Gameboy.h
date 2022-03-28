@@ -12,12 +12,15 @@ private:
 	ProcessorGraphic ppu;
 
 	bool isRunning;
+	bool canContinue;
+	bool isDebugMode;
 	
 public:
 	Gameboy(char* path);
 	bool run();
 	
 	void treatEvent(Event event);
+	void debugMode();
 
 	~Gameboy();
 };

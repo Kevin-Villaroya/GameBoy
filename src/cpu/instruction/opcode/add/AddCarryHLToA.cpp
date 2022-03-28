@@ -37,3 +37,7 @@ unsigned int AddCarryHLToA::getTiming(){
 
 void AddCarryHLToA::setParameters(const Memory&, unsigned short v){
 }
+
+std::string AddCarryHLToA::toString(){
+    return "ACR A, (HL)";
+}

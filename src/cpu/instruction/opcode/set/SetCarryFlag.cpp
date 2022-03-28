@@ -18,3 +18,7 @@ unsigned int SetCarryFlag::getTiming(){
 
 void SetCarryFlag::setParameters(const Memory&, unsigned short v){
 }
+
+std::string SetCarryFlag::toString(){
+    return "SCF";
+}

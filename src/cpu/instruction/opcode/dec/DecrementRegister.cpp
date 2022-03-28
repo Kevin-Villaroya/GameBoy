@@ -38,3 +38,7 @@ unsigned int DecrementRegister::getTiming(){
 void DecrementRegister::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string DecrementRegister::toString(){
+    return "DEC " + Registers::getRegisterName(this->registerName);
+}

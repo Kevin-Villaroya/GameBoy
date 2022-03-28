@@ -16,3 +16,7 @@ unsigned int DI::getTiming(){
 void DI::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string DI::toString(){
+    return "DI";
+}

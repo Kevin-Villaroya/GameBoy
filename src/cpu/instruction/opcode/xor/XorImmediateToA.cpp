@@ -28,3 +28,7 @@ unsigned int XorImmediateToA::getTiming(){
 void XorImmediateToA::setParameters(const Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
+
+std::string XorImmediateToA::toString(){
+    return "XOR " + std::to_string((int)this->parameter);
+}

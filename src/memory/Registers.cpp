@@ -2,6 +2,64 @@
 #include <iostream>
 #include <stdexcept>
 
+std::string Registers::getRegisterName(RegisterName registerName){
+    switch(registerName){
+        case RegisterName::A:
+            return "A";
+            break;
+        case RegisterName::B:
+            return "B";
+            break;
+        case RegisterName::C:
+            return "C";
+            break;
+        case RegisterName::D:
+            return "D";
+            break;  
+        case RegisterName::E:
+            return "E";
+            break;
+        case RegisterName::F:
+            return "F";
+            break;
+        case RegisterName::L:
+            return "L";
+            break;
+        case RegisterName::H:
+            return "H";
+            break;
+        default:
+            return "";
+            break;
+    }
+}
+
+std::string Registers::getDoubleRegisterName(DoubleRegisterName registerName){
+    switch(registerName){
+        case DoubleRegisterName::AF:
+            return "AF";
+            break;
+        case DoubleRegisterName::BC:
+            return "BC";
+            break;
+        case DoubleRegisterName::DE:
+            return "DE";
+            break;
+        case DoubleRegisterName::HL:
+            return "HL";
+            break;  
+        case DoubleRegisterName::PC:
+            return "PC";
+            break;
+        case DoubleRegisterName::SP:
+            return "SP";
+            break;
+        default:
+            return "";
+            break;
+    }
+}
+
 void Registers::init(Memory ram){
     this->setA(ram[0x01]);
     this->setF(ram[0xB0]);
@@ -297,4 +355,14 @@ void Registers::disableIME(){
 
 bool Registers::isIME(){
     return this->IME;
+}
+
+std::string Registers::dump(){
+    char pc[5];
+    char sp[5];
+
+	sprintf(pc, "%04X", this->getPC());
+    sprintf(sp, "%04X", this->getSP());
+
+    return "PC: " + std::string(pc) + " SP: " + std::string(sp); 
 }

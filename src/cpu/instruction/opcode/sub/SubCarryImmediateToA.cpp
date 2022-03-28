@@ -37,3 +37,7 @@ unsigned int SubCarryImmediateToA::getTiming(){
 void SubCarryImmediateToA::setParameters(const Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
+
+std::string SubCarryImmediateToA::toString(){
+    return "SBC A, " + std::to_string((int)this->parameter);
+}

@@ -18,3 +18,7 @@ unsigned int LoadAToImmediateAddress::getTiming() {
 void LoadAToImmediateAddress::setParameters(const Memory& memory, unsigned short pc) {
 	this->address = memory[pc];
 }
+
+std::string LoadAToImmediateAddress::toString(){
+    return "LD " + std::to_string((int)address) + ", A";
+}

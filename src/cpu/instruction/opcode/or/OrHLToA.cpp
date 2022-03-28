@@ -29,3 +29,7 @@ unsigned int OrHLToA::getTiming(){
 
 void OrHLToA::setParameters(const Memory&, unsigned short){
 }
+
+std::string OrHLToA::toString(){
+    return "OR (HL)";
+}

@@ -2,10 +2,13 @@
 #include "InstructionFactory.h"
 #include "startupException/StartupException.h"
 #include <iostream>
+#include <sstream>
+#include <stdlib.h>
 
 Processor::Processor(char* path) : memory(path){
 	bool canBoot = this->startupSequence();
 	this->ticksDelayed = 0;
+	this->instruction = nullptr;
 
     if(canBoot){
         this->memory.init();
@@ -114,8 +117,12 @@ const std::string Processor::getNameForCartridgeType(unsigned char type) {
 	}
 }
 
-void Processor::tick(){
+bool Processor::tick(){
 	if(this->ticksDelayed == 0){
+		if(this->instruction != nullptr){
+			delete this->instruction;
+		}
+
 		this->instruction = this->fetch();
 	}
 
@@ -125,8 +132,10 @@ void Processor::tick(){
     	this->execute(*this->instruction);
     	this->ticksDelayed = 0;
 
-    	delete this->instruction;
+		return true;
 	}
+
+	return false;
 }
 
 void Processor::printMetadata() {
@@ -147,6 +156,50 @@ void Processor::printMetadata() {
 	std::cout << " - Using Super GameBoy functions : " << (isSGB == 0x03 ? "True" : "False") << std::endl;
 	std::cout << " - Cartridge Type : " << this->getNameForCartridgeType(cartridgeType) << std::endl;
 	std::cout << " - Localization : " << (localization == 0 ? "Japanese" : "Non-Japanese") << std::endl;
+}
+
+void Processor::dump(){
+	std::cout << this->instruction->toString() << std::endl;
+
+	std::cout << this->registers.dump() << std::endl;
+
+	std::cout << "==============ROM================" << std::endl;
+	for(int i = 0; i < 0x3FFF; i++){
+		if((i) % 16 == 0){
+			std::cout << std::endl;
+		}
+
+		char hexString[3];
+		sprintf(hexString, "%02X", this->memory.get(i));
+
+		std::cout <<"| " << hexString << " |";
+	}
+
+	std::cout << "==============ROM SWITCHABLE================" << std::endl;
+	for(int i = 0x4000; i < 0x7FFF; i++){
+		if((i - 0x4000) % 16 == 0){
+			std::cout << std::endl;
+		}
+
+		char hexString[3];
+		sprintf(hexString, "%02X", this->memory.get(i));
+
+		std::cout <<"| " << hexString << " |";
+	}
+
+
+	std::cout << "==============VIDEO RAM================" << std::endl;
+	for(int i = 0X8000; i < 0x9FFF; i++){
+		if((i - 0x8000) % 16 == 0){
+			std::cout << std::endl;
+		}
+		
+		char hexString[3];
+		sprintf(hexString, "%02X", this->memory.get(i));
+
+		std::cout <<"| " << hexString << " |";
+	}
+
 }
 
 Memory& Processor::getMemory(){

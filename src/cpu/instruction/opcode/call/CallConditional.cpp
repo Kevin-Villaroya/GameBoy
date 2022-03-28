@@ -27,3 +27,7 @@ unsigned int CallConditional::getTiming() {
 void CallConditional::setParameters(const Memory& memory, unsigned short pc) {
 	this->address = memory.getDouble(pc);
 }
+
+std::string CallConditional::toString(){
+    return "CALL " + InstructionCondition::getConditionName(this->condition) + "," + std::to_string((int)this->address);
+}

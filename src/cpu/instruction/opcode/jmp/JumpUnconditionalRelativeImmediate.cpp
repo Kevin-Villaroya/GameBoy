@@ -15,3 +15,7 @@ unsigned int JumpUnconditionalRelativeImmediate::getTiming(){
 void JumpUnconditionalRelativeImmediate::setParameters(const Memory& rom, unsigned short parameterBegin){
     this->parameter = rom[parameterBegin];
 }
+
+std::string JumpUnconditionalRelativeImmediate::toString(){
+    return "JR " + std::to_string((signed int)this->parameter);
+}

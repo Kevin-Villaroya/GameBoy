@@ -46,6 +46,8 @@ private:
     bool IME;
 
 public:
+    static std::string getRegisterName(RegisterName registerName);
+    static std::string getDoubleRegisterName(DoubleRegisterName registerName);
     void init(Memory ram);
 
     void incrementPc(unsigned short);
@@ -104,6 +106,8 @@ public:
     void disableIME();
 
     bool isIME();
+
+    std::string dump();
 };
 
 #endif

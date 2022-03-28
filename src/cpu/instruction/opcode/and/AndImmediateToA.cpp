@@ -27,3 +27,7 @@ unsigned int AndImmediateToA::getTiming(){
 void AndImmediateToA::setParameters(const Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
+
+std::string AndImmediateToA::toString(){
+    return "AND " + (int)this->parameter;
+}

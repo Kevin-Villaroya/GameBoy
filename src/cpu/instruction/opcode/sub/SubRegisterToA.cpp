@@ -37,3 +37,7 @@ unsigned int SubRegisterToA::getTiming(){
 void SubRegisterToA::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string SubRegisterToA::toString(){
+    return "SUB " + Registers::getRegisterName(this->registerName);
+}

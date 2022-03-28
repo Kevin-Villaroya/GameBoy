@@ -3,28 +3,31 @@
 #include "Memory.h"
 
 Memory::Memory(char* path){
+    this->resetMemory();
+
     std::ifstream romFile;
     romFile.open(path, std::ifstream::in);
 
     int current = 0;
 
     while (romFile.good()) {
-    	if(current <= CARTRIGBE_SIZE) {
-		    char character = romFile.get();
-		    this->memory[current] = character;        
-		    current++;
-	   	}
-	   	else {
-	   		std::cerr << "Trying to load more data than a standard cartridge rom" << std::endl;
-	   		break;
-	   	}
+        char character = romFile.get();
+        if(!romFile.eof()){
+            if(current <= CARTRIGBE_SIZE) {
+                this->memory[current] = character;        
+                current++;
+            }
+            else {
+                std::cerr << "Trying to load more data than a standard cartridge rom" << std::endl;
+                break;
+            }
+        }
     }
 
     romFile.close();
 }
 
-void Memory::init(){
-    this->resetMemory();
+void Memory::init(){  
     this->setMemory();
 }
 
@@ -45,7 +48,7 @@ unsigned char& Memory::operator[](unsigned short pos) {
 }
 
 void Memory::resetMemory(){
-    for(int i = CARTRIGBE_SIZE + 1; i < RAM_SIZE; i++){
+    for(int i = 0; i < RAM_SIZE; i++){
         this->memory[i] = 0;
     }
 }

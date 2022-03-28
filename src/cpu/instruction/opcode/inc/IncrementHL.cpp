@@ -36,3 +36,7 @@ unsigned int IncrementHL::getTiming(){
 void IncrementHL::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string IncrementHL::toString(){
+    return "INC (HL)";
+}

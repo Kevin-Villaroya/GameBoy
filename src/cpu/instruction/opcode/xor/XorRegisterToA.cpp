@@ -28,3 +28,7 @@ unsigned int XorRegisterToA::getTiming(){
 
 void XorRegisterToA::setParameters(const Memory&, unsigned short){
 }
+
+std::string XorRegisterToA::toString(){
+    return "XOR " + Registers::getRegisterName(this->registerName);
+}

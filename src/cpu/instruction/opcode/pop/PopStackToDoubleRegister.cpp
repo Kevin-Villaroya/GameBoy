@@ -24,3 +24,7 @@ unsigned int PopStackToDoubleRegister::getTiming(){
 
 void PopStackToDoubleRegister::setParameters(const Memory&, unsigned short){
 }
+
+std::string PopStackToDoubleRegister::toString(){
+    return "POP " + Registers::getDoubleRegisterName(this->doubleRegName);
+}

@@ -19,3 +19,7 @@ unsigned int JumpConditionalRelativeImmediate::getTiming(){
 void JumpConditionalRelativeImmediate::setParameters(const Memory& ram, unsigned short pc){
     this->address = ram.get(pc);
 }
+
+std::string JumpConditionalRelativeImmediate::toString(){
+    return "JR " + InstructionCondition::getConditionName(this->condition) + ", " + std::to_string((int)this->address);
+}

@@ -17,3 +17,7 @@ unsigned int LoadRegisterToAddressFromRegister::getTiming() {
 }
 
 void LoadRegisterToAddressFromRegister::setParameters(const Memory&, unsigned short) {}
+
+std::string LoadRegisterToAddressFromRegister::toString(){
+    return "LD (" + Registers::getDoubleRegisterName(this->addr) + "), " + Registers::getRegisterName(this->src);
+}

@@ -19,3 +19,7 @@ unsigned int LoadImmediateToRegister::getTiming(){
 void LoadImmediateToRegister::setParameters(const Memory& memory, unsigned short positionParameters){
     this->parameter = memory.get(positionParameters);
 }
+
+std::string LoadImmediateToRegister::toString(){
+    return "LD " + Registers::getRegisterName(this->registerName) + ", " + std::to_string((int)this->parameter);
+}

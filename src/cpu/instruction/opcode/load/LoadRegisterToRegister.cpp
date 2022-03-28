@@ -17,3 +17,7 @@ unsigned int LoadRegisterToRegister::getTiming(){
 void LoadRegisterToRegister::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string LoadRegisterToRegister::toString(){
+    return "LD " + Registers::getRegisterName(this->dest) + ", " + Registers::getRegisterName(this->src);
+}

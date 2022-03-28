@@ -28,3 +28,7 @@ unsigned int OrRegisterToA::getTiming(){
 
 void OrRegisterToA::setParameters(const Memory&, unsigned short){
 }
+
+std::string OrRegisterToA::toString(){
+    return "OR " + Registers::getRegisterName(this->registerName);
+}

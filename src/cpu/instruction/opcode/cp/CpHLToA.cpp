@@ -35,3 +35,7 @@ unsigned int CpHLToA::getTiming(){
 
 void CpHLToA::setParameters(const Memory&, unsigned short){
 }
+
+std::string CpHLToA::toString(){
+    return "CP (HL)";
+}

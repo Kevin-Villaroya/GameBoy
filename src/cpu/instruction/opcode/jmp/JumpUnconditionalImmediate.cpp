@@ -16,3 +16,7 @@ unsigned int JumpUnconditionalImmediate::getTiming(){
 void JumpUnconditionalImmediate::setParameters(const Memory& rom, unsigned short parameterBegin){
     this->parameter = rom.getDouble(parameterBegin);
 }
+
+std::string JumpUnconditionalImmediate::toString(){
+    return "JP " + std::to_string((int)this->parameter);
+}

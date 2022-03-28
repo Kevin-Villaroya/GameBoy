@@ -28,3 +28,7 @@ unsigned int SwapRegister::getTiming(){
 
 void SwapRegister::setParameters(const Memory&, unsigned short v){
 }
+
+std::string SwapRegister::toString(){
+    return "SWAP " + Registers::getRegisterName(this->registerName);
+}

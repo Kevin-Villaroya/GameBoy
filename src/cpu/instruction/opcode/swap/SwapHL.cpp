@@ -29,3 +29,7 @@ unsigned int SwapHL::getTiming(){
 
 void SwapHL::setParameters(const Memory&, unsigned short v){
 }
+
+std::string SwapHL::toString(){
+    return "SWAP (HL)";
+}

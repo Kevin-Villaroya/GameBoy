@@ -13,6 +13,7 @@ class SubCarryHLToA : public Instruction{
         unsigned int getSize() override;
         unsigned int getTiming() override;
         void setParameters(const Memory&, unsigned short) override;
+        std::string toString() override;
 };
 
 #endif 

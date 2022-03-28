@@ -34,3 +34,7 @@ unsigned int CpImmediateToA::getTiming(){
 void CpImmediateToA::setParameters(const Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
+
+std::string CpImmediateToA::toString(){
+    return "CP " + std::to_string((int)this->parameter);
+}

@@ -17,3 +17,7 @@ unsigned int IncrementDoubleRegister::getTiming(){
 void IncrementDoubleRegister::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string IncrementDoubleRegister::toString(){
+    return "INC " + Registers::getDoubleRegisterName(this->registerName);
+}

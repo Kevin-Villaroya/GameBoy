@@ -22,6 +22,20 @@ class InstructionCondition {
 	   static bool C(const Memory& ram, const Registers& registers) {
 			return registers.isFlagC();
 		}
+
+		static std::string getConditionName(Condition condition) {
+			if(*condition.target<bool(*)(const Memory&, const Registers&)>() == InstructionCondition::NZ){
+				return "NZ";
+			}else if(*condition.target<bool(*)(const Memory&, const Registers&)>() == InstructionCondition::Z){
+				return "Z";
+			}else if(*condition.target<bool(*)(const Memory&, const Registers&)>() == InstructionCondition::NC){
+				return "NC";
+			}else if(*condition.target<bool(*)(const Memory&, const Registers&)>() == InstructionCondition::C){
+				return "C";
+			}else{
+				return "";
+			}
+		}
 };
 
 #endif

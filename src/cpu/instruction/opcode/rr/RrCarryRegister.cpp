@@ -28,3 +28,7 @@ unsigned int RrCarryRegister::getTiming(){
 
 void RrCarryRegister::setParameters(const Memory&, unsigned short v){
 }
+
+std::string RrCarryRegister::toString(){
+    return "RRC " + Registers::getRegisterName(this->registerName);
+}

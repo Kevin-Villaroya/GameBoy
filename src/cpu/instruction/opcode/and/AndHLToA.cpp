@@ -29,3 +29,7 @@ unsigned int AndHLToA::getTiming(){
 
 void AndHLToA::setParameters(const Memory&, unsigned short){
 }
+
+std::string AndHLToA::toString(){
+    return "AND (HL)";
+}

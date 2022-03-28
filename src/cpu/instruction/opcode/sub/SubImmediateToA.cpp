@@ -36,3 +36,7 @@ unsigned int SubImmediateToA::getTiming(){
 void SubImmediateToA::setParameters(const Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
+
+std::string SubImmediateToA::toString(){
+    return "SUB " + std::to_string((int)this->parameter);
+}

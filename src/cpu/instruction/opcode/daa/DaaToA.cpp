@@ -50,3 +50,7 @@ unsigned int DaaToA::getTiming(){
 
 void DaaToA::setParameters(const Memory&, unsigned short v){
 }
+
+std::string DaaToA::toString(){
+    return "DAA";
+}

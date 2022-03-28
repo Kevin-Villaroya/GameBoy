@@ -40,3 +40,7 @@ unsigned int RlCarryA::getTiming(){
 
 void RlCarryA::setParameters(const Memory&, unsigned short v){
 }
+
+std::string RlCarryA::toString(){
+    return "RLCA";
+}

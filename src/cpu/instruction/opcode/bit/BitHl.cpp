@@ -21,3 +21,7 @@ unsigned int BitHl::getTiming(){
 void BitHl::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string BitHl::toString(){
+    return "BIT " + std::to_string(((int)this->bit)) + ",(HL)";
+}

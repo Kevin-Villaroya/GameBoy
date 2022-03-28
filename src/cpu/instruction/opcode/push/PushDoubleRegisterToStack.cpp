@@ -23,3 +23,7 @@ unsigned int PushDoubleRegisterToStack::getTiming(){
 
 void PushDoubleRegisterToStack::setParameters(const Memory&, unsigned short){
 }
+
+std::string PushDoubleRegisterToStack::toString(){
+    return "PUSH " + Registers::getDoubleRegisterName(this->doubleRegName);
+}

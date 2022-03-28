@@ -37,3 +37,7 @@ unsigned int AddRegisterToA::getTiming(){
 void AddRegisterToA::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string AddRegisterToA::toString(){
+    return "ADD A, " + Registers::getRegisterName(this->registerName);
+}

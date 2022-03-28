@@ -38,3 +38,7 @@ unsigned int IncrementRegister::getTiming(){
 void IncrementRegister::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string IncrementRegister::toString(){
+    return "INC " + Registers::getRegisterName(this->registerName);
+}

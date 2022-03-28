@@ -45,3 +45,7 @@ unsigned int AddImmediateToSP::getTiming(){
 void AddImmediateToSP::setParameters(const Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
+
+std::string AddImmediateToSP::toString(){
+    return "ADD SP, " + (int)this->parameter;
+}

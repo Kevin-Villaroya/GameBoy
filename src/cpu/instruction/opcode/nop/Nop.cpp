@@ -15,3 +15,7 @@ unsigned int Nop::getTiming(){
 void Nop::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string Nop::toString(){
+    return "NOP";
+}

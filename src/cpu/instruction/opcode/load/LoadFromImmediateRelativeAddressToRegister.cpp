@@ -19,3 +19,7 @@ unsigned int LoadFromImmediateRelativeAddressToRegister::getTiming(){
 void LoadFromImmediateRelativeAddressToRegister::setParameters(const Memory& ram, unsigned short pc){
     this->relativeAddress = ram.get(pc);
 }
+
+std::string LoadFromImmediateRelativeAddressToRegister::toString(){
+    return "LD " + Registers::getRegisterName(this->registerName) + ", " + std::to_string((int)this->relativeAddress);
+}

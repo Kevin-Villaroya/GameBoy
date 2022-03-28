@@ -37,3 +37,7 @@ unsigned int SubCarryRegisterToA::getTiming(){
 void SubCarryRegisterToA::setParameters(const Memory&, unsigned short){
 
 }
+
+std::string SubCarryRegisterToA::toString(){
+    return "SBC A, " + Registers::getRegisterName(this->registerName);
+}
