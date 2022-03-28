@@ -36,8 +36,10 @@ void ProcessorGraphic::tick(){
 void ProcessorGraphic::oamSearch(){
     if(this->ticks == 40){
         this->x = 0;
-        unsigned char tileLine = this->getLY() % 8;
-        unsigned short tileMapRowAddr = 0x9800 + ((this->getLY() / 8) * 32);
+        unsigned short y = this->getLY() + this->getSCY();
+
+        unsigned char tileLine = y % 8;
+        unsigned short tileMapRowAddr = 0x9800 + ((y / 8) * 32);
 
         this->fetcher.start(tileMapRowAddr, tileLine);
         this->currentState = ProcessorGraphicState::PixelTransfer;
@@ -109,6 +111,14 @@ unsigned char ProcessorGraphic::getBGP(){
 
 void ProcessorGraphic::setBGP(unsigned char value){
     ram->set(0xff47, value);
+}
+
+unsigned char ProcessorGraphic::getSCY(){
+    return ram->get(0xff42);
+}
+
+void ProcessorGraphic::setSCY(unsigned char value){
+    ram->set(0xff42, value);
 }
 
 ProcessorGraphic::~ProcessorGraphic(){}

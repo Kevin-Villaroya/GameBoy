@@ -557,7 +557,6 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             return new JumpConditionalRelativeImmediate(InstructionCondition::C);
 
         case 0xF2:
-            std::cout << "si pas la je baise louis" << std::endl;
             return new LoadFromRelativeAddressToRegister(RegisterName::A, RegisterName::C);        
 
         case 0xE2:

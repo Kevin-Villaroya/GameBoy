@@ -42,6 +42,9 @@ private:
 	unsigned char getBGP();
 	void setBGP(unsigned char value);
 
+	unsigned char getSCY();
+	void setSCY(unsigned char value);
+
 public:
 	ProcessorGraphic(Display* screen, Memory* ram);
 	~ProcessorGraphic();

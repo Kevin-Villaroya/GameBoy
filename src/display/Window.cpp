@@ -18,7 +18,7 @@ Window::Window(){
 }
 
 void Window::write(unsigned char color){
-    SDL_Color paletteColor = this->palette[color];
+    SDL_Color paletteColor = this->palette[color];    
 
     this->setColorAt(this->offset + 0, paletteColor.r);
     this->setColorAt(this->offset + 1, paletteColor.g);
@@ -35,21 +35,23 @@ void Window::HBlank(){
 void Window::VBlank(){
     this->offset = 0;
 
-    SDL_UpdateTexture(this->texture, nullptr, this->bufferTexture, INIT_SIZE_X_WINDOW * 4);
-    SDL_RenderCopy(this->renderer, this->texture, nullptr, nullptr);
+    SDL_UpdateTexture(this->texture, NULL, this->bufferTexture, INIT_SIZE_X_WINDOW * 4);
+    SDL_RenderCopy(this->renderer, this->texture, NULL, NULL);
     SDL_RenderPresent(this->renderer);
 }
 
 Event Window::fetchEvent(){
     SDL_Event events;
 
-    while (SDL_PollEvent(&events)){
-        switch (events.type){
-            case SDL_QUIT:
-                return Event::QUIT;
-            default:
-                return Event::NONE;
-        }
+    SDL_PollEvent(&events);
+    
+    switch(events.type){
+        case SDL_QUIT:
+            return Event::QUIT;
+            break;
+        default:
+            return Event::NONE;
+            break;
     }
 
     return Event::NONE;
@@ -63,10 +65,8 @@ void Window::initPalette(){
 }
 
 void Window::setColorAt(unsigned int pos, uint8_t color){
-    if(pos > 0 && pos < INIT_SIZE_X_WINDOW * INIT_SIZE_X_WINDOW * 4){
-        this->bufferTexture[pos] = color;
-    }else{
-        //throw "ACCESS OUT OF TEXTURE BOUNDS";
+    if(pos >= 0 && pos < INIT_SIZE_X_WINDOW * INIT_SIZE_X_WINDOW * 4){
+        this->bufferTexture[pos] = color;    
     }
 }
 
