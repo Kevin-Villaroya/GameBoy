@@ -30,9 +30,12 @@ class Processor{
         void run();
 		void printMetadata();
 
+        Instruction* getInstruction();
+
         Memory& getMemory();
 
-        void dump();
+        void dumpRegister();
+        void dumpRam();
 };
 
 #endif

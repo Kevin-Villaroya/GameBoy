@@ -1,4 +1,5 @@
 #include "LoadRegisterToImmediateAddress.h"
+#include "../../util/DecToHex.h"
 
 LoadRegisterToImmediateAddress::LoadRegisterToImmediateAddress(RegisterName registerName) : registerName(registerName){}
 
@@ -21,5 +22,5 @@ void LoadRegisterToImmediateAddress::setParameters(const Memory& ram, unsigned s
 }
 
 std::string LoadRegisterToImmediateAddress::toString(){
-    return "LD " + std::to_string((int)this->address) + ", " + Registers::getRegisterName(this->registerName);
+    return "LD " + charToHex(this->address) + ", " + Registers::getRegisterName(this->registerName);
 }

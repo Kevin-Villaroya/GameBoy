@@ -1,4 +1,5 @@
 #include "SubCarryImmediateToA.h"
+#include "../../util/DecToHex.h"
 
 SubCarryImmediateToA::SubCarryImmediateToA(){}
 
@@ -39,5 +40,5 @@ void SubCarryImmediateToA::setParameters(const Memory& memory, unsigned short pc
 }
 
 std::string SubCarryImmediateToA::toString(){
-    return "SBC A, " + std::to_string((int)this->parameter);
+    return "SBC A, " + charToHex(this->parameter);
 }

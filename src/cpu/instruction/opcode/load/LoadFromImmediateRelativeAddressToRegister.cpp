@@ -1,4 +1,5 @@
 #include "LoadFromImmediateRelativeAddressToRegister.h"
+#include "../../util/DecToHex.h"
 
 LoadFromImmediateRelativeAddressToRegister::LoadFromImmediateRelativeAddressToRegister(RegisterName registerName) : registerName(registerName){}
 
@@ -21,5 +22,5 @@ void LoadFromImmediateRelativeAddressToRegister::setParameters(const Memory& ram
 }
 
 std::string LoadFromImmediateRelativeAddressToRegister::toString(){
-    return "LD " + Registers::getRegisterName(this->registerName) + ", " + std::to_string((int)this->relativeAddress);
+    return "LD " + Registers::getRegisterName(this->registerName) + ", " + charToHex(this->relativeAddress);
 }

@@ -1,4 +1,5 @@
 #include "AddImmediateToA.h"
+#include "../../util/DecToHex.h"
 
 AddImmediateToA::AddImmediateToA(){}
 
@@ -38,5 +39,5 @@ void AddImmediateToA::setParameters(const Memory& memory, unsigned short pc){
 }
 
 std::string AddImmediateToA::toString(){
-    return "ADD A, " + (int)this->parameter;
+    return "ADD A, " + charToHex(this->parameter);
 }

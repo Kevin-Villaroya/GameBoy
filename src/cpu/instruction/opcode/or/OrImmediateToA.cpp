@@ -1,4 +1,5 @@
 #include "OrImmediateToA.h"
+#include "../../util/DecToHex.h"
 
 OrImmediateToA::OrImmediateToA(){}
 
@@ -30,5 +31,5 @@ void OrImmediateToA::setParameters(const Memory& memory, unsigned short pc){
 }
 
 std::string OrImmediateToA::toString(){
-    return "OR " + std::to_string((int)this->parameter);
+    return "OR " + charToHex(this->parameter);
 }

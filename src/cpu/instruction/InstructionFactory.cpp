@@ -80,722 +80,986 @@
 
 Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc){
 	unsigned char byteInstr = memory[pc];
-
-    //std::cout << "pc: " << pc << std::endl;
-    //std::cout << "instr: " << (unsigned short)byteInstr << std::endl;
+    Instruction* instruction;
 
     switch(byteInstr){
         case 0xc3:
-            return new JumpUnconditionalImmediate();
+            instruction = new JumpUnconditionalImmediate();
+             break;
         case 0x00:
-            return new Nop();
+            instruction = new Nop();
+             break;
         case 0x2c:
-            return new IncrementRegister(RegisterName::L);
+            instruction =  new IncrementRegister(RegisterName::L);
+             break;
         case 0x04:
-            return new IncrementRegister(RegisterName::B);
+            instruction =  new IncrementRegister(RegisterName::B);
+             break;
         case 0x14:
-            return new IncrementRegister(RegisterName::D);
+            instruction =  new IncrementRegister(RegisterName::D);
+             break;
         case 0x24:
-            return new IncrementRegister(RegisterName::H);
+            instruction =  new IncrementRegister(RegisterName::H);
+             break;
         case 0x0c:
-            return new IncrementRegister(RegisterName::C);
+            instruction =  new IncrementRegister(RegisterName::C);
+             break;
         case 0x1c:
-            return new IncrementRegister(RegisterName::E);
+            instruction =  new IncrementRegister(RegisterName::E);
+             break;
         case 0x3c:
-            return new IncrementRegister(RegisterName::A);
+            instruction =  new IncrementRegister(RegisterName::A);
      	case 0x34:
-            return new IncrementHL();
+            instruction =  new IncrementHL();
+             break;
         case 0x40:
-            return new LoadRegisterToRegister(RegisterName::B, RegisterName::B);
+            instruction =  new LoadRegisterToRegister(RegisterName::B, RegisterName::B);
+             break;
         case 0x50:
-            return new LoadRegisterToRegister(RegisterName::D, RegisterName::B);
+            instruction =  new LoadRegisterToRegister(RegisterName::D, RegisterName::B);
+             break;
         case 0x60:
-            return new LoadRegisterToRegister(RegisterName::H, RegisterName::B);
+            instruction =  new LoadRegisterToRegister(RegisterName::H, RegisterName::B);
+             break;
         case 0x41:
-            return new LoadRegisterToRegister(RegisterName::B, RegisterName::C);
+            instruction =  new LoadRegisterToRegister(RegisterName::B, RegisterName::C);
+             break;
         case 0x51:
-            return new LoadRegisterToRegister(RegisterName::D, RegisterName::C);
+            instruction =  new LoadRegisterToRegister(RegisterName::D, RegisterName::C);
+             break;
         case 0x61:
-            return new LoadRegisterToRegister(RegisterName::H, RegisterName::C);
+            instruction =  new LoadRegisterToRegister(RegisterName::H, RegisterName::C);
+             break;
         case 0x42:
-            return new LoadRegisterToRegister(RegisterName::B, RegisterName::D);
+            instruction =  new LoadRegisterToRegister(RegisterName::B, RegisterName::D);
+             break;
         case 0x52:
-            return new LoadRegisterToRegister(RegisterName::D, RegisterName::D);
+            instruction =  new LoadRegisterToRegister(RegisterName::D, RegisterName::D);
+             break;
         case 0x62:
-            return new LoadRegisterToRegister(RegisterName::H, RegisterName::D);
+            instruction =  new LoadRegisterToRegister(RegisterName::H, RegisterName::D);
+             break;
         case 0x43:
-            return new LoadRegisterToRegister(RegisterName::B, RegisterName::E);
+            instruction =  new LoadRegisterToRegister(RegisterName::B, RegisterName::E);
+             break;
         case 0x53:
-            return new LoadRegisterToRegister(RegisterName::D, RegisterName::E);
+            instruction =  new LoadRegisterToRegister(RegisterName::D, RegisterName::E);
+             break;
         case 0x63:
-            return new LoadRegisterToRegister(RegisterName::H, RegisterName::E);
+            instruction =  new LoadRegisterToRegister(RegisterName::H, RegisterName::E);
+             break;
         case 0x44:
-            return new LoadRegisterToRegister(RegisterName::B, RegisterName::H);
+            instruction =  new LoadRegisterToRegister(RegisterName::B, RegisterName::H);
+             break;
         case 0x54:
-            return new LoadRegisterToRegister(RegisterName::D, RegisterName::H);
+            instruction =  new LoadRegisterToRegister(RegisterName::D, RegisterName::H);
+             break;
         case 0x64:
-            return new LoadRegisterToRegister(RegisterName::H, RegisterName::H);
+            instruction =  new LoadRegisterToRegister(RegisterName::H, RegisterName::H);
+             break;
         case 0x45:
-            return new LoadRegisterToRegister(RegisterName::B, RegisterName::L);
+            instruction =  new LoadRegisterToRegister(RegisterName::B, RegisterName::L);
+             break;
         case 0x55:
-            return new LoadRegisterToRegister(RegisterName::D, RegisterName::L);
+            instruction =  new LoadRegisterToRegister(RegisterName::D, RegisterName::L);
+             break;
         case 0x65:
-            return new LoadRegisterToRegister(RegisterName::H, RegisterName::L);
+            instruction =  new LoadRegisterToRegister(RegisterName::H, RegisterName::L);
+             break;
         case 0x47:
-            return new LoadRegisterToRegister(RegisterName::B, RegisterName::A);
+            instruction =  new LoadRegisterToRegister(RegisterName::B, RegisterName::A);
+             break;
         case 0x57:
-            return new LoadRegisterToRegister(RegisterName::D, RegisterName::A);
+            instruction =  new LoadRegisterToRegister(RegisterName::D, RegisterName::A);
+             break;
         case 0x67:
-            return new LoadRegisterToRegister(RegisterName::H, RegisterName::A);
+            instruction =  new LoadRegisterToRegister(RegisterName::H, RegisterName::A);
+             break;
         case 0x48:
-            return new LoadRegisterToRegister(RegisterName::C, RegisterName::B);
+            instruction =  new LoadRegisterToRegister(RegisterName::C, RegisterName::B);
+             break;
         case 0x58:
-            return new LoadRegisterToRegister(RegisterName::E, RegisterName::B);
+            instruction =  new LoadRegisterToRegister(RegisterName::E, RegisterName::B);
+             break;
         case 0x68:
-            return new LoadRegisterToRegister(RegisterName::L, RegisterName::B);
+            instruction =  new LoadRegisterToRegister(RegisterName::L, RegisterName::B);
+             break;
         case 0x78:
-            return new LoadRegisterToRegister(RegisterName::A, RegisterName::B);
+            instruction =  new LoadRegisterToRegister(RegisterName::A, RegisterName::B);
+             break;
         case 0x49:
-            return new LoadRegisterToRegister(RegisterName::C, RegisterName::C);
+            instruction =  new LoadRegisterToRegister(RegisterName::C, RegisterName::C);
+             break;
         case 0x59:
-            return new LoadRegisterToRegister(RegisterName::E, RegisterName::C);
+            instruction =  new LoadRegisterToRegister(RegisterName::E, RegisterName::C);
+             break;
         case 0x69:
-            return new LoadRegisterToRegister(RegisterName::L, RegisterName::C);
+            instruction =  new LoadRegisterToRegister(RegisterName::L, RegisterName::C);
+             break;
         case 0x79:
-            return new LoadRegisterToRegister(RegisterName::A, RegisterName::C);
+            instruction =  new LoadRegisterToRegister(RegisterName::A, RegisterName::C);
+             break;
         case 0x4A:
-            return new LoadRegisterToRegister(RegisterName::C, RegisterName::D);
+            instruction =  new LoadRegisterToRegister(RegisterName::C, RegisterName::D);
+             break;
         case 0x5A:
-            return new LoadRegisterToRegister(RegisterName::E, RegisterName::D);
+            instruction =  new LoadRegisterToRegister(RegisterName::E, RegisterName::D);
+             break;
         case 0x6A:
-            return new LoadRegisterToRegister(RegisterName::L, RegisterName::D);
+            instruction =  new LoadRegisterToRegister(RegisterName::L, RegisterName::D);
+             break;
         case 0x7A:
-            return new LoadRegisterToRegister(RegisterName::A, RegisterName::D);
+            instruction =  new LoadRegisterToRegister(RegisterName::A, RegisterName::D);
+             break;
         case 0x4B:
-            return new LoadRegisterToRegister(RegisterName::C, RegisterName::E);
+            instruction =  new LoadRegisterToRegister(RegisterName::C, RegisterName::E);
+             break;
         case 0x5B:
-            return new LoadRegisterToRegister(RegisterName::E, RegisterName::E);
+            instruction =  new LoadRegisterToRegister(RegisterName::E, RegisterName::E);
+             break;
         case 0x6B:
-            return new LoadRegisterToRegister(RegisterName::L, RegisterName::E);
+            instruction =  new LoadRegisterToRegister(RegisterName::L, RegisterName::E);
+             break;
         case 0x7B:
-            return new LoadRegisterToRegister(RegisterName::A, RegisterName::E);
+            instruction =  new LoadRegisterToRegister(RegisterName::A, RegisterName::E);
+             break;
         case 0x4C:
-            return new LoadRegisterToRegister(RegisterName::C, RegisterName::H);
+            instruction =  new LoadRegisterToRegister(RegisterName::C, RegisterName::H);
+             break;
         case 0x5C:
-            return new LoadRegisterToRegister(RegisterName::E, RegisterName::H);
+            instruction =  new LoadRegisterToRegister(RegisterName::E, RegisterName::H);
+             break;
         case 0x6C:
-            return new LoadRegisterToRegister(RegisterName::L, RegisterName::H);
+            instruction =  new LoadRegisterToRegister(RegisterName::L, RegisterName::H);
+             break;
         case 0x7C:
-            return new LoadRegisterToRegister(RegisterName::A, RegisterName::H);
+            instruction =  new LoadRegisterToRegister(RegisterName::A, RegisterName::H);
+             break;
         case 0x4D:
-            return new LoadRegisterToRegister(RegisterName::C, RegisterName::L);
+            instruction =  new LoadRegisterToRegister(RegisterName::C, RegisterName::L);
+             break;
         case 0x5D:
-            return new LoadRegisterToRegister(RegisterName::E, RegisterName::L);
+            instruction =  new LoadRegisterToRegister(RegisterName::E, RegisterName::L);
+             break;
         case 0x6D:
-            return new LoadRegisterToRegister(RegisterName::L, RegisterName::L);
+            instruction =  new LoadRegisterToRegister(RegisterName::L, RegisterName::L);
+             break;
         case 0x7D:
-            return new LoadRegisterToRegister(RegisterName::A, RegisterName::L);
+            instruction =  new LoadRegisterToRegister(RegisterName::A, RegisterName::L);
+             break;
         case 0x4F:
-            return new LoadRegisterToRegister(RegisterName::C, RegisterName::A);
+            instruction =  new LoadRegisterToRegister(RegisterName::C, RegisterName::A);
+             break;
         case 0x5F:
-            return new LoadRegisterToRegister(RegisterName::E, RegisterName::A);
+            instruction =  new LoadRegisterToRegister(RegisterName::E, RegisterName::A);
+             break;
         case 0x6F:
-            return new LoadRegisterToRegister(RegisterName::L, RegisterName::A);
+            instruction =  new LoadRegisterToRegister(RegisterName::L, RegisterName::A);
+             break;
         case 0x7F:
-            return new LoadRegisterToRegister(RegisterName::A, RegisterName::A);
+            instruction =  new LoadRegisterToRegister(RegisterName::A, RegisterName::A);
+             break;
         case 0x01:
-            return new LoadImmediateToDoubleRegister(DoubleRegisterName::BC);
+            instruction =  new LoadImmediateToDoubleRegister(DoubleRegisterName::BC);
+             break;
         case 0x11:
-            return new LoadImmediateToDoubleRegister(DoubleRegisterName::DE);
+            instruction =  new LoadImmediateToDoubleRegister(DoubleRegisterName::DE);
+             break;
         case 0x21:
-            return new LoadImmediateToDoubleRegister(DoubleRegisterName::HL);
+            instruction =  new LoadImmediateToDoubleRegister(DoubleRegisterName::HL);
+             break;
         case 0x31:
-            return new LoadImmediateToDoubleRegister(DoubleRegisterName::SP);
+            instruction =  new LoadImmediateToDoubleRegister(DoubleRegisterName::SP);
+             break;
         case 0xF5:
-            return new PushDoubleRegisterToStack(DoubleRegisterName::AF);
+            instruction =  new PushDoubleRegisterToStack(DoubleRegisterName::AF);
+             break;
         case 0xC5:
-            return new PushDoubleRegisterToStack(DoubleRegisterName::BC);
+            instruction =  new PushDoubleRegisterToStack(DoubleRegisterName::BC);
+             break;
         case 0xD5:
-            return new PushDoubleRegisterToStack(DoubleRegisterName::DE);
+            instruction =  new PushDoubleRegisterToStack(DoubleRegisterName::DE);
+             break;
         case 0xE5:
-            return new PushDoubleRegisterToStack(DoubleRegisterName::HL);
+            instruction =  new PushDoubleRegisterToStack(DoubleRegisterName::HL);
+             break;
         case 0xF1:
-            return new PopStackToDoubleRegister(DoubleRegisterName::AF);
+            instruction =  new PopStackToDoubleRegister(DoubleRegisterName::AF);
+             break;
         case 0xC1:
-            return new PopStackToDoubleRegister(DoubleRegisterName::BC);
+            instruction =  new PopStackToDoubleRegister(DoubleRegisterName::BC);
+             break;
         case 0xD1:
-            return new PopStackToDoubleRegister(DoubleRegisterName::DE);
+            instruction =  new PopStackToDoubleRegister(DoubleRegisterName::DE);
+             break;
         case 0xE1:
-            return new PopStackToDoubleRegister(DoubleRegisterName::HL);
+            instruction =  new PopStackToDoubleRegister(DoubleRegisterName::HL);
+             break;
         case 0x87:
-            return new AddRegisterToA(RegisterName::A);
+            instruction =  new AddRegisterToA(RegisterName::A);
+             break;
         case 0x80:
-            return new AddRegisterToA(RegisterName::B);
+            instruction =  new AddRegisterToA(RegisterName::B);
+             break;
         case 0x81:
-            return new AddRegisterToA(RegisterName::C);
+            instruction =  new AddRegisterToA(RegisterName::C);
+             break;
         case 0x82:
-            return new AddRegisterToA(RegisterName::D);
+            instruction =  new AddRegisterToA(RegisterName::D);
+             break;
         case 0x83:
-            return new AddRegisterToA(RegisterName::E);
+            instruction =  new AddRegisterToA(RegisterName::E);
+             break;
         case 0x84:
-            return new AddRegisterToA(RegisterName::H);
+            instruction =  new AddRegisterToA(RegisterName::H);
+             break;
         case 0x85:
-            return new AddRegisterToA(RegisterName::L);
+            instruction =  new AddRegisterToA(RegisterName::L);
+             break;
         case 0x86:
-            return new AddHLToA();
+            instruction =  new AddHLToA();
+             break;
         case 0xC6:
-            return new AddImmediateToA();
+            instruction =  new AddImmediateToA();
+             break;
         case 0x8F:
-            return new AddCarryRegisterToA(RegisterName::A);
+            instruction =  new AddCarryRegisterToA(RegisterName::A);
+             break;
         case 0x88:
-            return new AddCarryRegisterToA(RegisterName::B);
+            instruction =  new AddCarryRegisterToA(RegisterName::B);
+             break;
         case 0x89:
-            return new AddCarryRegisterToA(RegisterName::C);
+            instruction =  new AddCarryRegisterToA(RegisterName::C);
+             break;
         case 0x8A:
-            return new AddCarryRegisterToA(RegisterName::D);
+            instruction =  new AddCarryRegisterToA(RegisterName::D);
+             break;
         case 0x8B:
-            return new AddCarryRegisterToA(RegisterName::E);
+            instruction =  new AddCarryRegisterToA(RegisterName::E);
+             break;
         case 0x8C:
-            return new AddCarryRegisterToA(RegisterName::H);
+            instruction =  new AddCarryRegisterToA(RegisterName::H);
+             break;
         case 0x8D:
-            return new AddCarryRegisterToA(RegisterName::L);
+            instruction =  new AddCarryRegisterToA(RegisterName::L);
+             break;
         case 0x8E:
-            return new AddCarryHLToA();
+            instruction =  new AddCarryHLToA();
+             break;
         case 0xCE:
-            return new AddCarryImmediateToA();
+            instruction =  new AddCarryImmediateToA();
+             break;
         case 0x97:
-            return new SubRegisterToA(RegisterName::A);
+            instruction =  new SubRegisterToA(RegisterName::A);
+             break;
         case 0x90:
-            return new SubRegisterToA(RegisterName::B);
+            instruction =  new SubRegisterToA(RegisterName::B);
+             break;
         case 0x91:
-            return new SubRegisterToA(RegisterName::C);
+            instruction =  new SubRegisterToA(RegisterName::C);
+             break;
         case 0x92:
-            return new SubRegisterToA(RegisterName::D);
+            instruction =  new SubRegisterToA(RegisterName::D);
+             break;
         case 0x93:
-            return new SubRegisterToA(RegisterName::E);
+            instruction =  new SubRegisterToA(RegisterName::E);
+             break;
         case 0x94:
-            return new SubRegisterToA(RegisterName::H);
+            instruction =  new SubRegisterToA(RegisterName::H);
+             break;
         case 0x95:
-            return new SubRegisterToA(RegisterName::L);
+            instruction =  new SubRegisterToA(RegisterName::L);
+             break;
         case 0x96:
-            return new SubHLToA();
+            instruction =  new SubHLToA();
+             break;
         case 0xD6:
-            return new SubImmediateToA();
+            instruction =  new SubImmediateToA();
+             break;
         case 0x9F:
-            return new SubCarryRegisterToA(RegisterName::A);
+            instruction =  new SubCarryRegisterToA(RegisterName::A);
+             break;
         case 0x98:
-            return new SubCarryRegisterToA(RegisterName::B);
+            instruction =  new SubCarryRegisterToA(RegisterName::B);
+             break;
         case 0x99:
-            return new SubCarryRegisterToA(RegisterName::C);
+            instruction =  new SubCarryRegisterToA(RegisterName::C);
+             break;
         case 0x9A:
-            return new SubCarryRegisterToA(RegisterName::D);
+            instruction =  new SubCarryRegisterToA(RegisterName::D);
+             break;
         case 0x9B:
-            return new SubCarryRegisterToA(RegisterName::E);
+            instruction =  new SubCarryRegisterToA(RegisterName::E);
+             break;
         case 0x9C:
-            return new SubCarryRegisterToA(RegisterName::H);
+            instruction =  new SubCarryRegisterToA(RegisterName::H);
+             break;
         case 0x9D:
-            return new SubCarryRegisterToA(RegisterName::L);    
+            instruction =  new SubCarryRegisterToA(RegisterName::L);    
         case 0x9E:
-            return new SubCarryHLToA();
+            instruction =  new SubCarryHLToA();
+             break;
         case 0xDE:
-            return new SubCarryImmediateToA();
+            instruction =  new SubCarryImmediateToA();
+             break;
         case 0xA7:
-            return new AndRegisterToA(RegisterName::A);
+            instruction =  new AndRegisterToA(RegisterName::A);
+             break;
         case 0xA0:
-            return new AndRegisterToA(RegisterName::B);
+            instruction =  new AndRegisterToA(RegisterName::B);
+             break;
         case 0xA1:
-            return new AndRegisterToA(RegisterName::C);
+            instruction =  new AndRegisterToA(RegisterName::C);
+             break;
         case 0xA2:
-            return new AndRegisterToA(RegisterName::D);
+            instruction =  new AndRegisterToA(RegisterName::D);
+             break;
         case 0xA3:
-            return new AndRegisterToA(RegisterName::E);
+            instruction =  new AndRegisterToA(RegisterName::E);
+             break;
         case 0xA4:
-            return new AndRegisterToA(RegisterName::H);
+            instruction =  new AndRegisterToA(RegisterName::H);
+             break;
         case 0xA5:
-            return new AndRegisterToA(RegisterName::L);
+            instruction =  new AndRegisterToA(RegisterName::L);
+             break;
         case 0xA6:
-            return new AndHLToA();
+            instruction =  new AndHLToA();
+             break;
         case 0xE6:
-            return new AndImmediateToA();
+            instruction =  new AndImmediateToA();
+             break;
         case 0xB7:
-            return new OrRegisterToA(RegisterName::A);
+            instruction =  new OrRegisterToA(RegisterName::A);
+             break;
         case 0xB0:
-            return new OrRegisterToA(RegisterName::B);
+            instruction =  new OrRegisterToA(RegisterName::B);
+             break;
         case 0xB1:
-            return new OrRegisterToA(RegisterName::C);
+            instruction =  new OrRegisterToA(RegisterName::C);
+             break;
         case 0xB2:
-            return new OrRegisterToA(RegisterName::D);
+            instruction =  new OrRegisterToA(RegisterName::D);
+             break;
         case 0xB3:
-            return new OrRegisterToA(RegisterName::E);
+            instruction =  new OrRegisterToA(RegisterName::E);
+             break;
         case 0xB4:
-            return new OrRegisterToA(RegisterName::H);
+            instruction =  new OrRegisterToA(RegisterName::H);
+             break;
         case 0xB5:
-            return new OrRegisterToA(RegisterName::L);
+            instruction =  new OrRegisterToA(RegisterName::L);
+             break;
         case 0xB6:
-            return new OrHLToA();
+            instruction =  new OrHLToA();
+             break;
         case 0xF6:
-            return new OrImmediateToA();
+            instruction =  new OrImmediateToA();
+             break;
         case 0xAF:
-            return new XorRegisterToA(RegisterName::A);
+            instruction =  new XorRegisterToA(RegisterName::A);
+             break;
         case 0xA8:
-            return new XorRegisterToA(RegisterName::B);
+            instruction =  new XorRegisterToA(RegisterName::B);
+             break;
         case 0xA9:
-            return new XorRegisterToA(RegisterName::C);
+            instruction =  new XorRegisterToA(RegisterName::C);
+             break;
         case 0xAA:
-            return new XorRegisterToA(RegisterName::D);
+            instruction =  new XorRegisterToA(RegisterName::D);
+             break;
         case 0xAB:
-            return new XorRegisterToA(RegisterName::E);
+            instruction =  new XorRegisterToA(RegisterName::E);
+             break;
         case 0xAC:
-            return new XorRegisterToA(RegisterName::H);
+            instruction =  new XorRegisterToA(RegisterName::H);
+             break;
         case 0xAD:
-            return new XorRegisterToA(RegisterName::L);
+            instruction =  new XorRegisterToA(RegisterName::L);
+             break;
         case 0xAE:
-            return new XorHLToA();
+            instruction =  new XorHLToA();
+             break;
         case 0xEE:
-            return new XorImmediateToA();
+            instruction =  new XorImmediateToA();
+             break;
         case 0xBF:
-            return new CpRegisterToA(RegisterName::A);
+            instruction =  new CpRegisterToA(RegisterName::A);
+             break;
         case 0xB8:
-            return new CpRegisterToA(RegisterName::B);
+            instruction =  new CpRegisterToA(RegisterName::B);
+             break;
         case 0xB9:
-            return new CpRegisterToA(RegisterName::C);
+            instruction =  new CpRegisterToA(RegisterName::C);
+             break;
         case 0xBA:
-            return new CpRegisterToA(RegisterName::D);
+            instruction =  new CpRegisterToA(RegisterName::D);
+             break;
         case 0xBB:
-            return new CpRegisterToA(RegisterName::E);
+            instruction =  new CpRegisterToA(RegisterName::E);
+             break;
         case 0xBC:
-            return new CpRegisterToA(RegisterName::H);
+            instruction =  new CpRegisterToA(RegisterName::H);
+             break;
         case 0xBD:
-            return new CpRegisterToA(RegisterName::L);
+            instruction =  new CpRegisterToA(RegisterName::L);
+             break;
         case 0xBE:
-            return new CpHLToA();
+            instruction =  new CpHLToA();
+             break;
         case 0xFE:
-            return new CpImmediateToA();
+            instruction =  new CpImmediateToA();
+             break;
         case 0x09:
-            return new AddDoubleRegisterToHL(DoubleRegisterName::BC);
+            instruction =  new AddDoubleRegisterToHL(DoubleRegisterName::BC);
+             break;
         case 0x19:
-            return new AddDoubleRegisterToHL(DoubleRegisterName::DE);
+            instruction =  new AddDoubleRegisterToHL(DoubleRegisterName::DE);
+             break;
         case 0x29:
-            return new AddDoubleRegisterToHL(DoubleRegisterName::HL);
+            instruction =  new AddDoubleRegisterToHL(DoubleRegisterName::HL);
+             break;
         case 0x39:
-            return new AddDoubleRegisterToHL(DoubleRegisterName::SP);
+            instruction =  new AddDoubleRegisterToHL(DoubleRegisterName::SP);
+             break;
         case 0xE8:
-            return new AddImmediateToSP();
+            instruction =  new AddImmediateToSP();
+             break;
         case 0x27:
-            return new DaaToA();
+            instruction =  new DaaToA();
+             break;
         case 0x2F:
-            return new CplToA();
+            instruction =  new CplToA();
+             break;
         case 0x3F:
-            return new CplCarryFlag();
+            instruction =  new CplCarryFlag();
+             break;
         case 0x37:
-            return new SetCarryFlag();
+            instruction =  new SetCarryFlag();
+             break;
         case 0x07:
-            return new RlCarryA();
+            instruction =  new RlCarryA();
+             break;
         case 0x17:
-            return new RlA();
+            instruction =  new RlA();
+             break;
         case 0x0F:
-            return new RrCarryA();
+            instruction =  new RrCarryA();
+             break;
         case 0x1F:
-            return new RrA();            
+            instruction =  new RrA();            
         case 0x7E:
-        	return new LoadFromAddressToRegister(RegisterName::A, DoubleRegisterName::HL);
-        	
+        	instruction =  new LoadFromAddressToRegister(RegisterName::A, DoubleRegisterName::HL);
+             break;
         case 0x46:
-        	return new LoadFromAddressToRegister(RegisterName::B, DoubleRegisterName::HL);
-        	
+        	instruction =  new LoadFromAddressToRegister(RegisterName::B, DoubleRegisterName::HL);
+             break;
         case 0x4E:
-        	return new LoadFromAddressToRegister(RegisterName::C, DoubleRegisterName::HL);
-        	
+        	instruction =  new LoadFromAddressToRegister(RegisterName::C, DoubleRegisterName::HL);
+             break;
         case 0x56:
-        	return new LoadFromAddressToRegister(RegisterName::D, DoubleRegisterName::HL);
-        	
+        	instruction =  new LoadFromAddressToRegister(RegisterName::D, DoubleRegisterName::HL);
+             break;
         case 0x5E:
-        	return new LoadFromAddressToRegister(RegisterName::E, DoubleRegisterName::HL);
-        	
+        	instruction =  new LoadFromAddressToRegister(RegisterName::E, DoubleRegisterName::HL);
+             break;
         case 0x66:
-        	return new LoadFromAddressToRegister(RegisterName::H, DoubleRegisterName::HL);
-        	
+        	instruction =  new LoadFromAddressToRegister(RegisterName::H, DoubleRegisterName::HL);
+             break;
         case 0x6E:
-        	return new LoadFromAddressToRegister(RegisterName::L, DoubleRegisterName::HL);
-        	
+        	instruction =  new LoadFromAddressToRegister(RegisterName::L, DoubleRegisterName::HL);
+             break;
         case 0x70:
-        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::B);
-        	
+        	instruction =  new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::B);
+             break;
         case 0x71:
-        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::C);
-        	
+        	instruction =  new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::C);
+             break;
         case 0x72:
-        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::D);
-        	
+        	instruction =  new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::D);
+             break;
         case 0x73:
-        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::E);
-        	
+        	instruction =  new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::E);
+             break;
         case 0x74:
-        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::H);
+        	instruction =  new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::H);
         	
 		case 0x75:
-        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::L);
-        	
+        	instruction =  new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::L);
+             break;
         case 0x3D:
-        	return new DecrementRegister(RegisterName::A);
-        	
+        	instruction =  new DecrementRegister(RegisterName::A);
+             break;
         case 0x05:
-        	return new DecrementRegister(RegisterName::B);
-        	
+        	instruction =  new DecrementRegister(RegisterName::B);
+             break;
         case 0x0D:
-        	return new DecrementRegister(RegisterName::C);
-        	
+        	instruction =  new DecrementRegister(RegisterName::C);
+             break;
         case 0x15:
-        	return new DecrementRegister(RegisterName::D);
-        	
+        	instruction =  new DecrementRegister(RegisterName::D);
+             break;
         case 0x1D:
-        	return new DecrementRegister(RegisterName::E);
-        	
+        	instruction =  new DecrementRegister(RegisterName::E);
+             break;
         case 0x25:
-        	return new DecrementRegister(RegisterName::H);
-        	
+        	instruction =  new DecrementRegister(RegisterName::H);
+             break;
         case 0x2D:
-        	return new DecrementRegister(RegisterName::H);
-        	
+        	instruction =  new DecrementRegister(RegisterName::H);
+             break;
         case 0x35:
-        	return new DecrementHL();
-        	
+        	instruction =  new DecrementHL();
+             break;
         case 0x06:
-        	return new LoadImmediateToRegister(RegisterName::B);
-        	
+        	instruction =  new LoadImmediateToRegister(RegisterName::B);
+             break;
         case 0x0E:
-        	return new LoadImmediateToRegister(RegisterName::C);
-        	
+        	instruction =  new LoadImmediateToRegister(RegisterName::C);
+             break;
         case 0x16:
-        	return new LoadImmediateToRegister(RegisterName::D);
-        	
+        	instruction =  new LoadImmediateToRegister(RegisterName::D);
+             break;
         case 0x1E:
-        	return new LoadImmediateToRegister(RegisterName::E);
-        	
+        	instruction =  new LoadImmediateToRegister(RegisterName::E);
+             break;
         case 0x26:
-        	return new LoadImmediateToRegister(RegisterName::H);
-        	
+        	instruction =  new LoadImmediateToRegister(RegisterName::H);
+             break;
         case 0x2E:
-        	return new LoadImmediateToRegister(RegisterName::L);
-        	
+        	instruction =  new LoadImmediateToRegister(RegisterName::L);
+             break;
         case 0x3E:
-        	return new LoadImmediateToRegister(RegisterName::A);
-        	
+        	instruction =  new LoadImmediateToRegister(RegisterName::A);
+             break;
         case 0x18:
-        	return new JumpUnconditionalRelativeImmediate();
-        	
+        	instruction =  new JumpUnconditionalRelativeImmediate();
+             break;
         case 0x02:
-        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::BC, RegisterName::A);
+        	instruction =  new LoadRegisterToAddressFromRegister(DoubleRegisterName::BC, RegisterName::A);
         	
     	case 0x12:
-        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::DE, RegisterName::A);
-        	
+        	instruction =  new LoadRegisterToAddressFromRegister(DoubleRegisterName::DE, RegisterName::A);
+             break;
         case 0x77:
-        	return new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::A);
-        	
+        	instruction =  new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::A);
+             break;
         case 0x03:
-        	return new IncrementDoubleRegister(DoubleRegisterName::BC);
-        	
+        	instruction =  new IncrementDoubleRegister(DoubleRegisterName::BC);
+             break;
         case 0x13:
-        	return new IncrementDoubleRegister(DoubleRegisterName::DE);
-        	
+        	instruction =  new IncrementDoubleRegister(DoubleRegisterName::DE);
+             break;
         case 0x23:
-        	return new IncrementDoubleRegister(DoubleRegisterName::HL);
-        	
+        	instruction =  new IncrementDoubleRegister(DoubleRegisterName::HL);
+             break;
         case 0x33:
-        	return new IncrementDoubleRegister(DoubleRegisterName::SP);
-        	
+        	instruction =  new IncrementDoubleRegister(DoubleRegisterName::SP);
+             break;
         case 0xCD:
-        	return new CallUnconditional();
-        	
+        	instruction =  new CallUnconditional();
+             break;
         case 0xE0:
-        	return new LoadAToImmediateAddress();
-        
+        	instruction =  new LoadAToImmediateAddress();
+             break;
         case 0xC9:
-        	return new ReturnUnconditional();
-        	
+        	instruction =  new ReturnUnconditional();
+             break;
         case 0xC2:
-        	return new JumpConditionalImmediate(InstructionCondition::NZ);
-        	
+        	instruction =  new JumpConditionalImmediate(InstructionCondition::NZ);
+             break;
         case 0xCA:
-        	return new JumpConditionalImmediate(InstructionCondition::Z);
-        	
+        	instruction =  new JumpConditionalImmediate(InstructionCondition::Z);
+             break;
         case 0xD2:
-        	return new JumpConditionalImmediate(InstructionCondition::NC);
-        	
+        	instruction =  new JumpConditionalImmediate(InstructionCondition::NC);
+             break;
         case 0xDA:
-        	return new JumpConditionalImmediate(InstructionCondition::C);
-        
+        	instruction =  new JumpConditionalImmediate(InstructionCondition::C);
+             break;
         case 0xCC:
-            return new CallConditional(InstructionCondition::Z);
-
+            instruction =  new CallConditional(InstructionCondition::Z);
+             break;
         case 0xDC:
-            return new CallConditional(InstructionCondition::C);
-
+            instruction =  new CallConditional(InstructionCondition::C);
+             break;
         case 0xC4:
-            return new CallConditional(InstructionCondition::NZ);
-
+            instruction =  new CallConditional(InstructionCondition::NZ);
+             break;
         case 0xD4:
-            return new CallConditional(InstructionCondition::NC);
-        	
+            instruction =  new CallConditional(InstructionCondition::NC);
+             break;
         case 0x22:
-            return new LoadARegisterToHlIncrement();
-
+            instruction =  new LoadARegisterToHlIncrement();
+             break;
         case 0x32:
-            return new LoadARegisterToHlDecrement();
-
+            instruction =  new LoadARegisterToHlDecrement();
+             break;
         case 0x20:
-            return new JumpConditionalRelativeImmediate(InstructionCondition::NZ);
-
+            instruction =  new JumpConditionalRelativeImmediate(InstructionCondition::NZ);
+             break;
         case 0x30:
-            return new JumpConditionalRelativeImmediate(InstructionCondition::NC);
-            
+            instruction =  new JumpConditionalRelativeImmediate(InstructionCondition::NC);
+             break;
         case 0x28:
-            return new JumpConditionalRelativeImmediate(InstructionCondition::Z);
-            
+            instruction =  new JumpConditionalRelativeImmediate(InstructionCondition::Z);
+             break;
         case 0x38:
-            return new JumpConditionalRelativeImmediate(InstructionCondition::C);
-
+            instruction =  new JumpConditionalRelativeImmediate(InstructionCondition::C);
+             break;
         case 0xF2:
-            return new LoadFromRelativeAddressToRegister(RegisterName::A, RegisterName::C);        
-
+            instruction =  new LoadFromRelativeAddressToRegister(RegisterName::A, RegisterName::C);
+             break;
         case 0xE2:
-            return new LoadFromRegisterToRelativeAddress(RegisterName::C, RegisterName::A);  
-
+            instruction =  new LoadFromRegisterToRelativeAddress(RegisterName::C, RegisterName::A);  
+            break;
         case 0x0A:
-            return new LoadFromAddressToRegister(RegisterName::A, DoubleRegisterName::BC);
-
+            instruction =  new LoadFromAddressToRegister(RegisterName::A, DoubleRegisterName::BC);
+             break;
         case 0x1A:
-            return new LoadFromAddressToRegister(RegisterName::A, DoubleRegisterName::DE);
-
+            instruction =  new LoadFromAddressToRegister(RegisterName::A, DoubleRegisterName::DE);
+             break;
         case 0xF3:
-            return new DI();
-
+            instruction =  new DI();
+             break;
         case 0xEA:
-            return new LoadRegisterToImmediateAddress(RegisterName::A);
-
+            instruction =  new LoadRegisterToImmediateAddress(RegisterName::A);
+             break;
         case 0xF0:
-            return new LoadFromImmediateRelativeAddressToRegister(RegisterName::A);
-
+            instruction =  new LoadFromImmediateRelativeAddressToRegister(RegisterName::A);
+             break;
         case 0xCB:
-        	return InstructionFactory::forCodeCb(memory[pc + 1]);
-
+        	instruction =  InstructionFactory::forCodeCb(memory[pc + 1]);
+            break;
         default:
             throw UnknownInstructionException(0x00 + byteInstr, "8 bit opcode");
 	}
+
+    instruction->opCode = byteInstr;
+
+    return instruction;
 }
     
 Instruction* InstructionFactory::forCodeCb(unsigned char byteInstr){
+    Instruction* instruction;
+
 	switch(byteInstr){
 		case 0x07:
-	        return new RlCarryRegister(RegisterName::A);
+	        instruction =  new RlCarryRegister(RegisterName::A);
+	        break;
 	    case 0x00:
-	        return new RlCarryRegister(RegisterName::B);
+	        instruction =  new RlCarryRegister(RegisterName::B);
+	        break;
 	    case 0x01:
-	        return new RlCarryRegister(RegisterName::C);
+	        instruction =  new RlCarryRegister(RegisterName::C);
+	        break;
 	    case 0x02:
-	        return new RlCarryRegister(RegisterName::D);
+	        instruction =  new RlCarryRegister(RegisterName::D);
+	        break;
 	    case 0x03:
-	        return new RlCarryRegister(RegisterName::E);
+	        instruction =  new RlCarryRegister(RegisterName::E);
+	        break;
 	    case 0x04:
-	        return new RlCarryRegister(RegisterName::H);
+	        instruction =  new RlCarryRegister(RegisterName::H);
+	        break;
 	    case 0x05:
-	        return new RlCarryRegister(RegisterName::L);
+	        instruction =  new RlCarryRegister(RegisterName::L);
+	        break;
 	    case 0x06:
-	        return new RlCarryHL();
+	        instruction =  new RlCarryHL();
+	        break;
 	    case 0x17:
-	        return new RlRegister(RegisterName::A);
+	        instruction =  new RlRegister(RegisterName::A);
+	        break;
 	    case 0x10:
-	        return new RlRegister(RegisterName::B);
+	        instruction =  new RlRegister(RegisterName::B);
+	        break;
 	    case 0x11:
-	        return new RlRegister(RegisterName::C);
+	        instruction =  new RlRegister(RegisterName::C);
+	        break;
 	    case 0x12:
-	        return new RlRegister(RegisterName::D);
+	        instruction =  new RlRegister(RegisterName::D);
+	        break;
 	    case 0x13:
-	        return new RlRegister(RegisterName::E);
+	        instruction =  new RlRegister(RegisterName::E);
+	        break;
 	    case 0x14:
-	        return new RlRegister(RegisterName::H);
+	        instruction =  new RlRegister(RegisterName::H);
+	        break;
 	    case 0x15:
-	        return new RlRegister(RegisterName::L);
+	        instruction =  new RlRegister(RegisterName::L);
+	        break;
 	    case 0x16:
-	        return new RlHL();
+	        instruction =  new RlHL();
+	        break;
 	    case 0x0F:
-	        return new RrCarryRegister(RegisterName::A);
+	        instruction =  new RrCarryRegister(RegisterName::A);
+	        break;
 	    case 0x08:
-	        return new RrCarryRegister(RegisterName::B);
+	        instruction =  new RrCarryRegister(RegisterName::B);
+	        break;
 	    case 0x09:
-	        return new RrCarryRegister(RegisterName::C);
+	        instruction =  new RrCarryRegister(RegisterName::C);
+	        break;
 	    case 0x0A:
-	        return new RrCarryRegister(RegisterName::D);
+	        instruction =  new RrCarryRegister(RegisterName::D);
+	        break;
 	    case 0x0B:
-	        return new RrCarryRegister(RegisterName::E);
+	        instruction =  new RrCarryRegister(RegisterName::E);
+	        break;
 	    case 0x0C:
-	        return new RrCarryRegister(RegisterName::H);
+	        instruction =  new RrCarryRegister(RegisterName::H);
+	        break;
 	    case 0x0D:
-	        return new RrCarryRegister(RegisterName::L);
+	        instruction =  new RrCarryRegister(RegisterName::L);
+	        break;
 	    case 0x0E:
-	        return new RrCarryHL();
+	        instruction =  new RrCarryHL();
+	        break;
 	    case 0x1F:
-	        return new RrRegister(RegisterName::A);
+	        instruction =  new RrRegister(RegisterName::A);
+	        break;
 	    case 0x18:
-	        return new RrRegister(RegisterName::B);
+	        instruction =  new RrRegister(RegisterName::B);
+	        break;
 	    case 0x19:
-	        return new RrRegister(RegisterName::C);
+	        instruction =  new RrRegister(RegisterName::C);
+	        break;
 	    case 0x1A:
-	        return new RrRegister(RegisterName::D);
+	        instruction =  new RrRegister(RegisterName::D);
+	        break;
 	    case 0x1B:
-	        return new RrRegister(RegisterName::E);
+	        instruction =  new RrRegister(RegisterName::E);
+	        break;
 	    case 0x1C:
-	        return new RrRegister(RegisterName::H);
+	        instruction =  new RrRegister(RegisterName::H);
+	        break;
 	    case 0x1D:
-	        return new RrRegister(RegisterName::L);
+	        instruction =  new RrRegister(RegisterName::L);
+	        break;
 	    case 0x1E:
-	        return new RrHL();
+	        instruction =  new RrHL();
+	        break;
 	    case 0x37:
-	        return new SwapRegister(RegisterName::A);
+	        instruction =  new SwapRegister(RegisterName::A);
+	        break;
 	    case 0x30:
-	        return new SwapRegister(RegisterName::B);
+	        instruction =  new SwapRegister(RegisterName::B);
+	        break;
 	    case 0x31:
-	        return new SwapRegister(RegisterName::C);
+	        instruction =  new SwapRegister(RegisterName::C);
+	        break;
 	    case 0x32:
-	        return new SwapRegister(RegisterName::D);
+	        instruction =  new SwapRegister(RegisterName::D);
+	        break;
 	    case 0x33:
-	        return new SwapRegister(RegisterName::E);
+	        instruction =  new SwapRegister(RegisterName::E);
+	        break;
 	    case 0x34:
-	        return new SwapRegister(RegisterName::H);
+	        instruction =  new SwapRegister(RegisterName::H);
+	        break;
 	    case 0x35:
-	        return new SwapRegister(RegisterName::L);
+	        instruction =  new SwapRegister(RegisterName::L);
+	        break;
 	    case 0x36:
-	     	return new SwapHL();
+	     	instruction =  new SwapHL();
+             break;
         case 0x40:
-            return new Bit(0, RegisterName::B);
+            instruction =  new Bit(0, RegisterName::B);
+             break;
         case 0x41:
-            return new Bit(0, RegisterName::C);
+            instruction =  new Bit(0, RegisterName::C);
+             break;
         case 0x42:
-            return new Bit(0, RegisterName::D);
+            instruction =  new Bit(0, RegisterName::D);
+             break;
         case 0x43:
-            return new Bit(0, RegisterName::E);
+            instruction =  new Bit(0, RegisterName::E);
+             break;
         case 0x44:
-            return new Bit(0, RegisterName::H);
+            instruction =  new Bit(0, RegisterName::H);
+             break;
         case 0x45:
-            return new Bit(0, RegisterName::L);
+            instruction =  new Bit(0, RegisterName::L);
+             break;
         case 0x46:
-            return new BitHl(0);
+            instruction =  new BitHl(0);
+             break;
         case 0x47:
-            return new Bit(0, RegisterName::A);
+            instruction =  new Bit(0, RegisterName::A);
+             break;
         case 0x48:
-            return new Bit(1, RegisterName::B);
+            instruction =  new Bit(1, RegisterName::B);
+             break;
         case 0x49:
-            return new Bit(1, RegisterName::C);
+            instruction =  new Bit(1, RegisterName::C);
+             break;
         case 0x4A:
-            return new Bit(1, RegisterName::D);
+            instruction =  new Bit(1, RegisterName::D);
+             break;
         case 0x4B:
-            return new Bit(1, RegisterName::E);
+            instruction =  new Bit(1, RegisterName::E);
+             break;
         case 0x4C:
-            return new Bit(1, RegisterName::H);
+            instruction =  new Bit(1, RegisterName::H);
+             break;
         case 0x4D:
-            return new Bit(1, RegisterName::L);
+            instruction =  new Bit(1, RegisterName::L);
+             break;
         case 0x4E:
-            return new BitHl(1);
+            instruction =  new BitHl(1);
+             break;
         case 0x4F:
-            return new Bit(1, RegisterName::A);
+            instruction =  new Bit(1, RegisterName::A);
+             break;
         case 0x50:
-            return new Bit(2, RegisterName::B);
+            instruction =  new Bit(2, RegisterName::B);
+             break;
         case 0x51:
-            return new Bit(2, RegisterName::C);
+            instruction =  new Bit(2, RegisterName::C);
+             break;
         case 0x52:
-            return new Bit(2, RegisterName::D);
+            instruction =  new Bit(2, RegisterName::D);
+             break;
         case 0x53:
-            return new Bit(2, RegisterName::E);
+            instruction =  new Bit(2, RegisterName::E);
+             break;
         case 0x54:
-            return new Bit(2, RegisterName::H);
+            instruction =  new Bit(2, RegisterName::H);
+             break;
         case 0x55:
-            return new Bit(2, RegisterName::L);
+            instruction =  new Bit(2, RegisterName::L);
+             break;
         case 0x56:
-            return new BitHl(2);
+            instruction =  new BitHl(2);
+             break;
         case 0x57:
-            return new Bit(2, RegisterName::A);
+            instruction =  new Bit(2, RegisterName::A);
+             break;
         case 0x58:
-            return new Bit(3, RegisterName::B);
+            instruction =  new Bit(3, RegisterName::B);
+             break;
         case 0x59:
-            return new Bit(3, RegisterName::C);
+            instruction =  new Bit(3, RegisterName::C);
+             break;
         case 0x5A:
-            return new Bit(3, RegisterName::D);
+            instruction =  new Bit(3, RegisterName::D);
+             break;
         case 0x5B:
-            return new Bit(3, RegisterName::E);
+            instruction =  new Bit(3, RegisterName::E);
+             break;
         case 0x5C:
-            return new Bit(3, RegisterName::H);
+            instruction =  new Bit(3, RegisterName::H);
+             break;
         case 0x5D:
-            return new Bit(3, RegisterName::L);
+            instruction =  new Bit(3, RegisterName::L);
+             break;
         case 0x5E:
-            return new BitHl(3);
+            instruction =  new BitHl(3);
+             break;
         case 0x5F:
-            return new Bit(3, RegisterName::A);
+            instruction =  new Bit(3, RegisterName::A);
+             break;
         case 0x60:
-            return new Bit(4, RegisterName::B);
+            instruction =  new Bit(4, RegisterName::B);
+             break;
         case 0x61:
-            return new Bit(4, RegisterName::C);
+            instruction =  new Bit(4, RegisterName::C);
+             break;
         case 0x62:
-            return new Bit(4, RegisterName::D);
+            instruction =  new Bit(4, RegisterName::D);
+             break;
         case 0x63:
-            return new Bit(4, RegisterName::E);
+            instruction =  new Bit(4, RegisterName::E);
+             break;
         case 0x64:
-            return new Bit(4, RegisterName::H);
+            instruction =  new Bit(4, RegisterName::H);
+             break;
         case 0x65:
-            return new Bit(4, RegisterName::L);
+            instruction =  new Bit(4, RegisterName::L);
+             break;
         case 0x66:
-            return new BitHl(4);
+            instruction =  new BitHl(4);
+             break;
         case 0x67:
-            return new Bit(4, RegisterName::A);
+            instruction =  new Bit(4, RegisterName::A);
+             break;
         case 0x68:
-            return new Bit(5, RegisterName::B);
+            instruction =  new Bit(5, RegisterName::B);
+             break;
         case 0x69:
-            return new Bit(5, RegisterName::C);
+            instruction =  new Bit(5, RegisterName::C);
+             break;
         case 0x6A:
-            return new Bit(5, RegisterName::D);
+            instruction =  new Bit(5, RegisterName::D);
+             break;
         case 0x6B:
-            return new Bit(5, RegisterName::E);
+            instruction =  new Bit(5, RegisterName::E);
+             break;
         case 0x6C:
-            return new Bit(5, RegisterName::H);
+            instruction =  new Bit(5, RegisterName::H);
+             break;
         case 0x6D:
-            return new Bit(5, RegisterName::L);
+            instruction =  new Bit(5, RegisterName::L);
+             break;
         case 0x6E:
-            return new BitHl(5);
+            instruction =  new BitHl(5);
+             break;
         case 0x6F:
-            return new Bit(5, RegisterName::A);
+            instruction =  new Bit(5, RegisterName::A);
+             break;
         case 0x70:
-            return new Bit(6, RegisterName::B);
+            instruction =  new Bit(6, RegisterName::B);
+             break;
         case 0x71:
-            return new Bit(6, RegisterName::C);
+            instruction =  new Bit(6, RegisterName::C);
+             break;
         case 0x72:
-            return new Bit(6, RegisterName::D);
+            instruction =  new Bit(6, RegisterName::D);
+             break;
         case 0x73:
-            return new Bit(6, RegisterName::E);
+            instruction =  new Bit(6, RegisterName::E);
+             break;
         case 0x74:
-            return new Bit(6, RegisterName::H);
+            instruction =  new Bit(6, RegisterName::H);
+             break;
         case 0x75:
-            return new Bit(6, RegisterName::L);
+            instruction =  new Bit(6, RegisterName::L);
+             break;
         case 0x76:
-            return new BitHl(6);
+            instruction =  new BitHl(6);
+             break;
         case 0x77:
-            return new Bit(6, RegisterName::A);
+            instruction =  new Bit(6, RegisterName::A);
+             break;
         case 0x78:
-            return new Bit(7, RegisterName::B);
+            instruction =  new Bit(7, RegisterName::B);
+             break;
         case 0x79:
-            return new Bit(7, RegisterName::C);
+            instruction =  new Bit(7, RegisterName::C);
+             break;
         case 0x7A:
-            return new Bit(7, RegisterName::D);
+            instruction =  new Bit(7, RegisterName::D);
+             break;
         case 0x7B:
-            return new Bit(7, RegisterName::E);
+            instruction =  new Bit(7, RegisterName::E);
+             break;
         case 0x7C:
-            return new Bit(7, RegisterName::H);
+            instruction =  new Bit(7, RegisterName::H);
+             break;
         case 0x7D:
-            return new Bit(7, RegisterName::L);
+            instruction =  new Bit(7, RegisterName::L);
+             break;
         case 0x7E:
-            return new BitHl(7);
+            instruction =  new BitHl(7);
+             break;
         case 0x7F:
-            return new Bit(7, RegisterName::A);
+            instruction =  new Bit(7, RegisterName::A);
+            break;
 	    default:
         	throw UnknownInstructionException(0xCB00 + byteInstr, "16 bit opcode");       
     }
+    instruction->opCode = 0xCB00 + byteInstr;
+
+    return instruction;
 }

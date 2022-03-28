@@ -43,17 +43,30 @@ void Window::VBlank(){
 Event Window::fetchEvent(){
     SDL_Event events;
 
-    SDL_PollEvent(&events);
-    
-    switch(events.type){
-        case SDL_QUIT:
-            return Event::QUIT;
-            break;
-        case SDL_KEYDOWN:
-            return Event::TOUCH;
-        default:
-            return Event::NONE;
-            break;
+    bool findEvent = false;
+
+    while(SDL_PollEvent(&events)){
+        if(!findEvent){
+            findEvent = true;
+            switch(events.type){
+                case SDL_QUIT:
+                    return Event::QUIT;
+                    break;
+                case SDL_KEYUP:
+                    if(events.key.keysym.sym == SDLK_i){
+                        return Event::SKIP;
+                    }else if(events.key.keysym.sym == SDLK_t){
+                        return Event::TICK;
+                    }else if(events.key.keysym.sym == SDLK_b){
+                        return Event::WAIT_OPCODE_BREAKER;
+                    }else if(events.key.keysym.sym == SDLK_d){
+                        return Event::DUMP_RAM;
+                    }
+                default:
+                    return Event::NONE;
+                    break;
+            }
+        }
     }
 
     return Event::NONE;

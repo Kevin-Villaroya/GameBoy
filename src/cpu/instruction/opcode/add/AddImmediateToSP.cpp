@@ -1,4 +1,5 @@
 #include "AddImmediateToSP.h"
+#include "../../util/DecToHex.h"
 
 AddImmediateToSP::AddImmediateToSP(){}
 
@@ -47,5 +48,5 @@ void AddImmediateToSP::setParameters(const Memory& memory, unsigned short pc){
 }
 
 std::string AddImmediateToSP::toString(){
-    return "ADD SP, " + (int)this->parameter;
+    return "ADD SP, " + charToHex(this->parameter);
 }

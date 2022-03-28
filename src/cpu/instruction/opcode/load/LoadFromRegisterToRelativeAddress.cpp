@@ -24,5 +24,5 @@ void LoadFromRegisterToRelativeAddress::setParameters(const Memory&, unsigned sh
 }
 
 std::string LoadFromRegisterToRelativeAddress::toString(){
-    return "LD " + Registers::getRegisterName(this->dest) + ", " + Registers::getRegisterName(this->src);
+    return "LD (FF00" + Registers::getRegisterName(this->dest) + "), " + Registers::getRegisterName(this->src);
 }

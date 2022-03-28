@@ -1,4 +1,5 @@
 #include "LoadAToImmediateAddress.h"
+#include "../../util/DecToHex.h"
 
 void LoadAToImmediateAddress::execute(Memory& ram, Registers& registers) {
 	unsigned short absoluteAddress = 0xFF00 + this->address;
@@ -20,5 +21,5 @@ void LoadAToImmediateAddress::setParameters(const Memory& memory, unsigned short
 }
 
 std::string LoadAToImmediateAddress::toString(){
-    return "LD " + std::to_string((int)address) + ", A";
+    return "LD " + charToHex(address) + ", A";
 }

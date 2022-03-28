@@ -1,4 +1,5 @@
 #include "AndImmediateToA.h"
+#include "../../util/DecToHex.h"
 
 AndImmediateToA::AndImmediateToA(){}
 
@@ -29,5 +30,5 @@ void AndImmediateToA::setParameters(const Memory& memory, unsigned short pc){
 }
 
 std::string AndImmediateToA::toString(){
-    return "AND " + (int)this->parameter;
+    return "AND " + charToHex(this->parameter);
 }

@@ -1,4 +1,5 @@
 #include "JumpConditionalImmediate.h"
+#include "../../util/DecToHex.h"
 
 JumpConditionalImmediate::JumpConditionalImmediate(Condition test) : test(test) {}
 
@@ -22,5 +23,5 @@ void JumpConditionalImmediate::setParameters(const Memory& memory, unsigned shor
 }
 
 std::string JumpConditionalImmediate::toString(){
-    return "JP " + InstructionCondition::getConditionName(this->test) + ", " + std::to_string((int)this->address);
+    return "JP " + InstructionCondition::getConditionName(this->test) + ", " + charToHex(this->address);
 }

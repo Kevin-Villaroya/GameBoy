@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "Gameboy.h"
 #include "../cpu/instruction/instructionError/UnknownInstructionException.h"
 #include "../display/Window.h"
@@ -6,9 +7,13 @@
 
 Gameboy::Gameboy(char* path) : cpu(Processor(path)), view(new Window()), ppu(ProcessorGraphic(view, &cpu.getMemory())){
 	this->isRunning = true;
-	this->canContinue = true;
+	this->canTick = true;
+	this->canSkip = false;
+	this->waitingBreakingOpCode = false;
 	this->isDebugMode = false;
 	this->cpu.printMetadata();
+
+	this->opCodeBreak.push_back(0x20);
 }
 
 bool Gameboy::run(){
@@ -16,24 +21,35 @@ bool Gameboy::run(){
 		Event event = this->view->fetchEvent();
 		this->treatEvent(event);
 
-		if(this->canContinue){
-
-			if(this->isDebugMode){
-				std::cout << "tick" << std::endl;
-				this->canContinue = false;
-			}
-
+		if(canTick){
 			try{
-				if(this->cpu.tick()){
-					this->cpu.dump();
+				bool instructionExecuted = this->cpu.tick();
+
+				if(this->isDebugMode){
+					std::cout << "tick" << std::endl;
+
+					if(instructionExecuted){
+						if(this->waitingBreakingOpCode){
+							if(std::find(this->opCodeBreak.begin(), this->opCodeBreak.end(), this->cpu.getInstruction()->opCode) != this->opCodeBreak.end()){
+								this->waitingBreakingOpCode = false;
+
+								this->cpu.dumpRegister();
+							}
+						}else{
+							this->cpu.dumpRegister();
+							this->canSkip = false;
+						}
+					}
+
+					this->canTick = this->canSkip || this->waitingBreakingOpCode;
 				}
+
+				this->ppu.tick();
 			}catch(UnknownInstructionException &error){
 				std::cerr << error.what() << std::endl;
 				return 1;
-			}
-			
-			this->ppu.tick();				
-		}		
+			}			
+		}	
 	}
 	return 0;
 }
@@ -44,9 +60,20 @@ void Gameboy::treatEvent(Event event){
 			this->isRunning = false;
 			break;
 		
-		case Event::TOUCH:
-			this->canContinue = true;
-
+		case Event::TICK:
+			this->canTick = true;
+			break;
+		case Event::SKIP:
+			this->canSkip = true;
+			this->canTick = true;
+			break;
+		case Event::WAIT_OPCODE_BREAKER:
+			this->waitingBreakingOpCode = true;
+			this->canTick = true;
+			break;
+		case Event::DUMP_RAM:
+			this->cpu.dumpRam();
+			break;
 		default:
 			break;
 	}

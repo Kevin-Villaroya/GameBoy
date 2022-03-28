@@ -1,6 +1,7 @@
 #include "Processor.h"
 #include "InstructionFactory.h"
 #include "startupException/StartupException.h"
+#include "../util/DecToHex.h"
 #include <iostream>
 #include <sstream>
 #include <stdlib.h>
@@ -158,22 +159,23 @@ void Processor::printMetadata() {
 	std::cout << " - Localization : " << (localization == 0 ? "Japanese" : "Non-Japanese") << std::endl;
 }
 
-void Processor::dump(){
+void Processor::dumpRegister(){
 	std::cout << this->instruction->toString() << std::endl;
 
 	std::cout << this->registers.dump() << std::endl;
+}
 
+void Processor::dumpRam(){
 	std::cout << "==============ROM================" << std::endl;
+
 	for(int i = 0; i < 0x3FFF; i++){
 		if((i) % 16 == 0){
 			std::cout << std::endl;
 		}
 
-		char hexString[3];
-		sprintf(hexString, "%02X", this->memory.get(i));
-
-		std::cout <<"| " << hexString << " |";
+		std::cout <<"| " << charToHex(this->memory.get(i)) << " |";
 	}
+	std::cout << std::endl;
 
 	std::cout << "==============ROM SWITCHABLE================" << std::endl;
 	for(int i = 0x4000; i < 0x7FFF; i++){
@@ -181,25 +183,24 @@ void Processor::dump(){
 			std::cout << std::endl;
 		}
 
-		char hexString[3];
-		sprintf(hexString, "%02X", this->memory.get(i));
-
-		std::cout <<"| " << hexString << " |";
+		std::cout <<"| " << charToHex(this->memory.get(i)) << " |";
 	}
-
+	std::cout << std::endl;
 
 	std::cout << "==============VIDEO RAM================" << std::endl;
 	for(int i = 0X8000; i < 0x9FFF; i++){
 		if((i - 0x8000) % 16 == 0){
 			std::cout << std::endl;
 		}
-		
-		char hexString[3];
-		sprintf(hexString, "%02X", this->memory.get(i));
 
-		std::cout <<"| " << hexString << " |";
+		std::cout <<"| " << charToHex(this->memory.get(i)) << " |";
 	}
 
+	std::cout << std::endl;
+}
+
+Instruction* Processor::getInstruction(){
+	return this->instruction;
 }
 
 Memory& Processor::getMemory(){

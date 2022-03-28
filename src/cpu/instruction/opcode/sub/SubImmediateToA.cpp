@@ -1,4 +1,5 @@
 #include "SubImmediateToA.h"
+#include "../../util/DecToHex.h"
 
 SubImmediateToA::SubImmediateToA(){}
 
@@ -38,5 +39,5 @@ void SubImmediateToA::setParameters(const Memory& memory, unsigned short pc){
 }
 
 std::string SubImmediateToA::toString(){
-    return "SUB " + std::to_string((int)this->parameter);
+    return "SUB " + charToHex(this->parameter);
 }

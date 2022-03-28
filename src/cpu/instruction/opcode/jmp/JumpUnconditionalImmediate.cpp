@@ -1,5 +1,6 @@
 #include <iostream>
 #include "JumpUnconditionalImmediate.h"
+#include "../../util/DecToHex.h"
 
 void JumpUnconditionalImmediate::execute(Memory& ram, Registers& registers){
     registers.setPC(this->parameter);
@@ -18,5 +19,5 @@ void JumpUnconditionalImmediate::setParameters(const Memory& rom, unsigned short
 }
 
 std::string JumpUnconditionalImmediate::toString(){
-    return "JP " + std::to_string((int)this->parameter);
+    return "JP " + charToHex(this->parameter);
 }

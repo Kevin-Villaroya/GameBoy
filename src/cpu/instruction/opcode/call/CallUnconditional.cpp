@@ -1,4 +1,6 @@
 #include "CallUnconditional.h"
+#include "../../util/DecToHex.h"
+
 #include <iostream>
 
 void CallUnconditional::execute(Memory& ram, Registers& registers) {
@@ -25,5 +27,5 @@ void CallUnconditional::setParameters(const Memory& memory, unsigned short pc) {
 }
 
 std::string CallUnconditional::toString(){
-    return "CALL " + std::to_string((int)this->address);
+    return "CALL " + shortToHex(this->address);
 }

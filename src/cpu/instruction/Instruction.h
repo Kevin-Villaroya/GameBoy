@@ -15,6 +15,8 @@ class Instruction{
         virtual void setParameters(const Memory&, unsigned short pc) = 0;
         virtual std::string toString() = 0;
         virtual ~Instruction(){}
+
+        unsigned short opCode;
 };
 
 #endif

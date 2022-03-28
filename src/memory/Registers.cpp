@@ -1,4 +1,5 @@
 #include "Registers.h"
+#include "../util/DecToHex.h"
 #include <iostream>
 #include <stdexcept>
 
@@ -358,11 +359,26 @@ bool Registers::isIME(){
 }
 
 std::string Registers::dump(){
-    char pc[5];
-    char sp[5];
+    std::string res = "";
+    res += "A | F\n";
+    res += charToHex(getA()) + "|" +charToHex(getF()) + "\n";
 
-	sprintf(pc, "%04X", this->getPC());
-    sprintf(sp, "%04X", this->getSP());
+    res += "B | C\n";
+    res += charToHex(getB()) + "|" +charToHex(getC()) + "\n";
 
-    return "PC: " + std::string(pc) + " SP: " + std::string(sp); 
+    res += "D | E\n";
+    res += charToHex(getD()) + "|" +charToHex(getE()) + "\n";
+
+    res += "H | L\n";
+    res += charToHex(getH()) + "|" +charToHex(getL()) + "\n";
+
+    res += "PC: " + shortToHex(getPC()) + "\n";
+    res += "SP: " + shortToHex(getSP()) + "\n";
+
+    res += std::string("Zero: ") + (isFlagZ()? "true" : "false") + ", ";
+    res += std::string("Substraction: ") + (isFlagN()? "true" : "false") + ", ";
+    res += std::string("HalfCarry: ") + (isFlagH()? "true" : "false") + ", ";
+    res += std::string("Carry: ") + (isFlagC()? "true" : "false") + "\n";
+
+    return res;
 }

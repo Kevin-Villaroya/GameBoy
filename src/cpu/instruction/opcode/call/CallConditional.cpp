@@ -1,4 +1,5 @@
 #include "CallConditional.h"
+#include "../../util/DecToHex.h"
 
 CallConditional::CallConditional(Condition condition) : condition(condition){}
 
@@ -29,5 +30,5 @@ void CallConditional::setParameters(const Memory& memory, unsigned short pc) {
 }
 
 std::string CallConditional::toString(){
-    return "CALL " + InstructionCondition::getConditionName(this->condition) + "," + std::to_string((int)this->address);
+    return "CALL " + InstructionCondition::getConditionName(this->condition) + "," + shortToHex(this->address);
 }

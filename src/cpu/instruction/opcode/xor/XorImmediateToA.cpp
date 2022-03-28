@@ -1,4 +1,5 @@
 #include "XorImmediateToA.h"
+#include "../../util/DecToHex.h"
 
 XorImmediateToA::XorImmediateToA(){}
 
@@ -30,5 +31,5 @@ void XorImmediateToA::setParameters(const Memory& memory, unsigned short pc){
 }
 
 std::string XorImmediateToA::toString(){
-    return "XOR " + std::to_string((int)this->parameter);
+    return "XOR " + charToHex(this->parameter);
 }

@@ -51,6 +51,10 @@ void Memory::resetMemory(){
     for(int i = 0; i < RAM_SIZE; i++){
         this->memory[i] = 0;
     }
+
+    for(int i = 0x0104; i < 0x0104 + 52; i++){
+        this->memory[i] = 255;
+    }
 }
 
 unsigned short Memory::getDouble(unsigned short pos) const{

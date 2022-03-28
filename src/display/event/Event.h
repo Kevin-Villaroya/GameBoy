@@ -3,7 +3,10 @@
 
 enum class Event{
     QUIT,
-    TOUCH,
+    SKIP,
+    TICK,
+    WAIT_OPCODE_BREAKER,
+    DUMP_RAM,
     NONE
 };
 

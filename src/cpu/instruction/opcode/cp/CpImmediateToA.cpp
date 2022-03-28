@@ -1,4 +1,5 @@
 #include "CpImmediateToA.h"
+#include "../../util/DecToHex.h"
 
 CpImmediateToA::CpImmediateToA(){}
 
@@ -36,5 +37,5 @@ void CpImmediateToA::setParameters(const Memory& memory, unsigned short pc){
 }
 
 std::string CpImmediateToA::toString(){
-    return "CP " + std::to_string((int)this->parameter);
+    return "CP " + charToHex(this->parameter);
 }

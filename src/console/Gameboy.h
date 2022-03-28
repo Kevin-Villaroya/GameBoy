@@ -1,6 +1,7 @@
 #ifndef __GAMEBOY_H__
 #define __GAMEBOY_H__
 
+#include <vector>
 #include "../cpu/Processor.h"
 #include "../ppu/ProcessorGraphic.h"
 #include "../display/event/Event.h"
@@ -12,8 +13,12 @@ private:
 	ProcessorGraphic ppu;
 
 	bool isRunning;
-	bool canContinue;
+	bool canTick;
+	bool canSkip;
 	bool isDebugMode;
+	bool waitingBreakingOpCode;
+
+	std::vector<unsigned short> opCodeBreak;
 	
 public:
 	Gameboy(char* path);
