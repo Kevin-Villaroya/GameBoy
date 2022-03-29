@@ -13,7 +13,7 @@ Gameboy::Gameboy(char* path) : cpu(Processor(path)), view(new Window()), ppu(Pro
 	this->isDebugMode = false;
 	this->cpu.printMetadata();
 
-	this->opCodeBreak.push_back(0x20);
+	this->opCodeBreak.push_back(192);
 }
 
 bool Gameboy::run(){
@@ -29,9 +29,9 @@ bool Gameboy::run(){
 		if(canTick){
 			try{
 				bool instructionExecuted = this->cpu.tick();
-
+				
 				if(this->isDebugMode){
-					std::cout << "tick" << std::endl;
+					std::cout << "--tick--" << std::endl;
 
 					if(instructionExecuted){
 						if(this->waitingBreakingOpCode){

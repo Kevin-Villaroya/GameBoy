@@ -7,17 +7,12 @@
 #include <stdlib.h>
 
 Processor::Processor(char* path) : memory(path){
-	bool canBoot = this->startupSequence();
 	this->ticksDelayed = 0;
 	this->instruction = nullptr;
 
-    if(canBoot){
-        this->memory.init();
-        this->registers.init(this->memory);
-        this->registers.setPC(0x000);
-    }else{
-        throw startupSequence();
-    }
+	this->memory.init();
+	this->registers.init(this->memory);
+	this->registers.setPC(0x000);
 }
 
 Instruction* Processor::fetch(){
@@ -36,11 +31,6 @@ Instruction* Processor::decodeAndLoad(){
 
 void Processor::execute(Instruction& instr){
     instr.execute(this->memory, this->registers);
-}
-
-bool Processor::startupSequence(){
-    //TODO
-    return true;
 }
 
 const std::string Processor::getNameForCartridgeType(unsigned char type) {

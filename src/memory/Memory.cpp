@@ -28,11 +28,16 @@ Memory::Memory(char* path){
 }
 
 void Memory::init(){  
+    this->setBootMemory();
     this->setMemory();
 }
 
 unsigned char Memory::get(unsigned short pos) const{
-    return this->memory[pos];
+    if(this->hasReadBootRom() && pos <= 256){
+        return this->bootRom[pos];
+    }else{
+        return this->memory[pos];
+    }
 }
 
 void Memory::set(unsigned short pos, unsigned char value){
@@ -40,11 +45,15 @@ void Memory::set(unsigned short pos, unsigned char value){
 }
 
 unsigned char Memory::operator[](unsigned short pos)const {
-    return this->memory[pos];
+    return this->get(pos);
 }
 
 unsigned char& Memory::operator[](unsigned short pos) {
-	return this->memory[pos];
+	if(this->hasReadBootRom() && pos <= 256){
+        return this->bootRom[pos];
+    }else{
+        return this->memory[pos];
+    }
 }
 
 void Memory::resetMemory(){
@@ -60,11 +69,37 @@ void Memory::resetMemory(){
 unsigned short Memory::getDouble(unsigned short pos) const{
     unsigned short value;
     
-    value = this->memory[pos + 1];
+    value = this->get(pos + 1);
     value = value << 8;
-    value = value | this->memory[pos];
+    value = value | this->get(pos);
 
     return value;
+}
+
+unsigned char* Memory::getBootRom(){
+    return this->bootRom;
+}
+
+bool Memory::hasReadBootRom() const{
+    return this->memory[0xFF50] == 0;
+}
+
+void Memory::setBootMemory(){
+
+    std::ifstream romFile;
+    romFile.open("assets/bin/boot_rom.bin", std::ifstream::in);
+
+    int current = 0;
+
+    while (romFile.good()) {
+        char character = romFile.get();
+        if(!romFile.eof()){
+            this->bootRom[current] = character;        
+            current++;
+        }
+    }
+
+    romFile.close();
 }
 
 void Memory::setMemory(){
