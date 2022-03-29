@@ -1,4 +1,5 @@
 #include "AddHLToA.h"
+#include <iostream>
 
 AddHLToA::AddHLToA(){}
 
@@ -7,7 +8,7 @@ void AddHLToA::execute(Memory& ram, Registers& registers){
     unsigned char addValue = ram.get(hlValue);
     unsigned char aValue = registers.getA();
 
-    if(addValue+aValue == 0)
+    if( ((unsigned char)(addValue + aValue)) == 0)
         registers.setFlagZ(1);
     else
         registers.setFlagZ(0);

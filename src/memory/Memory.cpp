@@ -33,6 +33,11 @@ void Memory::init(){
 }
 
 unsigned char Memory::get(unsigned short pos) const{
+
+    /*if(pos > 0x067 && pos <= 0x00FE){
+        std::cout << "pos" << pos << std::endl;
+    }*/
+
     if(this->hasReadBootRom() && pos <= 256){
         return this->bootRom[pos];
     }else{

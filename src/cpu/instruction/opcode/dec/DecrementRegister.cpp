@@ -1,4 +1,5 @@
 #include "DecrementRegister.h"
+#include <iostream>
 
 DecrementRegister::DecrementRegister(RegisterName registerName) : registerName(registerName){}
 

@@ -2,6 +2,6 @@
 build/
 GameBoy
 *.gb
-./*.bin
+/*.bin
 
 *.fuse*

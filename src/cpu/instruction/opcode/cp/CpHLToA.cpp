@@ -1,4 +1,6 @@
 #include "CpHLToA.h"
+#include "../util/DecToHex.h"
+#include <iostream>
 
 CpHLToA::CpHLToA(){}
 

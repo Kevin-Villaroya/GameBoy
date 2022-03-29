@@ -1,10 +1,11 @@
 #include "IncrementHL.h"
+#include <iostream>
 
 void IncrementHL::execute(Memory& ram, Registers& registers){
 	unsigned short valueAddress = registers.getDoubleRegister(DoubleRegisterName::HL);
 	
     bool byte3Before = ram[valueAddress] & 0b00001000;
-    unsigned char value = ram[valueAddress] + 1;
+    unsigned char value = ram.get(valueAddress) + 1;
     bool byte3After = value & 0b00001000;
 
     ram[valueAddress] = value;
