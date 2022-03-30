@@ -86,6 +86,21 @@
 #include "opcode/jmp/JumpUnconditionHL.h"
 #include "opcode/res/ResImmediateOfRegister.h"
 #include "opcode/res/ResImmediateOfHL.h"
+#include "opcode/sl/ShiftLeftRegister.h"
+#include "opcode/sl/ShiftLeftHL.h"
+#include "opcode/sr/ShiftRightRegister.h"
+#include "opcode/sr/ShiftRightHL.h"
+#include "opcode/sr/ShiftRightRegisterResetMSB.h"
+#include "opcode/sr/ShiftRightHLResetMSB.h"
+#include "opcode/set/SetBitRegister.h"
+#include "opcode/set/SetBitHL.h"
+
+
+
+
+
+
+
 
 Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc){
 	unsigned char byteInstr = memory[pc];
@@ -405,6 +420,7 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             break;
         case 0x9D:
             instruction =  new SubCarryRegisterToA(RegisterName::L);    
+            break;
         case 0x9E:
             instruction =  new SubCarryHLToA();
             break;
@@ -556,7 +572,8 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             instruction =  new RrCarryA();
             break;
         case 0x1F:
-            instruction =  new RrA();            
+            instruction =  new RrA();
+            break;          
         case 0x7E:
         	instruction =  new LoadFromAddressToRegister(RegisterName::A, DoubleRegisterName::HL);
             break;
@@ -592,10 +609,10 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             break;
         case 0x74:
         	instruction =  new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::H);
-           break;
+            break;
         case 0x36:
             instruction = new LoadRegisterToAddressFromImmediate(DoubleRegisterName::HL);
-           break;
+            break;
 		case 0x75:
         	instruction =  new LoadRegisterToAddressFromRegister(DoubleRegisterName::HL, RegisterName::L);
             break;
@@ -649,7 +666,7 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             break;
         case 0x02:
         	instruction =  new LoadRegisterToAddressFromRegister(DoubleRegisterName::BC, RegisterName::A);
-        	
+            break;
     	case 0x12:
         	instruction =  new LoadRegisterToAddressFromRegister(DoubleRegisterName::DE, RegisterName::A);
             break;
@@ -723,8 +740,8 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             instruction =  new LoadFromRelativeAddressToRegister(RegisterName::A, RegisterName::C);
             break;
         case 0xE2:
-            instruction =  new LoadFromRegisterToRelativeAddress(RegisterName::C, RegisterName::A);  
-           break;
+            instruction =  new LoadFromRegisterToRelativeAddress(RegisterName::C, RegisterName::A);
+            break;
         case 0x0A:
             instruction =  new LoadFromAddressToRegister(RegisterName::A, DoubleRegisterName::BC);
             break;
@@ -1115,7 +1132,7 @@ Instruction* InstructionFactory::forCodeCb(unsigned char byteInstr){
             break;
         case 0x7F:
             instruction =  new Bit(7, RegisterName::A);
-           break;
+            break;
         case 0x80:
             instruction = new ResImmediateOfRegister(0, RegisterName::B);
             break;
@@ -1307,6 +1324,267 @@ Instruction* InstructionFactory::forCodeCb(unsigned char byteInstr){
             break;
         case 0xBF:
             instruction = new ResImmediateOfRegister(7, RegisterName::A);
+            break;
+        case 0x27:
+            instruction = new ShiftLeftRegister(RegisterName::A);
+            break;    
+        case 0x20:
+            instruction = new ShiftLeftRegister(RegisterName::B);
+            break;  
+        case 0x21:
+            instruction = new ShiftLeftRegister(RegisterName::C);
+            break;  
+        case 0x22:
+            instruction = new ShiftLeftRegister(RegisterName::D);
+            break;  
+        case 0x23:
+            instruction = new ShiftLeftRegister(RegisterName::E);
+            break;  
+        case 0x24:
+            instruction = new ShiftLeftRegister(RegisterName::H);
+            break;  
+        case 0x25:
+            instruction = new ShiftLeftRegister(RegisterName::L);
+            break;  
+        case 0x26:
+            instruction = new ShiftLeftHL();
+            break;
+        case 0x2F:
+            instruction = new ShiftRightRegister(RegisterName::A);
+            break;
+        case 0x28:
+            instruction = new ShiftRightRegister(RegisterName::B);
+            break;
+        case 0x29:
+            instruction = new ShiftRightRegister(RegisterName::C);
+            break;
+        case 0x2A:
+            instruction = new ShiftRightRegister(RegisterName::D);
+            break;
+        case 0x2B:
+            instruction = new ShiftRightRegister(RegisterName::E);
+            break;
+        case 0x2C:
+            instruction = new ShiftRightRegister(RegisterName::H);
+            break;
+        case 0x2D:
+            instruction = new ShiftRightRegister(RegisterName::L);
+            break;
+        case 0x2E:
+            instruction = new ShiftRightHL();
+            break;
+        case 0x38:
+            instruction = new ShiftRightRegisterResetMSB(RegisterName::B);
+            break;
+        case 0x39:
+            instruction = new ShiftRightRegisterResetMSB(RegisterName::C);
+            break;
+        case 0x3A:
+            instruction = new ShiftRightRegisterResetMSB(RegisterName::D);
+            break;
+        case 0x3B:
+            instruction = new ShiftRightRegisterResetMSB(RegisterName::E);
+            break;
+        case 0x3C:
+            instruction = new ShiftRightRegisterResetMSB(RegisterName::H);
+            break;
+        case 0x3D:
+            instruction = new ShiftRightRegisterResetMSB(RegisterName::L);
+            break;
+        case 0x3E:
+            instruction = new ShiftRightHLResetMSB();
+            break;
+        case 0xC0:
+            instruction = new SetBitRegister(0, RegisterName::B);
+            break;
+        case 0xC1:
+            instruction = new SetBitRegister(0, RegisterName::C);
+            break;
+        case 0xC2:
+            instruction = new SetBitRegister(0, RegisterName::D);
+            break;
+        case 0xC3:
+            instruction = new SetBitRegister(0, RegisterName::E);
+            break;
+        case 0xC4:
+            instruction = new SetBitRegister(0, RegisterName::H);
+            break;
+        case 0xC5:
+            instruction = new SetBitRegister(0, RegisterName::L);
+            break;
+        case 0xC6:
+            instruction = new SetBitHL(0);
+            break;
+        case 0xC7:
+            instruction = new SetBitRegister(0, RegisterName::A);
+            break;
+        case 0xD0:
+            instruction = new SetBitRegister(2, RegisterName::B);
+            break;
+        case 0xD1:
+            instruction = new SetBitRegister(2, RegisterName::C);
+            break;
+        case 0xD2:
+            instruction = new SetBitRegister(2, RegisterName::D);
+            break;
+        case 0xD3:
+            instruction = new SetBitRegister(2, RegisterName::E);
+            break;
+        case 0xD4:
+            instruction = new SetBitRegister(2, RegisterName::H);
+            break;
+        case 0xD5:
+            instruction = new SetBitRegister(2, RegisterName::L);
+            break;
+        case 0xD6:
+            instruction = new SetBitHL(2);
+            break;
+        case 0xD7:
+            instruction = new SetBitRegister(2, RegisterName::A);
+            break;
+        case 0xE0:
+            instruction = new SetBitRegister(4, RegisterName::B);
+            break;
+        case 0xE1:
+            instruction = new SetBitRegister(4, RegisterName::C);
+            break;
+        case 0xE2:
+            instruction = new SetBitRegister(4, RegisterName::D);
+            break;
+        case 0xE3:
+            instruction = new SetBitRegister(4, RegisterName::E);
+            break;
+        case 0xE4:
+            instruction = new SetBitRegister(4, RegisterName::H);
+            break;
+        case 0xE5:
+            instruction = new SetBitRegister(4, RegisterName::L);
+            break;
+        case 0xE6:
+            instruction = new SetBitHL(4);
+            break;
+        case 0xE7:
+            instruction = new SetBitRegister(4, RegisterName::A);
+            break;
+        case 0xF0:
+            instruction = new SetBitRegister(6, RegisterName::B);
+            break;
+        case 0xF1:
+            instruction = new SetBitRegister(6, RegisterName::C);
+            break;
+        case 0xF2:
+            instruction = new SetBitRegister(6, RegisterName::D);
+            break;
+        case 0xF3:
+            instruction = new SetBitRegister(6, RegisterName::E);
+            break;
+        case 0xF4:
+            instruction = new SetBitRegister(6, RegisterName::H);
+            break;
+        case 0xF5:
+            instruction = new SetBitRegister(6, RegisterName::L);
+            break;
+        case 0xF6:
+            instruction = new SetBitHL(6);
+            break;
+        case 0xF7:
+            instruction = new SetBitRegister(6, RegisterName::A);
+            break;
+        case 0xC8:
+            instruction = new SetBitRegister(1, RegisterName::B);
+            break;
+        case 0xC9:
+            instruction = new SetBitRegister(1, RegisterName::C);
+            break;
+        case 0xCA:
+            instruction = new SetBitRegister(1, RegisterName::D);
+            break;
+        case 0xCB:
+            instruction = new SetBitRegister(1, RegisterName::E);
+            break;
+        case 0xCC:
+            instruction = new SetBitRegister(1, RegisterName::H);
+            break;
+        case 0xCD:
+            instruction = new SetBitRegister(1, RegisterName::L);
+            break;
+        case 0xCE:
+            instruction = new SetBitHL(1);
+            break;
+        case 0xCF:
+            instruction = new SetBitRegister(1, RegisterName::A);
+            break;
+        case 0xD8:
+            instruction = new SetBitRegister(3, RegisterName::B);
+            break;
+        case 0xD9:
+            instruction = new SetBitRegister(3, RegisterName::C);
+            break;
+        case 0xDA:
+            instruction = new SetBitRegister(3, RegisterName::D);
+            break;
+        case 0xDB:
+            instruction = new SetBitRegister(3, RegisterName::E);
+            break;
+        case 0xDC:
+            instruction = new SetBitRegister(3, RegisterName::H);
+            break;
+        case 0xDD:
+            instruction = new SetBitRegister(3, RegisterName::L);
+            break;
+        case 0xDE:
+            instruction = new SetBitHL(3);
+            break;
+        case 0xDF:
+            instruction = new SetBitRegister(3, RegisterName::A);
+            break;
+        case 0xE8:
+            instruction = new SetBitRegister(5, RegisterName::B);
+            break;
+        case 0xE9:
+            instruction = new SetBitRegister(5, RegisterName::C);
+            break;
+        case 0xEA:
+            instruction = new SetBitRegister(5, RegisterName::D);
+            break;
+        case 0xEB:
+            instruction = new SetBitRegister(5, RegisterName::E);
+            break;
+        case 0xEC:
+            instruction = new SetBitRegister(5, RegisterName::H);
+            break;
+        case 0xED:
+            instruction = new SetBitRegister(5, RegisterName::L);
+            break;
+        case 0xEE:
+            instruction = new SetBitHL(5);
+            break;
+        case 0xEF:
+            instruction = new SetBitRegister(5, RegisterName::A);
+            break;
+        case 0xF8:
+            instruction = new SetBitRegister(7, RegisterName::B);
+            break;
+        case 0xF9:
+            instruction = new SetBitRegister(7, RegisterName::C);
+            break;
+        case 0xFA:
+            instruction = new SetBitRegister(7, RegisterName::D);
+            break;
+        case 0xFB:
+            instruction = new SetBitRegister(7, RegisterName::E);
+            break;
+        case 0xFC:
+            instruction = new SetBitRegister(7, RegisterName::H);
+            break;
+        case 0xFD:
+            instruction = new SetBitRegister(7, RegisterName::L);
+            break;
+        case 0xFE:
+            instruction = new SetBitHL(7);
+            break;
+        case 0xFF:
+            instruction = new SetBitRegister(7, RegisterName::A);
             break;
 	    default:
         	throw UnknownInstructionException(0xCB00 + byteInstr, "16 bit opcode");       
