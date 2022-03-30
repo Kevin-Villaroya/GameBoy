@@ -151,6 +151,7 @@ void Processor::printMetadata() {
 
 void Processor::dumpRegister(){
 	std::cout << this->instruction->toString() << std::endl;
+	std::cout << "op code: " << shortToHex(this->instruction->opCode) << std::endl;
 
 	std::cout << this->registers.dump() << std::endl;
 }

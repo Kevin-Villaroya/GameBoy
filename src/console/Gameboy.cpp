@@ -30,10 +30,6 @@ bool Gameboy::run(){
 			try{
 				bool instructionExecuted = this->cpu.tick();
 
-				/*if(instructionExecuted){
-					this->cpu.dumpRegister();
-				}*/
-
 				if(this->isDebugMode){
 					std::cout << "--tick--" << std::endl;
 

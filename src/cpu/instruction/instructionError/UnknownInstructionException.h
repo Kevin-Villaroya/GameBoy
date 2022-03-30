@@ -7,9 +7,9 @@
 class UnknownInstructionException : public std::runtime_error{
     private:
 
-        static std::string createErrorMessage(unsigned char byteInstr, std::string message);
+        static std::string createErrorMessage(unsigned short byteInstr, std::string message);
     public:
-        UnknownInstructionException(unsigned char byteInstr, std::string message);
+        UnknownInstructionException(unsigned short byteInstr, std::string message);
 };
 
 #endif
