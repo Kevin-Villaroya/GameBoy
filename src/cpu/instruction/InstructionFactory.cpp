@@ -94,13 +94,7 @@
 #include "opcode/sr/ShiftRightHLResetMSB.h"
 #include "opcode/set/SetBitRegister.h"
 #include "opcode/set/SetBitHL.h"
-
-
-
-
-
-
-
+#include "opcode/load/LoadImmediateAddressToRegister.h"
 
 Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc){
 	unsigned char byteInstr = memory[pc];
@@ -804,6 +798,9 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             break;
         case 0xE9:
             instruction = new JumpUnconditionHL();
+            break;
+        case 0xFA:
+            instruction = new LoadImmediateAddressToRegister(RegisterName::A);
             break;
         case 0xCB:
         	instruction =  InstructionFactory::forCodeCb(memory[pc + 1]);

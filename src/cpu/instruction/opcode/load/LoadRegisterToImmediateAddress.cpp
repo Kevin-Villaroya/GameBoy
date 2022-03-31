@@ -22,5 +22,5 @@ void LoadRegisterToImmediateAddress::setParameters(const Memory& ram, unsigned s
 }
 
 std::string LoadRegisterToImmediateAddress::toString(){
-    return "LD " + charToHex(this->address) + ", " + Registers::getRegisterName(this->registerName);
+    return "LD (" + shortToHex(this->address) + "), " + Registers::getRegisterName(this->registerName);
 }

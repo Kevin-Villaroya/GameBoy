@@ -6,7 +6,7 @@ void ShiftRightRegisterResetMSB::execute(Memory& ram, Registers& registers){
     unsigned char aValue = registers.getRegister(this->registerName);
 	bool lastBit = aValue & 0b10000000;
 
-	registers.setFlagC(0b1 & aValue);
+	registers.setFlagC(lastBit);
 	aValue >>= 1;
     aValue == 0 ? registers.setFlagZ(0) : registers.setFlagZ(1);
     registers.setFlagH(0);
