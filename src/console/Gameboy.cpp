@@ -13,7 +13,7 @@ Gameboy::Gameboy(char* path) : cpu(Processor(path)), view(new Window()), ppu(Pro
 	this->isDebugMode = false;
 	this->cpu.printMetadata();
 
-	this->opCodeBreak.push_back(192);
+	this->opCodeBreak.push_back(0xC8);
 }
 
 bool Gameboy::run(){

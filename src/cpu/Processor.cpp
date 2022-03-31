@@ -162,8 +162,9 @@ void Processor::dumpRam(){
 	for(int i = 0; i < 0x3FFF; i++){
 		if((i) % 16 == 0){
 			std::cout << std::endl;
+			std::cout <<shortToHex(i) + ": ";
 		}
-
+		
 		std::cout <<"| " << charToHex(this->memory.get(i)) << " |";
 	}
 	std::cout << std::endl;
@@ -172,6 +173,7 @@ void Processor::dumpRam(){
 	for(int i = 0x4000; i < 0x7FFF; i++){
 		if((i - 0x4000) % 16 == 0){
 			std::cout << std::endl;
+			std::cout <<shortToHex(i) + ": ";
 		}
 
 		std::cout <<"| " << charToHex(this->memory.get(i)) << " |";
@@ -182,8 +184,9 @@ void Processor::dumpRam(){
 	for(int i = 0X8000; i < 0x9FFF; i++){
 		if((i - 0x8000) % 16 == 0){
 			std::cout << std::endl;
+			std::cout <<shortToHex(i) + ": ";
 		}
-
+		
 		std::cout <<"| " << charToHex(this->memory.get(i)) << " |";
 	}
 

@@ -3,6 +3,7 @@
 
 #include "PixelFetcher.h"
 #include "../display/Display.h"
+#include "RegisterProcessorGraphic.h"
 
 enum class ProcessorGraphicState{
 	OAMSearch,
@@ -20,6 +21,8 @@ private:
 	Display* screen;
 	Memory* ram;
 
+	RegisterProcessorGraphic registersPPU;
+
 	ProcessorGraphicState currentState;
 
 	// Tick associated to the current line being drawed
@@ -32,18 +35,6 @@ private:
 	void pixelTransfer();
 	void vBlank();
 	void hBlank();
-
-	unsigned char getLY();
-	void setLY(unsigned char value);
-
-	unsigned char getLCDC();
-	void setLCDC(unsigned char value);
-
-	unsigned char getBGP();
-	void setBGP(unsigned char value);
-
-	unsigned char getSCY();
-	void setSCY(unsigned char value);
 
 public:
 	ProcessorGraphic(Display* screen, Memory* ram);
