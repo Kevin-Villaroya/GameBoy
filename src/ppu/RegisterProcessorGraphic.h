@@ -7,10 +7,13 @@ class RegisterProcessorGraphic{
 	private:
 		Memory* ram;
 
-		unsigned char LY;
-		unsigned char LCDC;
-		unsigned char BGP;
-		unsigned char SCY;
+		unsigned char LY; //CURRENT HORIZONTAL LINE
+		unsigned char LCDC; //
+		unsigned char BGP; //BACKGROUND PALETTE
+		unsigned char SCY; //BACKGROUND SCROLL Y
+		unsigned char SCX; //BACKGROUND SCROLL X
+		unsigned char WY; //WINDOW SCROLL Y
+		unsigned char WX; //WINDOW SCROLL X
 	public:
 		RegisterProcessorGraphic(Memory* ram);	
 
@@ -24,7 +27,16 @@ class RegisterProcessorGraphic{
 		void setBGP(unsigned char value);
 
 		unsigned char getSCY();
-		void setSCY(unsigned char value);	
+		void setSCY(unsigned char value);
+
+		unsigned char getSCX();
+		void setSCX(unsigned char value);	
+
+		unsigned char getWY();
+		void setWY(unsigned char value);
+
+		unsigned char getWX();
+		void setWX(unsigned char value);
 };
 
 #endif

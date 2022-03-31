@@ -33,3 +33,27 @@ unsigned char RegisterProcessorGraphic::getSCY(){
 void RegisterProcessorGraphic::setSCY(unsigned char value){
     ram->set(0xff42, value);
 }
+
+unsigned char RegisterProcessorGraphic::getSCX(){
+	return ram->get(0xff43);
+}
+
+void RegisterProcessorGraphic::setSCX(unsigned char value){
+	ram->set(0xff43, value);
+}
+
+unsigned char RegisterProcessorGraphic::getWY(){
+	return ram->get(0xff4A);
+}
+
+void RegisterProcessorGraphic::setWY(unsigned char value){
+	ram->set(0xff4A, value);
+}
+
+unsigned char RegisterProcessorGraphic::getWX(){
+	return ram->get(0xff4B);
+}
+
+void RegisterProcessorGraphic::setWX(unsigned char value){
+	ram->set(0xff4B, value);
+}
