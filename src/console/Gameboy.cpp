@@ -5,16 +5,16 @@
 #include "../display/Window.h"
 #include "../display/Terminal.h"
 
-Gameboy::Gameboy(char* path) : cpu(Processor(path)), view(new Window()), ppu(ProcessorGraphic(view, &cpu.getMemory())){
+Gameboy::Gameboy(char* path) : memory(path), cpu(Processor(&memory)), view(new Window()), ppu(ProcessorGraphic(view, &cpu.getMemory())){
 	this->isRunning = true;
 
 	this->frequency = 4096;
+	this->lastTimeFetch = 0;
 
 	this->canTick = true;
 	this->canSkip = false;
 	this->waitingBreakingOpCode = false;
 	this->isDebugMode = false;
-	this->lastTimeFetch = 0;
 	this->cpu.printMetadata();
 
 	this->opCodeBreak.push_back(0xC8);
@@ -22,29 +22,20 @@ Gameboy::Gameboy(char* path) : cpu(Processor(path)), view(new Window()), ppu(Pro
 
 bool Gameboy::run(){
 	uint32_t currentTime = 0;
-	uint32_t lastTimeTick = 0;
-	size_t nbTicks = 0;
 
 	while(this->isRunning){
-
-		nbTicks++;
-
-		if(currentTime - lastTimeTick > 1000){
-			lastTimeTick = currentTime;
-			std::cout << nbTicks << std::endl;
-			nbTicks = 0;
-		}
-
 		currentTime = SDL_GetTicks();
-		this->treatEvent(currentTime);
+		
 
 		if(canTick){
 			try{
 				bool instructionExecuted = this->cpu.tick();
 
+				this->updateTimers(instructionExecuted);
 				this->debug(instructionExecuted);
 
 				this->ppu.tick();
+				this->treatEvent(currentTime);
 			}catch(UnknownInstructionException &error){
 				std::cerr << error.what() << std::endl;
 				return 1;
@@ -52,6 +43,12 @@ bool Gameboy::run(){
 		}	
 	}
 	return 0;
+}
+
+void Gameboy::updateTimers(bool instructionExecuted){
+	if(instructionExecuted){
+		this->memory.updateTimers(this->cpu.getInstruction()->getTiming());
+	}
 }
 
 void Gameboy::treatEvent(uint32_t currentTime){
@@ -86,10 +83,6 @@ void Gameboy::treatEvent(uint32_t currentTime){
 
 void Gameboy::debugMode(){
 	this->isDebugMode = true;
-}
-
-int Gameboy::getTimerCounter(){
-	return Gameboy::CLOCKSPEED / this->frequency;
 }
 
 void Gameboy::debug(bool isInstructionExecuted){

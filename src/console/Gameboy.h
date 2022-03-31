@@ -11,13 +11,15 @@ private:
 	const int CLOCKSPEED = 4194304;
 	const uint32_t DELAY_FETCH = 30;
 
+	Memory memory;
 	Processor cpu;
 	Display* view;
 	ProcessorGraphic ppu;
-
+	
 	int frequency;
 
 	uint32_t lastTimeFetch;
+
 	bool isRunning;
 	bool canTick;
 	bool canSkip;
@@ -26,7 +28,8 @@ private:
 
 	std::vector<unsigned short> opCodeBreak;
 
-	int getTimerCounter();
+	void updateTimers(bool instructionExecuted);
+
 	void debug(bool isInstructionExecuted);
 	
 public:

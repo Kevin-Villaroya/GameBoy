@@ -4,7 +4,7 @@ void LoadARegisterToHlDecrement::execute(Memory& ram, Registers& registers){
     
     unsigned short hlValue = registers.getHL();
 
-    ram.set(hlValue, registers.getA());
+    ram.writeMemory(hlValue, registers.getA());
     registers.setHL(hlValue - 1);
 }
 

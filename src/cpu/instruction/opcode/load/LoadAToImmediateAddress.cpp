@@ -5,7 +5,7 @@ void LoadAToImmediateAddress::execute(Memory& ram, Registers& registers) {
 	unsigned short absoluteAddress = 0xFF00 + this->address;
 	unsigned char aValue = registers.getA();
 	
-	ram.set(absoluteAddress, aValue);
+	ram.writeMemory(absoluteAddress, aValue);
 }
 
 unsigned int LoadAToImmediateAddress::getSize() {

@@ -48,7 +48,7 @@ private:
 public:
     static std::string getRegisterName(RegisterName registerName);
     static std::string getDoubleRegisterName(DoubleRegisterName registerName);
-    void init(Memory ram);
+    void init(Memory* ram);
 
     void incrementPc(unsigned short);
 

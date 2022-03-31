@@ -8,8 +8,8 @@ void PushDoubleRegisterToStack::execute(Memory& ram, Registers& registers){
     unsigned char leftRegVal = doubleRegVal >> 8;
     unsigned char rightRegVal = doubleRegVal;
     
-    ram.set(spValue-1, leftRegVal);
-    ram.set(spValue-2, rightRegVal);
+    ram.writeMemory(spValue-1, leftRegVal);
+    ram.writeMemory(spValue-2, rightRegVal);
     registers.setSP(spValue-2);
 }
 

@@ -61,20 +61,20 @@ std::string Registers::getDoubleRegisterName(DoubleRegisterName registerName){
     }
 }
 
-void Registers::init(Memory ram){
-    this->setA(ram[0x01]);
-    this->setF(ram[0xB0]);
+void Registers::init(Memory* ram){
+    this->setA(ram->get(0x01));
+    this->setF(ram->get(0xB0));
 
-    this->setB(ram[0x0013]);
-    this->setC(ram[0x0014]);
+    this->setB(ram->get(0x0013));
+    this->setC(ram->get(0x0014));
 
-    this->setD(ram[0x00D8]);
-    this->setE(ram[0x00D9]);
+    this->setD(ram->get(0x00D8));
+    this->setE(ram->get(0x00D9));
 
-    this->setH(ram[0x014D]);
-    this->setL(ram[0x014E]);
+    this->setH(ram->get(0x014D));
+    this->setL(ram->get(0x014E));
 
-    this->setSP(ram[0xFFFE]);
+    this->setSP(ram->get(0xFFFE));
 }
 
 void Registers::incrementPc(unsigned short incr){

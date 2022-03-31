@@ -8,7 +8,7 @@ void LoadFromRegisterToRelativeAddress::execute(Memory& ram, Registers& register
     unsigned char value = registers.getRegister(this->src);
 
     unsigned short address = 0xFF00 + registers.getRegister(this->dest);
-    ram.set(address, value);
+    ram.writeMemory(address, value);
 }
 
 unsigned int LoadFromRegisterToRelativeAddress::getSize(){

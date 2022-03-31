@@ -12,7 +12,7 @@ void ShiftLeftHL::execute(Memory& ram, Registers& registers){
     registers.setFlagC(lastBit);
     registers.setFlagH(0);
     registers.setFlagN(0);
-    ram.set(hlValue, aValue);
+    ram.writeMemory(hlValue, aValue);
 }
 
 unsigned int ShiftLeftHL::getSize(){

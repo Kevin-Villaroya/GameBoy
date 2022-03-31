@@ -10,8 +10,8 @@ void RST::execute(Memory& ram, Registers& registers){
     unsigned char leftRegVal = pcValue >> 8;
     unsigned char rightRegVal = pcValue;
     
-    ram.set(spValue-1, leftRegVal);
-    ram.set(spValue-2, rightRegVal);
+    ram.writeMemory(spValue-1, leftRegVal);
+    ram.writeMemory(spValue-2, rightRegVal);
     registers.setSP(spValue-2);
 
     registers.setPC(this->address);

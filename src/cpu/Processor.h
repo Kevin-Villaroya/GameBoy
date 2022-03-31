@@ -8,7 +8,7 @@
 
 class Processor{
     private:
-        Memory memory;
+        Memory* memory;
         Registers registers;
 
         Instruction* instruction;
@@ -24,9 +24,9 @@ class Processor{
 		const std::string getNameForCartridgeType(unsigned char);	
 	
     public:
-        Processor(char* path);
+        Processor(Memory* memory);
 	
-        bool tick();
+        int tick();
         void run();
 		void printMetadata();
 

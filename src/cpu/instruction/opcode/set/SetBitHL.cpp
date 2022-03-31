@@ -8,7 +8,7 @@ void SetBitHL::execute(Memory& ram, Registers& registers){
     unsigned char compare = 0b1<<this->bit;
     val &= compare;
     
-    ram.set(hlVal, val);
+    ram.writeMemory(hlVal, val);
 }
 
 unsigned int SetBitHL::getSize(){

@@ -7,8 +7,8 @@ void CallUnconditional::execute(Memory& ram, Registers& registers) {
 	unsigned short sp = registers.getSP();
 	unsigned short pc = registers.getPC();
 	
-	ram.set(sp - 1, pc >> 8);
-	ram.set(sp - 2, pc);
+	ram.writeMemory(sp - 1, pc >> 8);
+	ram.writeMemory(sp - 2, pc);
 	
 	registers.setSP(sp-2);
 	registers.setPC(this->address); 

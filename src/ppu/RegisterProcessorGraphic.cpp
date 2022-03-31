@@ -7,7 +7,7 @@ unsigned char RegisterProcessorGraphic::getLY(){
 }
 
 void RegisterProcessorGraphic::setLY(unsigned char value){
-    ram->set(0xFF44, value);
+    ram->writeMemory(0xFF44, value);
 }
 
 unsigned char RegisterProcessorGraphic::getLCDC(){
@@ -15,7 +15,7 @@ unsigned char RegisterProcessorGraphic::getLCDC(){
 }
 
 void RegisterProcessorGraphic::setLCDC(unsigned char value){
-    ram->set(0xff40, value);
+    ram->writeMemory(0xff40, value);
 }
 
 unsigned char RegisterProcessorGraphic::getBGP(){
@@ -23,7 +23,7 @@ unsigned char RegisterProcessorGraphic::getBGP(){
 }
 
 void RegisterProcessorGraphic::setBGP(unsigned char value){
-    ram->set(0xff47, value);
+    ram->writeMemory(0xff47, value);
 }
 
 unsigned char RegisterProcessorGraphic::getSCY(){
@@ -31,5 +31,5 @@ unsigned char RegisterProcessorGraphic::getSCY(){
 }
 
 void RegisterProcessorGraphic::setSCY(unsigned char value){
-    ram->set(0xff42, value);
+    ram->writeMemory(0xff42, value);
 }

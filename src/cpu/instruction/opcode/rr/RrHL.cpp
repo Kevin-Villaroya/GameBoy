@@ -15,7 +15,7 @@ void RrHL::execute(Memory& ram, Registers& registers){
     registers.setFlagN(0);
     registers.setFlagH(0);
     registers.setFlagC(valueOf0bit);
-    ram.set(hlValue, memValue);
+    ram.writeMemory(hlValue, memValue);
 }
 
 unsigned int RrHL::getSize(){

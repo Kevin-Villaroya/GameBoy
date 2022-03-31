@@ -6,7 +6,7 @@ LoadRegisterToImmediateAddress::LoadRegisterToImmediateAddress(RegisterName regi
 void LoadRegisterToImmediateAddress::execute(Memory& ram, Registers& registers){
     unsigned char value = registers.getRegister(this->registerName);
 
-    ram.set(this->address, value);
+    ram.writeMemory(this->address, value);
 }
 
 unsigned int LoadRegisterToImmediateAddress::getSize(){

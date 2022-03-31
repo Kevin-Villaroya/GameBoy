@@ -6,11 +6,11 @@
 #include <sstream>
 #include <stdlib.h>
 
-Processor::Processor(char* path) : memory(path){
+Processor::Processor(Memory* memory) : memory(memory){
 	this->ticksDelayed = 0;
 	this->instruction = nullptr;
 
-	this->memory.init();
+	this->memory->init();
 	this->registers.init(this->memory);
 	this->registers.setPC(0x000);
 }
@@ -23,14 +23,14 @@ Instruction* Processor::fetch(){
 }
 
 Instruction* Processor::decodeAndLoad(){
-    Instruction* instr = InstructionFactory::forCode(this->memory, this->registers.getPC());
-    instr->setParameters(this->memory, this->registers.getPC() + 1);
+    Instruction* instr = InstructionFactory::forCode(*this->memory, this->registers.getPC());
+    instr->setParameters(*this->memory, this->registers.getPC() + 1);
 
     return instr;
 }
 
 void Processor::execute(Instruction& instr){
-    instr.execute(this->memory, this->registers);
+    instr.execute(*this->memory, this->registers);
 }
 
 const std::string Processor::getNameForCartridgeType(unsigned char type) {
@@ -108,7 +108,7 @@ const std::string Processor::getNameForCartridgeType(unsigned char type) {
 	}
 }
 
-bool Processor::tick(){
+int Processor::tick(){
 	if(this->ticksDelayed == 0){
 		if(this->instruction != nullptr){
 			delete this->instruction;
@@ -123,10 +123,10 @@ bool Processor::tick(){
     	this->execute(*this->instruction);
     	this->ticksDelayed = 0;
 
-		return true;
+		return this->instruction->getTiming();
 	}
 
-	return false;
+	return 0;
 }
 
 void Processor::printMetadata() {
@@ -134,16 +134,16 @@ void Processor::printMetadata() {
 	
 	// Title memory range
 	for(int i = 0x0134; i <= 0x0142; i++) {
-		name += this->memory[i];	
+		name += this->memory->get(i);	
 	}
 	
-	unsigned char isColored = this->memory[0x0143];
-	unsigned char isSGB = this->memory[0x0146];
-	unsigned char cartridgeType = this->memory[0x0147];
-	unsigned char localization = this->memory[0x014A];
+	unsigned char isColored = this->memory->get(0x0143);
+	unsigned char isSGB = this->memory->get(0x0146);
+	unsigned char cartridgeType = this->memory->get(0x0147);
+	unsigned char localization = this->memory->get(0x014A);
 	
 	std::cout << name << " : " << std::endl;
-	std::cout << " - Using color " << (isColored == this->memory[0x80] ? "True" : "False") << std::endl;
+	std::cout << " - Using color " << (isColored == this->memory->get(0x80) ? "True" : "False") << std::endl;
 	std::cout << " - Using Super GameBoy functions : " << (isSGB == 0x03 ? "True" : "False") << std::endl;
 	std::cout << " - Cartridge Type : " << this->getNameForCartridgeType(cartridgeType) << std::endl;
 	std::cout << " - Localization : " << (localization == 0 ? "Japanese" : "Non-Japanese") << std::endl;
@@ -165,7 +165,7 @@ void Processor::dumpRam(){
 			std::cout <<shortToHex(i) + ": ";
 		}
 		
-		std::cout <<"| " << charToHex(this->memory.get(i)) << " |";
+		std::cout <<"| " << charToHex(this->memory->get(i)) << " |";
 	}
 	std::cout << std::endl;
 
@@ -176,7 +176,7 @@ void Processor::dumpRam(){
 			std::cout <<shortToHex(i) + ": ";
 		}
 
-		std::cout <<"| " << charToHex(this->memory.get(i)) << " |";
+		std::cout <<"| " << charToHex(this->memory->get(i)) << " |";
 	}
 	std::cout << std::endl;
 
@@ -187,7 +187,7 @@ void Processor::dumpRam(){
 			std::cout <<shortToHex(i) + ": ";
 		}
 		
-		std::cout <<"| " << charToHex(this->memory.get(i)) << " |";
+		std::cout <<"| " << charToHex(this->memory->get(i)) << " |";
 	}
 
 	std::cout << std::endl;
@@ -198,5 +198,5 @@ Instruction* Processor::getInstruction(){
 }
 
 Memory& Processor::getMemory(){
-	return this->memory;
+	return *this->memory;
 }

@@ -16,7 +16,7 @@ void SwapHL::execute(Memory& ram, Registers& registers){
     registers.setFlagH(0);
     registers.setFlagC(0);
 
-    ram.set(hlValue, nMemValue);
+    ram.writeMemory(hlValue, nMemValue);
 }
 
 unsigned int SwapHL::getSize(){

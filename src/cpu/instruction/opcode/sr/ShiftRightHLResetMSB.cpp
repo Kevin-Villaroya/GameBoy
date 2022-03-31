@@ -12,7 +12,7 @@ void ShiftRightHLResetMSB::execute(Memory& ram, Registers& registers){
     aValue == 0 ? registers.setFlagZ(0) : registers.setFlagZ(1);
     registers.setFlagH(0);
     registers.setFlagN(0);
-    ram.set(hlValue, aValue);
+    ram.writeMemory(hlValue, aValue);
 }
 
 unsigned int ShiftRightHLResetMSB::getSize(){

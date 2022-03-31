@@ -3,6 +3,9 @@
 #include "Memory.h"
 
 Memory::Memory(char* path){
+    this->timerCounter = 1024;
+    this->dividerCounter = 0;
+
     this->resetMemory();
 
     std::ifstream romFile;
@@ -41,15 +44,25 @@ unsigned char Memory::get(unsigned short pos) const{
     }
 }
 
-void Memory::writeMemory(unsigned short pos, unsigned char value){
+void Memory::set(unsigned short pos, unsigned char value){
     this->memory[pos] = value;    
 }
 
-void Memory::set(unsigned short pos, unsigned char value){
-    this->memory[pos] = value;
+void Memory::writeMemory(unsigned short pos, unsigned char value){
+    if(pos == Memory::DIVIDER){
 
-    if(pos == 0xFF04){ // if the game want to change this address, it's set to 0
-        memory[0xFF04] = 0;
+        memory[Memory::DIVIDER] = 0;
+    }else if (Memory::TMC == pos){
+
+        unsigned char currentfreq = this->getClockFrequency();
+        this->memory[pos] = value;
+        unsigned char newfreq = this->getClockFrequency();
+
+        if (currentfreq != newfreq){
+            this->setClockFrequency();
+        }
+    }else{
+        this->memory[pos] = value;
     }
     
 }
@@ -78,12 +91,35 @@ unsigned short Memory::getDouble(unsigned short pos) const{
     return value;
 }
 
+int Memory::getTimerCounter(){
+    return this->timerCounter;
+}
+
 unsigned char* Memory::getBootRom(){
     return this->bootRom;
 }
 
 bool Memory::hasReadBootRom() const{
     return this->memory[0xFF50] == 0;
+}
+
+void Memory::updateTimers(int cycles){
+    this->doDividerRegister(cycles);
+
+    if(this->isClockEnabled()){
+        this->timerCounter -= cycles;
+
+        if(this->timerCounter <= 0){
+            this->setClockFrequency();
+
+            if(this->get(Memory::TIMA) == 255){
+                this->writeMemory(Memory::TIMA, 0);
+                //this->requestInterupt(2);TODO
+            }else{
+                this->writeMemory(Memory::TIMA, this->get(Memory::TIMA) + 1);
+            }
+        }
+    }
 }
 
 void Memory::setBootMemory(){
@@ -136,4 +172,42 @@ void Memory::setMemory(){
     this->memory[0xFF4A] = 0; //WY
     this->memory[0xFF4B] = 0; //WX
     this->memory[0xFFFF] = 0; //IE
+}
+
+bool Memory::isClockEnabled(){
+    return (this->get(Memory::TMC) & 0b00000100) != 0;
+}
+
+unsigned char Memory::getClockFrequency(){
+    return this->get(Memory::TMC) & 0x3;
+}
+
+void Memory::setClockFrequency(){
+    unsigned char frequency = this->getClockFrequency();
+
+    switch (frequency){
+    case 0:
+        this->timerCounter = 1024;
+        break;
+    case 1:
+        this->timerCounter = 16;
+        break;
+    case 2:
+        this->timerCounter = 64;
+        break;
+    case 3:
+        this->timerCounter = 256;
+        break;
+    default:
+        break;
+    }
+}
+
+void Memory::doDividerRegister(int cycles){ //every 256 cycles Divider value increments
+    this->dividerCounter += cycles;
+
+    if(dividerCounter >= 255){
+        dividerCounter = 0;
+        this->set(Memory::DIVIDER, this->get(Memory::DIVIDER) + 1);
+    }
 }
