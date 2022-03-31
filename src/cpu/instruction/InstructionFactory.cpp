@@ -95,6 +95,7 @@
 #include "opcode/set/SetBitRegister.h"
 #include "opcode/set/SetBitHL.h"
 #include "opcode/load/LoadImmediateAddressToRegister.h"
+#include "opcode/ret/ReturnConditional.h"
 
 Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc){
 	unsigned char byteInstr = memory[pc];
@@ -798,6 +799,18 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             break;
         case 0xE9:
             instruction = new JumpUnconditionHL();
+            break;
+        case 0xC0:
+            instruction = new ReturnConditional(InstructionCondition::NZ);
+            break;
+        case 0xC8:
+            instruction = new ReturnConditional(InstructionCondition::Z);
+            break;
+        case 0xD0:
+            instruction = new ReturnConditional(InstructionCondition::NC);
+            break;
+        case 0xD8:
+            instruction = new ReturnConditional(InstructionCondition::C);
             break;
         case 0xFA:
             instruction = new LoadImmediateAddressToRegister(RegisterName::A);
