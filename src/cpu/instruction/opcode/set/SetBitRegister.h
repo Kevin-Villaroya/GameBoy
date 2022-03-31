@@ -4,8 +4,9 @@
 
 class SetBitRegister : public Instruction{
     private:
-        RegisterName registerName;
         int bit;
+        RegisterName registerName;
+        
     public:
         SetBitRegister(int, RegisterName);
 

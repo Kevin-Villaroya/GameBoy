@@ -8,10 +8,16 @@
 
 class Gameboy{
 private:
+	const int CLOCKSPEED = 4194304;
+	const uint32_t DELAY_FETCH = 30;
+
 	Processor cpu;
 	Display* view;
 	ProcessorGraphic ppu;
 
+	int frequency;
+
+	uint32_t lastTimeFetch;
 	bool isRunning;
 	bool canTick;
 	bool canSkip;
@@ -19,12 +25,15 @@ private:
 	bool waitingBreakingOpCode;
 
 	std::vector<unsigned short> opCodeBreak;
+
+	int getTimerCounter();
+	void debug(bool isInstructionExecuted);
 	
 public:
 	Gameboy(char* path);
 	bool run();
 	
-	void treatEvent(Event event);
+	void treatEvent(uint32_t currentTime);
 	void debugMode();
 
 	~Gameboy();

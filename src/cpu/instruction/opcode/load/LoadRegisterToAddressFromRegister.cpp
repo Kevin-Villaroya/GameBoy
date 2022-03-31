@@ -5,7 +5,8 @@ LoadRegisterToAddressFromRegister::LoadRegisterToAddressFromRegister(DoubleRegis
 void LoadRegisterToAddressFromRegister::execute(Memory& ram, Registers& registers) {
 	unsigned short valueAddress = registers.getDoubleRegister(this->addr);
 	unsigned char value = registers.getRegister(this->src);
-	ram[valueAddress] = value;
+	
+	ram.set(valueAddress, value);
 }
 
 unsigned int LoadRegisterToAddressFromRegister::getSize() {

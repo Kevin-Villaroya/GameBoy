@@ -7,7 +7,7 @@ void DecrementHL::execute(Memory& ram, Registers& registers){
     unsigned char value = ram[valueAddress] - 1;
     bool byte3After = value & 0b00001000;
 
-    ram[valueAddress] = value;
+    ram.set(valueAddress, value);
 
     if(byte3Before && !byte3After){
         registers.setFlagH(1);
