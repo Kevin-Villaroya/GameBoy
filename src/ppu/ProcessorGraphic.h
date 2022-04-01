@@ -3,7 +3,6 @@
 
 #include "PixelFetcher.h"
 #include "../display/Display.h"
-#include "RegisterProcessorGraphic.h"
 
 enum class ProcessorGraphicState{
 	OAMSearch,
@@ -20,8 +19,6 @@ private:
 	PixelFetcher fetcher;
 	Display* screen;
 	Memory* ram;
-
-	RegisterProcessorGraphic registersPPU;
 
 	ProcessorGraphicState currentState;
 

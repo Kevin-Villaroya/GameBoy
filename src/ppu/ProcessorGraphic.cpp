@@ -1,7 +1,7 @@
 #include "ProcessorGraphic.h"
 #include <iostream>
 
-ProcessorGraphic::ProcessorGraphic(Display* screen, Memory* ram) : screen(screen), ram(ram), registersPPU(RegisterProcessorGraphic(ram)){
+ProcessorGraphic::ProcessorGraphic(Display* screen, Memory* ram) : screen(screen), ram(ram){
     this->x = 0;
     this->ticks = 0;
     this->currentState = ProcessorGraphicState::OAMSearch;
@@ -36,7 +36,7 @@ void ProcessorGraphic::tick(){
 void ProcessorGraphic::oamSearch(){
     if(this->ticks == 40){
         this->x = 0;
-        unsigned short y = this->registersPPU.getLY() + this->registersPPU.getSCY();
+        unsigned short y = this->ram->get(Memory::LY) + this->ram->get(Memory::SCY);
 
         unsigned char tileLine = y % 8;
         unsigned short tileMapRowAddr = 0x9800 + ((y / 8) * 32);
@@ -51,7 +51,7 @@ void ProcessorGraphic::pixelTransfer(){
 
     if(this->fetcher.hasPixel()){
         unsigned char pixelRaw = this->fetcher.popPixel();
-        unsigned char pixel = (this->registersPPU.getBGP() >> ((uint8_t)pixelRaw * 2)) & 3;
+        unsigned char pixel = (this->ram->get(Memory::BGP) >> ((uint8_t)pixelRaw * 2)) & 3;
 
         this->screen->write(pixel);
         this->x++;
@@ -66,9 +66,9 @@ void ProcessorGraphic::pixelTransfer(){
 void ProcessorGraphic::hBlank(){
      if(this->ticks == 456){
         this->ticks = 0;
-        this->registersPPU.setLY(this->registersPPU.getLY() + 1);
+        this->ram->set(Memory::LY, this->ram->get(Memory::LY) + 1);
 
-        if(this->registersPPU.getLY() == 144){
+        if(this->ram->get(Memory::LY) == 144){
             this->screen->VBlank();
             this->currentState = ProcessorGraphicState::VBlank;
         }else{
@@ -78,12 +78,16 @@ void ProcessorGraphic::hBlank(){
 }
 
 void ProcessorGraphic::vBlank(){
+    if(this->ticks == 0){
+        this->ram->requestInterupt(0); //set interruption vblank
+    }
+    
     if(this->ticks == 456){
         this->ticks = 0;
-        this->registersPPU.setLY(this->registersPPU.getLY() + 1);
+       this->ram->set(Memory::LY, this->ram->get(Memory::LY) + 1);
 
-        if(this->registersPPU.getLY() == 153){
-            this->registersPPU.setLY(0);
+        if(this->ram->get(Memory::LY) == 153){
+            this->ram->set(Memory::LY, 0);
             this->currentState = ProcessorGraphicState::OAMSearch;
         }
     }

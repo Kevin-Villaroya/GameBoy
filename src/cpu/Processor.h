@@ -9,7 +9,7 @@
 class Processor{
     private:
         Memory* memory;
-        Registers registers;
+        Registers* registers;
 
         Instruction* instruction;
         unsigned int ticksDelayed;
@@ -24,7 +24,7 @@ class Processor{
 		const std::string getNameForCartridgeType(unsigned char);	
 	
     public:
-        Processor(Memory* memory);
+        Processor(Memory* memory, Registers* registers);
 	
         int tick();
         void run();

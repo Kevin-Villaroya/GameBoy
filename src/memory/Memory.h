@@ -29,6 +29,12 @@ class Memory{
         static const unsigned short TIMA = 0xFF05;
         static const unsigned short TMA = 0xFF06;
         static const unsigned short TMC = 0xFF07;
+        static const unsigned short IF = 0xFF0F;
+        static const unsigned short IE = 0xFFFF;
+        static const unsigned short LY = 0xFF44;
+        static const unsigned short LCDC = 0xFF40;
+        static const unsigned short BGP = 0xFF47;
+        static const unsigned short SCY = 0xFF42;
 
         Memory(char* path);
 
@@ -48,6 +54,7 @@ class Memory{
         bool hasReadBootRom() const;
 
         void updateTimers(int cycles);
+        void requestInterupt(unsigned char bit);
 };
 
 #endif

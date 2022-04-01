@@ -6,31 +6,27 @@
 #include <sstream>
 #include <stdlib.h>
 
-Processor::Processor(Memory* memory) : memory(memory){
+Processor::Processor(Memory* memory, Registers* registers) : memory(memory), registers(registers){
 	this->ticksDelayed = 0;
 	this->instruction = nullptr;
-
-	this->memory->init();
-	this->registers.init(this->memory);
-	this->registers.setPC(0x000);
 }
 
 Instruction* Processor::fetch(){
     Instruction* currentInstr = this->decodeAndLoad();
-    this->registers.incrementPc(currentInstr->getSize());
+    this->registers->incrementPc(currentInstr->getSize());
 
     return currentInstr;
 }
 
 Instruction* Processor::decodeAndLoad(){
-    Instruction* instr = InstructionFactory::forCode(*this->memory, this->registers.getPC());
-    instr->setParameters(*this->memory, this->registers.getPC() + 1);
+    Instruction* instr = InstructionFactory::forCode(*this->memory, this->registers->getPC());
+    instr->setParameters(*this->memory, this->registers->getPC() + 1);
 
     return instr;
 }
 
 void Processor::execute(Instruction& instr){
-    instr.execute(*this->memory, this->registers);
+    instr.execute(*this->memory, *this->registers);
 }
 
 const std::string Processor::getNameForCartridgeType(unsigned char type) {
@@ -153,7 +149,7 @@ void Processor::dumpRegister(){
 	std::cout << this->instruction->toString() << std::endl;
 	std::cout << "op code: " << shortToHex(this->instruction->opCode) << std::endl;
 
-	std::cout << this->registers.dump() << std::endl;
+	std::cout << this->registers->dump() << std::endl;
 }
 
 void Processor::dumpRam(){

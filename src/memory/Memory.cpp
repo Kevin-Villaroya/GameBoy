@@ -1,6 +1,7 @@
 #include <fstream>
 #include <iostream>
 #include "Memory.h"
+#include "../util/BitMath.h"
 
 Memory::Memory(char* path){
     this->timerCounter = 1024;
@@ -114,12 +115,18 @@ void Memory::updateTimers(int cycles){
 
             if(this->get(Memory::TIMA) == 255){
                 this->writeMemory(Memory::TIMA, 0);
-                //this->requestInterupt(2);TODO
+                this->requestInterupt(2);
             }else{
                 this->writeMemory(Memory::TIMA, this->get(Memory::TIMA) + 1);
             }
         }
     }
+}
+
+void Memory::requestInterupt(unsigned char bit){
+    unsigned char value = this->get(Memory::IF);
+    setBit(value, 2);
+    this->set(Memory::IF, value);
 }
 
 void Memory::setBootMemory(){

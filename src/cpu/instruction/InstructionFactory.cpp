@@ -96,6 +96,7 @@
 #include "opcode/set/SetBitHL.h"
 #include "opcode/load/LoadImmediateAddressToRegister.h"
 #include "opcode/ret/ReturnConditional.h"
+#include "opcode/reti/ReturnInterruptServiceRoutine.h"
 
 Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc){
 	unsigned char byteInstr = memory[pc];
@@ -814,6 +815,9 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             break;
         case 0xFA:
             instruction = new LoadImmediateAddressToRegister(RegisterName::A);
+            break;
+        case 0xD9:
+            instruction = new ReturnInterruptServiceRoutine();
             break;
         case 0xCB:
         	instruction =  InstructionFactory::forCodeCb(memory[pc + 1]);

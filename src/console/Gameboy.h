@@ -12,6 +12,7 @@ private:
 	const uint32_t DELAY_FETCH = 30;
 
 	Memory memory;
+	Registers registers;
 	Processor cpu;
 	Display* view;
 	ProcessorGraphic ppu;
@@ -29,8 +30,9 @@ private:
 	std::vector<unsigned short> opCodeBreak;
 
 	void updateTimers(bool instructionExecuted);
-
 	void debug(bool isInstructionExecuted);
+	void doInterrupts();
+	void serviceInterrupt(int interruption);
 	
 public:
 	Gameboy(char* path);

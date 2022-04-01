@@ -5,7 +5,6 @@ ShiftRightHLResetMSB::ShiftRightHLResetMSB(){}
 void ShiftRightHLResetMSB::execute(Memory& ram, Registers& registers){
     unsigned short hlValue = registers.getDoubleRegister(DoubleRegisterName::HL);
     unsigned char aValue = ram.get(hlValue);
-	bool lastBit = aValue & 0b10000000;
 
 	registers.setFlagC(0b1 & aValue);
 	aValue >>= 1;
