@@ -23,6 +23,8 @@ class Memory{
         unsigned char getClockFrequency();
         void setClockFrequency();
         void doDividerRegister(int cycles);
+
+        void dmaTransfer(unsigned char value);
     
     public:
         static const unsigned short DIVIDER = 0xFF04;
@@ -32,9 +34,12 @@ class Memory{
         static const unsigned short IF = 0xFF0F;
         static const unsigned short IE = 0xFFFF;
         static const unsigned short LY = 0xFF44;
+        static const unsigned short LYC = 0xFF45;
+        static const unsigned short DMA = 0xFF46;
         static const unsigned short LCDC = 0xFF40;
         static const unsigned short BGP = 0xFF47;
         static const unsigned short SCY = 0xFF42;
+        static const unsigned short LCD = 0xFF41;
 
         Memory(char* path);
 

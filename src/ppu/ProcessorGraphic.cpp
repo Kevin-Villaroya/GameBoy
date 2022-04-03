@@ -1,4 +1,5 @@
 #include "ProcessorGraphic.h"
+#include "../util/BitMath.h"
 #include <iostream>
 
 ProcessorGraphic::ProcessorGraphic(Display* screen, Memory* ram) : screen(screen), ram(ram){
@@ -8,6 +9,8 @@ ProcessorGraphic::ProcessorGraphic(Display* screen, Memory* ram) : screen(screen
 }
 
 void ProcessorGraphic::tick(){
+    this->setLCDStatus();
+
     this->ticks++;
 
     switch (this->currentState){
@@ -91,6 +94,81 @@ void ProcessorGraphic::vBlank(){
             this->currentState = ProcessorGraphicState::OAMSearch;
         }
     }
+}
+
+void ProcessorGraphic::setLCDStatus(){
+    unsigned char status = this->ram->get(Memory::LCD);
+    int nextScanLineCounter = 456 - this->x; //quantity pixels left in scanline
+
+    if (this->isLCDEnabled() == false){
+        // set the mode to 1 during lcd disabled and reset scanline
+        this->x = 0;
+        this->ticks = 0;
+        this->currentState = ProcessorGraphicState::OAMSearch;
+        this->ram->writeMemory(Memory::LY, 0);
+        status &= 0b11111100;
+        setBit(status, 0);
+        this->ram->writeMemory(Memory::LCD, status);
+    }else{
+
+        unsigned char currentline = this->ram->get(Memory::LY);
+        unsigned char currentmode = status & 0b00000011;
+
+        unsigned char mode = 0;
+        bool reqInt = false;
+
+        // in vblank so set mode to 1
+        if (currentline >= 144){      
+            mode = 1;
+            setBit(status, 0);
+            resetBit(status, 1);
+            testBit(status, 4);
+        }else{
+            int mode2bounds = 456 - 80 ;
+            int mode3bounds = mode2bounds - 172 ;
+
+            // mode 2
+            if (nextScanLineCounter >= mode2bounds){
+                mode = 2 ;
+                setBit(status, 1) ;
+                resetBit(status, 0) ;
+                reqInt = testBit(status, 5) ;
+            }
+            // mode 3
+            else if(nextScanLineCounter >= mode3bounds){
+                mode = 3 ;
+                setBit(status, 1);
+                setBit(status, 0);
+            }
+            // mode 0
+            else{
+                mode = 0;
+                resetBit(status,1) ;
+                resetBit(status,0) ;
+                reqInt = testBit(status,3) ;
+            }
+        }
+
+        // just entered a new mode so request interupt
+        if (reqInt && (mode != currentmode))
+                this->ram->requestInterupt(1);
+
+        // check the conincidence flag
+            if (currentline == this->ram->get(Memory::LYC)){
+                setBit(status, 2) ;
+                if (testBit(status, 6)){
+                    this->ram->requestInterupt(1) ;
+                }
+        }else{
+            resetBit(status, 2);
+        }
+
+        this->ram->writeMemory(Memory::LCD, status);
+    }
+}
+
+bool ProcessorGraphic::isLCDEnabled(){
+    return testBit(this->ram->get(Memory::LCDC), 7);
 }
 
 ProcessorGraphic::~ProcessorGraphic(){}

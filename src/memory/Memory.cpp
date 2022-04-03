@@ -51,10 +51,9 @@ void Memory::set(unsigned short pos, unsigned char value){
 
 void Memory::writeMemory(unsigned short pos, unsigned char value){
     if(pos == Memory::DIVIDER){
-
         memory[Memory::DIVIDER] = 0;
-    }else if (Memory::TMC == pos){
 
+    }else if (Memory::TMC == pos){
         unsigned char currentfreq = this->getClockFrequency();
         this->memory[pos] = value;
         unsigned char newfreq = this->getClockFrequency();
@@ -62,10 +61,16 @@ void Memory::writeMemory(unsigned short pos, unsigned char value){
         if (currentfreq != newfreq){
             this->setClockFrequency();
         }
-    }else{
-        this->memory[pos] = value;
+
+    }else if (pos == Memory::LY){
+        this->memory[pos] = 0;
+
+    }else if(pos == Memory::DMA){
+        this->dmaTransfer(value);
     }
-    
+    else{
+        this->memory[pos] = value;
+    }    
 }
 
 unsigned char Memory::operator[](unsigned short pos)const {
@@ -216,5 +221,12 @@ void Memory::doDividerRegister(int cycles){ //every 256 cycles Divider value inc
     if(dividerCounter >= 255){
         dividerCounter = 0;
         this->set(Memory::DIVIDER, this->get(Memory::DIVIDER) + 1);
+    }
+}
+
+void Memory::dmaTransfer(unsigned char value){
+    unsigned short address = value << 8;
+    for (int i = 0 ; i < 0xA0; i++){
+        this->writeMemory(0xFE00 + i, this->get(address + i));
     }
 }

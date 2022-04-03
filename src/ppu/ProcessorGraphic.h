@@ -33,6 +33,9 @@ private:
 	void vBlank();
 	void hBlank();
 
+	void setLCDStatus();
+	bool isLCDEnabled();
+
 public:
 	ProcessorGraphic(Display* screen, Memory* ram);
 	~ProcessorGraphic();
