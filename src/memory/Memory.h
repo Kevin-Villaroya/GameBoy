@@ -32,14 +32,17 @@ class Memory{
         static const unsigned short TMA = 0xFF06;
         static const unsigned short TMC = 0xFF07;
         static const unsigned short IF = 0xFF0F;
-        static const unsigned short IE = 0xFFFF;
-        static const unsigned short LY = 0xFF44;
-        static const unsigned short LYC = 0xFF45;
         static const unsigned short DMA = 0xFF46;
         static const unsigned short LCDC = 0xFF40;
-        static const unsigned short BGP = 0xFF47;
-        static const unsigned short SCY = 0xFF42;
         static const unsigned short LCD = 0xFF41;
+        static const unsigned short SCY = 0xFF42;
+        static const unsigned short SCX = 0xFF43;
+        static const unsigned short LY = 0xFF44;
+        static const unsigned short LYC = 0xFF45;
+        static const unsigned short BGP = 0xFF47;
+        static const unsigned short WY = 0xFF4A;
+        static const unsigned short WX = 0xFF4B;
+        static const unsigned short IE = 0xFFFF;
 
         Memory(char* path);
 

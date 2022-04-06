@@ -14,23 +14,35 @@ enum class PixelFetcherState{
 class PixelFetcher{
 private:
     std::queue<unsigned char> fifo;
-    unsigned int ticks;
     PixelFetcherState currentState;
 
-    unsigned char tileIndex;
-    unsigned short mapAddr;
-    unsigned char tileLine;
-    unsigned char tileId;
+    Memory* ram;
+
+    unsigned char ticks;
+    unsigned char pixel;
+    unsigned char yPos;
+    unsigned short tileData;
+    unsigned short tileLocation;
+    unsigned short tileRow;
+    unsigned char line;
+    unsigned short backgroundMemory;
+    bool unsignedValue;
+    bool usingWindow;
+
+    unsigned char scrollX;
+    unsigned char scrollY;
+    unsigned char windowX;
+    unsigned char windowY;
 
     unsigned char pixelData[8];
 
-    void readTileId(Memory& ram);
-    void readTileData0(Memory& ram);
-    void readTileData1(Memory& ram);
+    void readTileId();
+    void readTileData0();
+    void readTileData1();
     void pushToFIFO();
 public:
-    void tick(Memory& ram);
-    void start(unsigned short tileMapRowAddr, unsigned char tileLine);
+    void tick();
+    void start(Memory* ram);
 
     bool hasPixel();
     unsigned char popPixel();

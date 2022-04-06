@@ -22,6 +22,9 @@ private:
 
 	ProcessorGraphicState currentState;
 
+	bool hasToRenderTiles;
+	bool hasToRenderSprites;
+
 	// Tick associated to the current line being drawed
 	unsigned int ticks;
 

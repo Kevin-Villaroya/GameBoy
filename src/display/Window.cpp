@@ -19,7 +19,7 @@ Window::Window(){
 }
 
 void Window::write(unsigned char color){
-    SDL_Color paletteColor = this->palette[color];    
+    SDL_Color paletteColor = this->palette[color];
 
     this->setColorAt(this->offset + 0, paletteColor.r);
     this->setColorAt(this->offset + 1, paletteColor.g);

@@ -1,22 +1,25 @@
 #include "PixelFetcher.h"
+#include "../util/BitMath.h"
 #include <iostream>
 
-void PixelFetcher::tick(Memory& ram){
+void PixelFetcher::tick(){
+    this->pixel++;
+
     this->ticks++;
     if(this->ticks == 2){
         this->ticks = 0;
 
         switch (this->currentState){
             case PixelFetcherState::ReadTileId:
-                this->readTileId(ram);
+                this->readTileId();
                 break;
         
             case PixelFetcherState::ReadTileData0:
-                this->readTileData0(ram);
+                this->readTileData0();
                 break;
 
             case PixelFetcherState::ReadTileData1:
-                this->readTileData1(ram);
+                this->readTileData1();
                 break;
 
             case PixelFetcherState::PushToFIFO:
@@ -29,31 +32,93 @@ void PixelFetcher::tick(Memory& ram){
     }
 }
 
-void PixelFetcher::start(unsigned short tileMapRowAddr, unsigned char tileLine){
-    this->tileIndex = 0;
-    this->mapAddr = tileMapRowAddr;
-    this->tileLine = tileLine;
+void PixelFetcher::start(Memory* ram){
+    this->ram = ram;
+    this->pixel = 0;
     this->ticks = 0;
+    this->tileData = 0;
+    this->backgroundMemory = 0;
+    this->unsignedValue = true;
+    this->usingWindow = false;
+
+    this->scrollX = this->ram->get(Memory::SCX);
+    this->scrollY = this->ram->get(Memory::SCY);
+    this->windowX = this->ram->get(Memory::WX);
+    this->windowY = this->ram->get(Memory::WY);
+
+    if(testBit(this->ram->get(Memory::LCDC), 5)){
+        if(this->windowY <= this->ram->get(Memory::LY)){
+            this->usingWindow = true;
+        }
+    }
+
+    if(testBit(this->ram->get(Memory::LCDC), 4)){
+        this->tileData = 0x8000;
+    }else{
+        tileData = 0x8800;
+        this->unsignedValue = false;
+    }
+
+    if(!this->usingWindow){
+        if(testBit(this->ram->get(Memory::LCDC), 3)){
+            this->backgroundMemory = 0x9C00;
+        }else{
+            this->backgroundMemory = 0x9800;
+        }
+    }
+
+    if(!usingWindow){
+        this->yPos = this->scrollY + this->ram->get(Memory::LY);
+    }else{
+        this->yPos = this->ram->get(Memory::LY) - this->windowY;
+    }
+
+    this->tileRow = ((unsigned char)(this->yPos / 8)) * 32;
 
     this->currentState = PixelFetcherState::ReadTileId;
 
+    this->line = yPos % 8;
+    this->line *= 2;
+
+    
     while(this->fifo.size() > 0){
         this->fifo.pop();
     }
 }
 
-void PixelFetcher::readTileId(Memory& ram){
-    this->tileId = ram.get(this->mapAddr + ((unsigned short)this->tileIndex));
+void PixelFetcher::readTileId(){
+    unsigned short xPos = this->pixel + this->scrollX;
 
+    if(this->usingWindow){
+        if(this->pixel >= this->windowX){
+            xPos = this->pixel - this->windowX;
+        }
+    }
+
+    unsigned short tileColumn = xPos / 8;
+    signed short tileNumber;
+
+    unsigned short tileAddress = this->backgroundMemory + this->tileRow + tileColumn;
+
+    if(this->unsignedValue){
+        tileNumber = (unsigned char)this->ram->get(tileAddress);
+    }else{
+        tileNumber = (signed char)this->ram->get(tileAddress);
+    }
+
+    this->tileLocation = this->tileData;
+
+    if(this->unsignedValue){
+        this->tileLocation += tileNumber * 16;
+    }else{
+        this->tileLocation += (tileNumber + 128) * 16;
+    }
+    
     this->currentState = PixelFetcherState::ReadTileData0;
 }
 
-void PixelFetcher::readTileData0(Memory& ram){
-    unsigned short offset = 0x8000 + ((unsigned short)this->tileId) * 16;
-
-    unsigned short addr = offset + ((unsigned short)this->tileLine) * 2;
-
-    unsigned char data = ram.get(addr);
+void PixelFetcher::readTileData0(){
+    unsigned char data = this->ram->get(tileLocation + line);
 
     for(size_t bitPos = 0; bitPos < 8; bitPos++){
         this->pixelData[bitPos] = (data >> bitPos) & 0b00000001;
@@ -62,12 +127,8 @@ void PixelFetcher::readTileData0(Memory& ram){
     this->currentState = PixelFetcherState::ReadTileData1;
 }
 
-void PixelFetcher::readTileData1(Memory& ram){
-    unsigned short offset = 0x8000 + ((unsigned short)this->tileId) * 16;
-
-    unsigned short addr = offset + ((unsigned short)this->tileLine) * 2;
-
-    unsigned char data = ram.get(addr + 1);
+void PixelFetcher::readTileData1(){
+    unsigned char data = this->ram->get(tileLocation + line + 1);
 
     for(size_t bitPos = 0; bitPos < 8; bitPos++){
         unsigned char value = (data >> bitPos) & 0b00000001;
@@ -76,6 +137,7 @@ void PixelFetcher::readTileData1(Memory& ram){
             this->pixelData[bitPos] |= ((data >> bitPos) & 0b00000001) << 1;
         }
     }
+
 
     this->currentState = PixelFetcherState::PushToFIFO;
 }
@@ -86,7 +148,6 @@ void PixelFetcher::pushToFIFO(){
             this->fifo.push(this->pixelData[i]);
         }
 
-        this->tileIndex++;
         this->currentState = PixelFetcherState::ReadTileId;
     }
 }
