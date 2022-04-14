@@ -7,6 +7,15 @@ enum class Event{
     TICK,
     WAIT_OPCODE_BREAKER,
     DUMP_RAM,
+    CONTINUE,
+    A,
+    S,
+    RETURN,
+    SPACE,
+    RIGHT,
+    LEFT,
+    UP,
+    DOWN,
     NONE
 };
 

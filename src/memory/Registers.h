@@ -102,7 +102,7 @@ public:
     void setSP(unsigned short);
     void setPC(unsigned short);
 
-    void enbaleIME();
+    void enableIME();
     void disableIME();
 
     bool isIME();

@@ -306,7 +306,7 @@ void Registers::setDoubleRegister(DoubleRegisterName registerName, unsigned shor
     }
 }
 
-void Registers::setA(unsigned char a ){
+void Registers::setA(unsigned char a){
     this->a = a;
 }
 
@@ -346,7 +346,7 @@ void Registers::setPC(unsigned short pc){
     this->pc = pc;
 }
 
-void Registers::enbaleIME(){
+void Registers::enableIME(){
     this->IME = true;
 }
 

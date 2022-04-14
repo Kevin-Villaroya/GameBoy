@@ -1,7 +1,7 @@
 #include "EI.h"
 
 void EI::execute(Memory& ram, Registers& registers){
-    registers.enbaleIME();
+    registers.enableIME();
 }
 
 unsigned int EI::getSize(){
@@ -17,5 +17,5 @@ void EI::setParameters(const Memory&, unsigned short){
 }
 
 std::string EI::toString(){
-    return "DI";
+    return "EI";
 }

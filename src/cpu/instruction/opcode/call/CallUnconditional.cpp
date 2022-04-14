@@ -10,8 +10,8 @@ void CallUnconditional::execute(Memory& ram, Registers& registers) {
 	ram.writeMemory(sp - 1, pc >> 8);
 	ram.writeMemory(sp - 2, pc);
 	
-	registers.setSP(sp-2);
-	registers.setPC(this->address); 
+	registers.setSP(sp - 2);
+	registers.setPC(this->address);
 }
 
 unsigned int CallUnconditional::getSize() {

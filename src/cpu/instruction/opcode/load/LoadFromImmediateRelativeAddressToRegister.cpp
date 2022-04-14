@@ -1,5 +1,6 @@
 #include "LoadFromImmediateRelativeAddressToRegister.h"
 #include "../../util/DecToHex.h"
+#include <iostream>
 
 LoadFromImmediateRelativeAddressToRegister::LoadFromImmediateRelativeAddressToRegister(RegisterName registerName) : registerName(registerName){}
 

@@ -1,5 +1,6 @@
 #include "CpImmediateToA.h"
 #include "../../util/DecToHex.h"
+#include <iostream>
 
 CpImmediateToA::CpImmediateToA(){}
 

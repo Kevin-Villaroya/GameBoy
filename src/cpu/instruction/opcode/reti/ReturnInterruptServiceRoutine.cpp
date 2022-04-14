@@ -11,7 +11,7 @@ void ReturnInterruptServiceRoutine::execute(Memory& ram, Registers& registers){
     registers.setSP(sp + 2);
     registers.setPC(pc);
 
-    registers.enbaleIME();
+    registers.enableIME();
 }
 
 unsigned int ReturnInterruptServiceRoutine::getSize(){

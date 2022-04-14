@@ -2,6 +2,7 @@
 #define __MEMORY_H__
 
 #include <cstdint>
+#include <string>
 
 #define CARTRIGBE_SIZE 32768
 #define RAM_SIZE 65536
@@ -14,6 +15,8 @@ class Memory{
         unsigned char memory[RAM_SIZE];
         unsigned char bootRom[256];
 
+        unsigned char joypadState;
+
         void resetMemory();
 
         void setBootMemory();
@@ -24,9 +27,11 @@ class Memory{
         void setClockFrequency();
         void doDividerRegister(int cycles);
 
+        unsigned char getJoypadState() const;
         void dmaTransfer(unsigned char value);
     
     public:
+        static const unsigned short JOYPAD = 0xFF00;
         static const unsigned short DIVIDER = 0xFF04;
         static const unsigned short TIMA = 0xFF05;
         static const unsigned short TMA = 0xFF06;
@@ -63,6 +68,11 @@ class Memory{
 
         void updateTimers(int cycles);
         void requestInterupt(unsigned char bit);
+
+        void setJoypad(unsigned char value);
+        unsigned char getJoypad();
+
+        std::string dump();
 };
 
 #endif

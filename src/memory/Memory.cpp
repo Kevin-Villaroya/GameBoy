@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Memory.h"
 #include "../util/BitMath.h"
+#include "../util/DecToHex.h"
 
 Memory::Memory(char* path){
     this->timerCounter = 1024;
@@ -12,13 +13,13 @@ Memory::Memory(char* path){
     std::ifstream romFile;
     romFile.open(path, std::ifstream::in);
 
-    int current = 0;
+    unsigned short current = 0;
 
     while (romFile.good()) {
-        char character = romFile.get();
+        unsigned char character = romFile.get();
         if(!romFile.eof()){
             if(current <= CARTRIGBE_SIZE) {
-                this->memory[current] = character;        
+                this->memory[current] = character;    
                 current++;
             }
             else {
@@ -40,22 +41,26 @@ unsigned char Memory::get(unsigned short pos) const{
 
     if(this->hasReadBootRom() && pos <= 256){
         return this->bootRom[pos];
+    }else if(pos == Memory::JOYPAD){
+        return this->getJoypadState();
     }else{
         return this->memory[pos];
     }
 }
 
 void Memory::set(unsigned short pos, unsigned char value){
-    this->memory[pos] = value;    
+    if(pos > CARTRIGBE_SIZE){
+        this->memory[pos] = value;
+    }
 }
 
 void Memory::writeMemory(unsigned short pos, unsigned char value){
     if(pos == Memory::DIVIDER){
-        memory[Memory::DIVIDER] = 0;
+        this->set(Memory::DIVIDER, 0);
 
     }else if (Memory::TMC == pos){
         unsigned char currentfreq = this->getClockFrequency();
-        this->memory[pos] = value;
+        this->set(pos, value);
         unsigned char newfreq = this->getClockFrequency();
 
         if (currentfreq != newfreq){
@@ -63,13 +68,13 @@ void Memory::writeMemory(unsigned short pos, unsigned char value){
         }
 
     }else if (pos == Memory::LY){
-        this->memory[pos] = 0;
+        this->set(pos, 0);
 
     }else if(pos == Memory::DMA){
         this->dmaTransfer(value);
     }
     else{
-        this->memory[pos] = value;
+        this->set(pos, value);
     }    
 }
 
@@ -224,9 +229,44 @@ void Memory::doDividerRegister(int cycles){ //every 256 cycles Divider value inc
     }
 }
 
+unsigned char Memory::getJoypadState() const{
+    unsigned char result = this->memory[0xFF00];
+
+    //flip bits
+    result ^= 0xFF;
+
+    if(testBit(result, 4)){
+        unsigned char topJoypad = this->joypadState >> 4;
+        topJoypad |= 0xF0; //set 4 first bits on
+        result &= topJoypad;
+    }else if(!testBit(result, 5)){
+        unsigned char bottomJoypad = this->joypadState & 0xF;
+        bottomJoypad |= 0xF0;
+        result &= bottomJoypad;
+    }
+
+    return result;
+}
+
 void Memory::dmaTransfer(unsigned char value){
     unsigned short address = value << 8;
     for (int i = 0 ; i < 0xA0; i++){
         this->writeMemory(0xFE00 + i, this->get(address + i));
     }
+}
+
+void Memory::setJoypad(unsigned char value){
+    this->joypadState = value;
+}
+
+unsigned char Memory::getJoypad(){
+    return this->joypadState;
+}
+
+std::string Memory::dump(){
+    std::string res = "";
+    res += "LY\n";
+    res += std::to_string((int)this->get(Memory::LY));
+
+    return res;
 }

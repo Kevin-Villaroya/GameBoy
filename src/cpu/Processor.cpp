@@ -150,6 +150,7 @@ void Processor::dumpRegister(){
 	std::cout << "op code: " << shortToHex(this->instruction->opCode) << std::endl;
 
 	std::cout << this->registers->dump() << std::endl;
+	//std::cout << this->memory->dump() << std::endl;
 }
 
 void Processor::dumpRam(){
@@ -178,6 +179,17 @@ void Processor::dumpRam(){
 
 	std::cout << "==============VIDEO RAM================" << std::endl;
 	for(int i = 0X8000; i < 0x9FFF; i++){
+		if((i - 0x8000) % 16 == 0){
+			std::cout << std::endl;
+			std::cout <<shortToHex(i) + ": ";
+		}
+		
+		std::cout <<"| " << charToHex(this->memory->get(i)) << " |";
+	}
+	std::cout << std::endl;
+
+	std::cout << "==============SPRITE ATTRIBUTES================" << std::endl;
+	for(int i = 0XFE00; i < 0xFEA0; i++){
 		if((i - 0x8000) % 16 == 0){
 			std::cout << std::endl;
 			std::cout <<shortToHex(i) + ": ";

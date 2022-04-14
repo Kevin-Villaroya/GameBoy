@@ -11,14 +11,17 @@ enum class PixelFetcherState{
     PushToFIFO
 };
 
-class PixelFetcher{
+class TileFetcher{
 private:
     std::queue<unsigned char> fifo;
     PixelFetcherState currentState;
 
     Memory* ram;
 
+    bool hasToRenderTiles;
+
     unsigned char ticks;
+
     unsigned char pixel;
     unsigned char yPos;
     unsigned short tileData;

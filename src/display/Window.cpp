@@ -62,6 +62,24 @@ Event Window::fetchEvent(){
                         return Event::WAIT_OPCODE_BREAKER;
                     }else if(events.key.keysym.sym == SDLK_d){
                         return Event::DUMP_RAM;
+                    }else if(events.key.keysym.sym == SDLK_g){
+                        return Event::CONTINUE;
+                    }else if(events.key.keysym.sym == SDLK_a){
+                        return Event::A;
+                    }else if(events.key.keysym.sym == SDLK_s){
+                        return Event::S;
+                    }else if(events.key.keysym.sym == SDLK_RETURN){
+                        return Event::RETURN;
+                    }else if(events.key.keysym.sym == SDLK_SPACE){
+                        return Event::SPACE;
+                    }else if(events.key.keysym.sym == SDLK_RIGHT){
+                        return Event::RIGHT;
+                    }else if(events.key.keysym.sym == SDLK_LEFT){
+                        return Event::LEFT;
+                    }else if(events.key.keysym.sym == SDLK_UP){
+                        return Event::UP;
+                    }else if(events.key.keysym.sym == SDLK_DOWN){
+                        return Event::DOWN;
                     }
                 default:
                     return Event::NONE;

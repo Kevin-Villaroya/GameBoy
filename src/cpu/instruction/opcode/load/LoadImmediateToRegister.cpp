@@ -1,4 +1,5 @@
 #include "LoadImmediateToRegister.h"
+#include "../../util/DecToHex.h"
 
 LoadImmediateToRegister::LoadImmediateToRegister(RegisterName registerName){
     this->registerName = registerName;
@@ -21,5 +22,5 @@ void LoadImmediateToRegister::setParameters(const Memory& memory, unsigned short
 }
 
 std::string LoadImmediateToRegister::toString(){
-    return "LD " + Registers::getRegisterName(this->registerName) + ", " + std::to_string((int)this->parameter);
+    return "LD " + Registers::getRegisterName(this->registerName) + ", " + charToHex(this->parameter);
 }

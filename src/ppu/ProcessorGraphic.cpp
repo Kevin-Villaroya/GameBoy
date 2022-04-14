@@ -6,8 +6,6 @@ ProcessorGraphic::ProcessorGraphic(Display* screen, Memory* ram) : screen(screen
     this->x = 0;
     this->ticks = 0;
     this->currentState = ProcessorGraphicState::OAMSearch;
-    this->hasToRenderTiles = false;
-    this->hasToRenderSprites = false;
 }
 
 void ProcessorGraphic::tick(){
@@ -39,28 +37,35 @@ void ProcessorGraphic::tick(){
 
 void ProcessorGraphic::oamSearch(){
     if(this->ticks == 40){
-        this->hasToRenderTiles = testBit(this->ram->get(Memory::LCDC), 0);
-        this->hasToRenderSprites = testBit(this->ram->get(Memory::LCDC), 1);
-
         this->x = 0;
 
-        this->fetcher.start(this->ram);
+        this->tileFetcher.start(this->ram);
+        this->spriteFetcher.start(this->ram);
         this->currentState = ProcessorGraphicState::PixelTransfer;
     }
 }
 
 void ProcessorGraphic::pixelTransfer(){
-    this->fetcher.tick();
+    this->tileFetcher.tick();
 
-    if(this->fetcher.hasPixel()){
-        unsigned char pixelRaw = this->fetcher.popPixel();
-        unsigned char pixel = (this->ram->get(Memory::BGP) >> ((uint8_t)pixelRaw * 2)) & 3;
-
-        this->screen->write(pixel);
-        this->x++;
+    if(this->tileFetcher.hasPixel()){
+        unsigned char pixelRaw = this->tileFetcher.popPixel();
+        this->pixelLine[x] = pixelRaw;
     }
 
+    this->x++;
+
     if(this->x == 160){
+        
+        this->spriteFetcher.fetch(this->pixelLine);
+
+        while(this->spriteFetcher.hasPixel()){
+            unsigned char pixelRaw = this->spriteFetcher.popPixel();
+            unsigned char pixel = (this->ram->get(Memory::BGP) >> ((uint8_t)pixelRaw * 2)) & 3;
+
+            this->screen->write(pixel);
+        }
+
         this->screen->HBlank();
         this->currentState = ProcessorGraphicState::HBlank;
     }

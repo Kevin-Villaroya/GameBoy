@@ -26,13 +26,19 @@ private:
 	bool canSkip;
 	bool isDebugMode;
 	bool waitingBreakingOpCode;
+	bool canContinue;
 
 	std::vector<unsigned short> opCodeBreak;
+	std::vector<unsigned short> pcValueBreak;
 
 	void updateTimers(bool instructionExecuted);
 	void debug(bool isInstructionExecuted);
 	void doInterrupts();
 	void serviceInterrupt(int interruption);
+
+	bool needBreak();
+
+	void gameboyKey(int key);
 	
 public:
 	Gameboy(char* path);

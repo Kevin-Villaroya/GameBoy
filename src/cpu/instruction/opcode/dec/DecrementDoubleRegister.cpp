@@ -4,7 +4,7 @@
 DecrementDoubleRegister::DecrementDoubleRegister(DoubleRegisterName registerName) : registerName(registerName){}
 
 void DecrementDoubleRegister::execute(Memory& ram, Registers& registers){
-    unsigned char value = registers.getDoubleRegister(this->registerName) - 1;
+    unsigned short value = registers.getDoubleRegister(this->registerName) - 1;
 
     registers.setDoubleRegister(this->registerName, value);
 }

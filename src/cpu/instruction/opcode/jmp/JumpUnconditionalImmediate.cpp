@@ -19,5 +19,5 @@ void JumpUnconditionalImmediate::setParameters(const Memory& rom, unsigned short
 }
 
 std::string JumpUnconditionalImmediate::toString(){
-    return "JP " + charToHex(this->parameter);
+    return "JP " + shortToHex(this->parameter);
 }
