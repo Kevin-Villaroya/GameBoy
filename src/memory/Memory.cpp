@@ -135,8 +135,11 @@ void Memory::updateTimers(int cycles){
 
 void Memory::requestInterupt(unsigned char bit){
     unsigned char value = this->get(Memory::IF);
-    setBit(value, 2);
+    setBit(value, bit);
     this->set(Memory::IF, value);
+    if(bit != 0){
+        std::cout << "request with the bit " << (int)bit << std::endl;
+    }
 }
 
 void Memory::setBootMemory(){

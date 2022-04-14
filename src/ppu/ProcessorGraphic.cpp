@@ -86,13 +86,13 @@ void ProcessorGraphic::hBlank(){
 }
 
 void ProcessorGraphic::vBlank(){
-    if(this->ticks == 0){
+    if(this->ticks == 1){
         this->ram->requestInterupt(0); //set interruption vblank
     }
     
     if(this->ticks == 456){
         this->ticks = 0;
-       this->ram->set(Memory::LY, this->ram->get(Memory::LY) + 1);
+        this->ram->set(Memory::LY, this->ram->get(Memory::LY) + 1);
 
         if(this->ram->get(Memory::LY) == 153){
             this->ram->set(Memory::LY, 0);
@@ -117,7 +117,7 @@ void ProcessorGraphic::setLCDStatus(){
     }else{
 
         unsigned char currentline = this->ram->get(Memory::LY);
-        unsigned char currentmode = status & 0b00000011;
+        unsigned char currentmode = status & 0x3;
 
         unsigned char mode = 0;
         bool reqInt = false;
@@ -127,17 +127,18 @@ void ProcessorGraphic::setLCDStatus(){
             mode = 1;
             setBit(status, 0);
             resetBit(status, 1);
-            testBit(status, 4);
+            reqInt = testBit(status, 4);
         }else{
-            int mode2bounds = 456 - 80 ;
-            int mode3bounds = mode2bounds - 172 ;
+
+            int mode2bounds = 456 - 80;
+            int mode3bounds = mode2bounds - 172;
 
             // mode 2
             if (nextScanLineCounter >= mode2bounds){
-                mode = 2 ;
-                setBit(status, 1) ;
-                resetBit(status, 0) ;
-                reqInt = testBit(status, 5) ;
+                mode = 2;
+                setBit(status, 1);
+                resetBit(status, 0);
+                reqInt = testBit(status, 5);
             }
             // mode 3
             else if(nextScanLineCounter >= mode3bounds){
@@ -155,15 +156,15 @@ void ProcessorGraphic::setLCDStatus(){
         }
 
         // just entered a new mode so request interupt
-        if (reqInt && (mode != currentmode))
-                this->ram->requestInterupt(1);
-
+        if (reqInt && (mode != currentmode)){
+            this->ram->requestInterupt(1);
+        }
         // check the conincidence flag
-            if (currentline == this->ram->get(Memory::LYC)){
-                setBit(status, 2) ;
-                if (testBit(status, 6)){
-                    this->ram->requestInterupt(1) ;
-                }
+        if (currentline == this->ram->get(Memory::LYC)){
+            setBit(status, 2) ;
+            if (testBit(status, 6)){
+                this->ram->requestInterupt(1) ;
+            }
         }else{
             resetBit(status, 2);
         }

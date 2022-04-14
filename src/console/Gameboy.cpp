@@ -23,8 +23,8 @@ Gameboy::Gameboy(char* path) : memory(path), cpu(Processor(&memory, &registers))
 	this->canContinue = false;
 	this->cpu.printMetadata();
 
-	this->pcValueBreak.push_back(0x02CD);
-	this->pcValueBreak.push_back(0x29BA);
+	this->pcValueBreak.push_back(0x02F2);
+	//this->pcValueBreak.push_back(0x29BA);
 }
 
 bool Gameboy::run(){

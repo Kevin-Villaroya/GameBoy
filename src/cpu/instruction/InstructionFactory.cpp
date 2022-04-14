@@ -97,6 +97,7 @@
 #include "opcode/load/LoadImmediateAddressToRegister.h"
 #include "opcode/ret/ReturnConditional.h"
 #include "opcode/reti/ReturnInterruptServiceRoutine.h"
+#include "opcode/stop/Stop.h"
 
 Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc){
 	unsigned char byteInstr = memory[pc];
@@ -818,6 +819,9 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             break;
         case 0xD9:
             instruction = new ReturnInterruptServiceRoutine();
+            break;
+        case 0x10:
+            instruction = new Stop();
             break;
         case 0xCB:
         	instruction =  InstructionFactory::forCodeCb(memory[pc + 1]);
