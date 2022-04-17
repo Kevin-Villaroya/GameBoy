@@ -6,7 +6,7 @@ void SpriteFetcher::start(Memory* ram){
     this->ram = ram;
 }
 
-void SpriteFetcher::fetch(unsigned char *pixelLine){
+/*void SpriteFetcher::fetch(unsigned char *pixelLine){
     this->pixelLine = pixelLine;
     this->size = 160;
 
@@ -76,6 +76,11 @@ void SpriteFetcher::fetch(unsigned char *pixelLine){
             }
         }
     }
+}*/
+
+void SpriteFetcher::fetch(unsigned char *pixelLine){
+    this->pixelLine = pixelLine;
+    this->size = 160;
 }
 
 bool SpriteFetcher::hasPixel(){

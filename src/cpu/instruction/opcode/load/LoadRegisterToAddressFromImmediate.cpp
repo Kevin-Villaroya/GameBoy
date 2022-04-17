@@ -10,7 +10,7 @@ void LoadRegisterToAddressFromImmediate::execute(Memory& ram, Registers& registe
 }
 
 unsigned int LoadRegisterToAddressFromImmediate::getSize() {
-	return 1;
+	return 2;
 }
 
 unsigned int LoadRegisterToAddressFromImmediate::getTiming() {

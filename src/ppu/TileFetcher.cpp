@@ -1,5 +1,6 @@
 #include "TileFetcher.h"
 #include "../util/BitMath.h"
+#include "../util/DecToHex.h"
 #include <iostream>
 
 void TileFetcher::tick(){
@@ -121,7 +122,7 @@ void TileFetcher::readTileId(){
     }else{
         this->tileLocation += (tileNumber + 128) * 16;
     }
-    
+
     this->currentState = PixelFetcherState::ReadTileData0;
 }
 

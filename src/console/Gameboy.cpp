@@ -23,7 +23,8 @@ Gameboy::Gameboy(char* path) : memory(path), cpu(Processor(&memory, &registers))
 	this->canContinue = false;
 	this->cpu.printMetadata();
 
-	this->pcValueBreak.push_back(0x02F2);
+	//this->opCodeBreak.push_back(0x10);
+	this->pcValueBreak.push_back(0x03FF);
 	//this->pcValueBreak.push_back(0x29BA);
 }
 
@@ -189,6 +190,7 @@ void Gameboy::debug(bool isInstructionExecuted){
 				this->cpu.dumpRegister();
 				this->canSkip = false;
 			}
+			this->cpu.dumpRegister();
 		}
 
 		this->canTick = this->canSkip || this->waitingBreakingOpCode || this->canContinue;
@@ -198,7 +200,7 @@ void Gameboy::debug(bool isInstructionExecuted){
 bool Gameboy::needBreak(){
 	bool opCodeBreak = std::find(this->opCodeBreak.begin(), this->opCodeBreak.end(), this->cpu.getInstruction()->opCode) != this->opCodeBreak.end();
 	bool pcCodeBreak = std::find(this->pcValueBreak.begin(), this->pcValueBreak.end(), this->registers.getPC()) != this->pcValueBreak.end();
-	
+
 	return opCodeBreak || pcCodeBreak;
 }
 
