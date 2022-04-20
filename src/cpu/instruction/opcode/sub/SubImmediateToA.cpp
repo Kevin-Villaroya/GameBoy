@@ -1,8 +1,6 @@
 #include "SubImmediateToA.h"
 #include "../../util/DecToHex.h"
 
-SubImmediateToA::SubImmediateToA(){}
-
 void SubImmediateToA::execute(Memory& ram, Registers& registers){
     unsigned char aValue = registers.getA();
 

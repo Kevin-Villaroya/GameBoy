@@ -6,7 +6,7 @@ void SpriteFetcher::start(Memory* ram){
     this->ram = ram;
 }
 
-/*void SpriteFetcher::fetch(unsigned char *pixelLine){
+void SpriteFetcher::fetch(unsigned char *pixelLine){
     this->pixelLine = pixelLine;
     this->size = 160;
 
@@ -62,25 +62,14 @@ void SpriteFetcher::start(Memory* ram){
 
                 int pixel = xPos+xPix;
 
-                for(size_t bitPos = 0; bitPos < 8; bitPos++){
-                    this->pixelLine[pixel] = (data1 >> bitPos) & 0b00000001;
-                }
+                int colourNum = bitGetVal(data2, colourBit);
+                colourNum <<= 1;
+                colourNum |= bitGetVal(data1, colourBit);
 
-                for(size_t bitPos = 0; bitPos < 8; bitPos++){
-                    unsigned char value = (data2 >> bitPos) & 0b00000001;
-
-                    if(value == 1){
-                        this->pixelLine[pixel] |= ((data2 >> bitPos) & 0b00000001) << 1;
-                    }
-                }
+                this->pixelLine[pixel] = colourNum;
             }
         }
     }
-}*/
-
-void SpriteFetcher::fetch(unsigned char *pixelLine){
-    this->pixelLine = pixelLine;
-    this->size = 160;
 }
 
 bool SpriteFetcher::hasPixel(){

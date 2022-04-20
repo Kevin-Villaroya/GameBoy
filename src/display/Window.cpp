@@ -99,7 +99,7 @@ void Window::initPalette(){
 }
 
 void Window::setColorAt(unsigned int pos, uint8_t color){
-    if(pos >= 0 && pos < INIT_SIZE_X_WINDOW * INIT_SIZE_X_WINDOW * 4){
+    if(pos >= 0 && pos < INIT_SIZE_X_WINDOW * INIT_SIZE_Y_WINDOW * 4 * sizeof(uint8_t)){
         this->bufferTexture[pos] = color;    
     }
 }

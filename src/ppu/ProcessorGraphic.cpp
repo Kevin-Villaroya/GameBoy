@@ -48,15 +48,14 @@ void ProcessorGraphic::oamSearch(){
 void ProcessorGraphic::pixelTransfer(){
     this->tileFetcher.tick();
 
-    if(this->tileFetcher.hasPixel()){
+    while(this->tileFetcher.hasPixel()){
         unsigned char pixelRaw = this->tileFetcher.popPixel();
         this->pixelLine[x] = pixelRaw;
+        this->x++;
     }
+    
 
-    this->x++;
-
-    if(this->x == 160){
-        
+    if(this->x == 160){        
         this->spriteFetcher.fetch(this->pixelLine);
 
         while(this->spriteFetcher.hasPixel()){
@@ -86,6 +85,7 @@ void ProcessorGraphic::hBlank(){
 }
 
 void ProcessorGraphic::vBlank(){
+    this->ram->requestInterupt(0); //set interruption vblank
     if(this->ticks == 1){
         this->ram->requestInterupt(0); //set interruption vblank
     }

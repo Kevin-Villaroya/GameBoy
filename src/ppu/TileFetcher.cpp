@@ -4,45 +4,43 @@
 #include <iostream>
 
 void TileFetcher::tick(){
-    this->pixel++;
-
     this->ticks++;
     if(this->ticks == 2){
         this->ticks = 0;
 
         switch (this->currentState){
             case PixelFetcherState::ReadTileId:
-                if(this->hasToRenderTiles){
-                    this->readTileId();
-                }
+                this->readTileId();
                 break;
         
             case PixelFetcherState::ReadTileData0:
-                if(this->hasToRenderTiles){
-                    this->readTileData0();
-                }
+                this->readTileData0();
                 break;
 
             case PixelFetcherState::ReadTileData1:
-                if(this->hasToRenderTiles){
-                    this->readTileData1();
-                }
+                this->readTileData1();
                 break;
 
             case PixelFetcherState::PushToFIFO:
-                this->pushToFIFO();
+                if(this->hasToRenderTiles){
+                    this->pushToFIFO();
+                }else{
+                    this->setFifoOfBlanks();
+                }
                 break;
 
             default:
                 break;
         }
     }
+    
+    this->pixel++;
 }
 
 void TileFetcher::start(Memory* ram){
     this->ram = ram;
     this->pixel = 0;
-    this->ticks = 0;
+    this->ticks = 1;
     this->tileData = 0;
     this->backgroundMemory = 0;
     this->unsignedValue = true;
@@ -52,7 +50,7 @@ void TileFetcher::start(Memory* ram){
 
     this->scrollX = this->ram->get(Memory::SCX);
     this->scrollY = this->ram->get(Memory::SCY);
-    this->windowX = this->ram->get(Memory::WX);
+    this->windowX = this->ram->get(Memory::WX) - 7;
     this->windowY = this->ram->get(Memory::WY);
 
     if(testBit(this->ram->get(Memory::LCDC), 5)){
@@ -74,6 +72,12 @@ void TileFetcher::start(Memory* ram){
         }else{
             this->backgroundMemory = 0x9800;
         }
+    }else{
+        if(testBit(this->ram->get(Memory::LCDC), 6)){
+            backgroundMemory = 0x9C00;
+        }else{
+            backgroundMemory = 0x9800;
+        }
     }
 
     if(!usingWindow){
@@ -85,10 +89,6 @@ void TileFetcher::start(Memory* ram){
     this->tileRow = ((unsigned char)(this->yPos / 8)) * 32;
 
     this->currentState = PixelFetcherState::ReadTileId;
-
-    this->line = yPos % 8;
-    this->line *= 2;
-
     
     while(this->fifo.size() > 0){
         this->fifo.pop();
@@ -96,6 +96,8 @@ void TileFetcher::start(Memory* ram){
 }
 
 void TileFetcher::readTileId(){
+    this->line = yPos % 8;
+    this->line *= 2;
     unsigned short xPos = this->pixel + this->scrollX;
 
     if(this->usingWindow){
@@ -170,4 +172,10 @@ unsigned char TileFetcher::popPixel(){
     this->fifo.pop();
 
     return value;
+}
+
+void TileFetcher::setFifoOfBlanks(){
+    while(this->fifo.size() < 8){
+        this->fifo.push(0);
+    }
 }

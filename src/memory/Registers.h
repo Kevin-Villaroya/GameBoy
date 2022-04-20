@@ -44,6 +44,7 @@ private:
 
     //Interrupt Master Enable Flag
     bool IME;
+    bool halt;
 
 public:
     static std::string getRegisterName(RegisterName registerName);
@@ -101,6 +102,10 @@ public:
 
     void setSP(unsigned short);
     void setPC(unsigned short);
+
+    void setHalt();
+    void resetHalt();
+    bool isHalt();
 
     void enableIME();
     void disableIME();

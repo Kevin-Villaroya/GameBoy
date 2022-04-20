@@ -20,3 +20,7 @@ unsigned char returnResetBit(unsigned char bit, int index){
 bool testBit(unsigned char bit, int index){
     return (bit & (1 << index)) != 0;
 }
+
+unsigned char bitGetVal(unsigned char bit, int index){
+    return testBit(bit, index)? 1 : 0;
+}

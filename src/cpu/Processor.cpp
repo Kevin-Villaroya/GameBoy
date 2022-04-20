@@ -197,8 +197,13 @@ void Processor::dumpRam(){
 		
 		std::cout <<"| " << charToHex(this->memory->get(i)) << " |";
 	}
-
 	std::cout << std::endl;
+
+	std::cout << "==============ATTRIBUTES================" << std::endl;	
+	std::cout <<"LY " << charToHex(this->memory->get(Memory::LY)) << std::endl;
+	std::cout <<"LE " << charToHex(this->memory->get(Memory::IF)) << std::endl;
+	std::cout <<"LF " << charToHex(this->memory->get(Memory::IE)) << std::endl;
+
 }
 
 Instruction* Processor::getInstruction(){

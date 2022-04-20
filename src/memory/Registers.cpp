@@ -346,6 +346,18 @@ void Registers::setPC(unsigned short pc){
     this->pc = pc;
 }
 
+void Registers::setHalt(){
+    this->halt = true;
+}
+
+void Registers::resetHalt(){
+    this->halt = false;
+}
+
+bool Registers::isHalt(){
+    return this->halt;
+}
+
 void Registers::enableIME(){
     this->IME = true;
 }

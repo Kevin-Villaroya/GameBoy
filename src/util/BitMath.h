@@ -6,5 +6,6 @@ unsigned char returnSetBit(unsigned char bit, int index);
 void resetBit(unsigned char& bit, int index);
 unsigned char returnResetBit(unsigned char bit, int index);
 bool testBit(unsigned char bit, int index);
+unsigned char bitGetVal(unsigned char bit, int index);
 
 #endif

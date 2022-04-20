@@ -7,8 +7,6 @@ class SubImmediateToA : public Instruction{
         unsigned char parameter;
 
     public:
-        SubImmediateToA();
-
         void execute(Memory& ram, Registers& registers) override;
         unsigned int getSize() override;
         unsigned int getTiming() override;

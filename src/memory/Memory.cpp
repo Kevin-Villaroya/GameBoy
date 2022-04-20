@@ -75,7 +75,7 @@ void Memory::writeMemory(unsigned short pos, unsigned char value){
     }
     else{
         this->set(pos, value);
-    }    
+    }
 }
 
 unsigned char Memory::operator[](unsigned short pos)const {
@@ -136,10 +136,8 @@ void Memory::updateTimers(int cycles){
 void Memory::requestInterupt(unsigned char bit){
     unsigned char value = this->get(Memory::IF);
     setBit(value, bit);
+    
     this->set(Memory::IF, value);
-    if(bit != 0){
-        std::cout << "request with the bit " << (int)bit << std::endl;
-    }
 }
 
 void Memory::setBootMemory(){

@@ -5,6 +5,7 @@
 #include "../display/Window.h"
 #include "../display/Terminal.h"
 #include "../util/BitMath.h"
+#include "../util/DecToHex.h"
 
 Gameboy::Gameboy(char* path) : memory(path), cpu(Processor(&memory, &registers)), view(new Window()), ppu(ProcessorGraphic(view, &cpu.getMemory())){
 	this->isRunning = true;
@@ -24,7 +25,7 @@ Gameboy::Gameboy(char* path) : memory(path), cpu(Processor(&memory, &registers))
 	this->cpu.printMetadata();
 
 	//this->opCodeBreak.push_back(0x10);
-	this->pcValueBreak.push_back(0x03FF);
+	this->pcValueBreak.push_back(0x0358);
 	//this->pcValueBreak.push_back(0x29BA);
 }
 
@@ -38,13 +39,15 @@ bool Gameboy::run(){
 
 		if(canTick){
 			try{
-				bool instructionExecuted = this->cpu.tick();
-
-				this->updateTimers(instructionExecuted);
-				this->debug(instructionExecuted);
-				this->ppu.tick();
 				this->doInterrupts();
 
+				if(!this->registers.isHalt()){
+					bool instructionExecuted = this->cpu.tick();
+					this->updateTimers(instructionExecuted);
+					this->debug(instructionExecuted);
+				}
+
+				this->ppu.tick();
 			}catch(UnknownInstructionException &error){
 				std::cerr << error.what() << std::endl;
 				return 1;
@@ -65,6 +68,11 @@ void Gameboy::doInterrupts(){
 		unsigned char requests = this->memory.get(Memory::IF);
 		unsigned char enabled = this->memory.get(Memory::IE);
 
+		if(testBit(requests, 0)){
+			//std::cout << charToHex(enabled) << std::endl;
+			//std::cout << shortToHex(this->registers.getPC()) << std::endl;
+		}
+
 		if(requests > 0){
 			for(int i = 0; i < 5; i++){
 				if(testBit(requests,i)){
@@ -78,9 +86,11 @@ void Gameboy::doInterrupts(){
 }
 
 void Gameboy::serviceInterrupt(int interruption){
+	this->registers.resetHalt();
 	this->registers.disableIME();
 
 	unsigned char requests = this->memory.get(Memory::IF);
+
 	resetBit(requests, interruption);
 	this->memory.set(Memory::IF, requests);
 
@@ -92,6 +102,8 @@ void Gameboy::serviceInterrupt(int interruption){
 	this->memory.writeMemory(sp - 2, pc);
 	
 	registers.setSP(sp-2);
+
+	//std::cout << "doing interrupt " << interruption << std::endl;
 
 	//call a interrupt-service routine
 	switch (interruption){
@@ -135,7 +147,9 @@ void Gameboy::treatEvent(uint32_t currentTime){
 				this->canTick = true;
 				break;
 			case Event::DUMP_RAM:
-				this->cpu.dumpRam();
+				if(this->isDebugMode){
+					this->cpu.dumpRam();
+				}
 				break;
 			case Event::CONTINUE:
 				this->canContinue = !this->canContinue;
@@ -190,7 +204,6 @@ void Gameboy::debug(bool isInstructionExecuted){
 				this->cpu.dumpRegister();
 				this->canSkip = false;
 			}
-			this->cpu.dumpRegister();
 		}
 
 		this->canTick = this->canSkip || this->waitingBreakingOpCode || this->canContinue;

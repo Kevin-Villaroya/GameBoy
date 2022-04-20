@@ -39,6 +39,8 @@ private:
 
     unsigned char pixelData[8];
 
+    void setFifoOfBlanks();
+
     void readTileId();
     void readTileData0();
     void readTileData1();
