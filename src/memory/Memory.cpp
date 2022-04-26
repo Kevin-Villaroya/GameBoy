@@ -5,7 +5,7 @@
 #include "../util/DecToHex.h"
 
 Memory::Memory(char* path){
-    this->timerCounter = 1024;
+    this->timerCounter = 256;
     this->dividerCounter = 0;
 
     this->resetMemory();
@@ -114,7 +114,8 @@ bool Memory::hasReadBootRom() const{
     return this->memory[0xFF50] == 0;
 }
 
-void Memory::updateTimers(int cycles){
+void Memory::updateTimers(){
+    int cycles = 1;
     this->doDividerRegister(cycles);
 
     if(this->isClockEnabled()){
@@ -124,7 +125,7 @@ void Memory::updateTimers(int cycles){
             this->setClockFrequency();
 
             if(this->get(Memory::TIMA) == 255){
-                this->writeMemory(Memory::TIMA, 0);
+                this->writeMemory(Memory::TIMA, this->get(Memory::TMA));
                 this->requestInterupt(2);
             }else{
                 this->writeMemory(Memory::TIMA, this->get(Memory::TIMA) + 1);
@@ -193,7 +194,7 @@ void Memory::setMemory(){
 }
 
 bool Memory::isClockEnabled(){
-    return (this->get(Memory::TMC) & 0b00000100) != 0;
+    return testBit(this->get(Memory::TMC), 2);
 }
 
 unsigned char Memory::getClockFrequency(){

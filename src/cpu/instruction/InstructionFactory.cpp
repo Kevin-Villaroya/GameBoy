@@ -132,6 +132,7 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             break;
         case 0x3c:
             instruction =  new IncrementRegister(RegisterName::A);
+            break;
      	case 0x34:
             instruction =  new IncrementHL();
             break;
@@ -1416,6 +1417,9 @@ Instruction* InstructionFactory::forCodeCb(unsigned char byteInstr){
             break;
         case 0x3D:
             instruction = new ShiftRightRegisterResetMSB(RegisterName::L);
+            break;
+        case 0x3F:
+            instruction = new ShiftRightRegisterResetMSB(RegisterName::A);
             break;
         case 0x3E:
             instruction = new ShiftRightHLResetMSB();

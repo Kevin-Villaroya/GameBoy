@@ -66,7 +66,7 @@ class Memory{
         unsigned char* getBootRom();
         bool hasReadBootRom() const;
 
-        void updateTimers(int cycles);
+        void updateTimers();
         void requestInterupt(unsigned char bit);
 
         void setJoypad(unsigned char value);

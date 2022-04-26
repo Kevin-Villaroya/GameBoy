@@ -1,4 +1,5 @@
 #include "IncrementRegister.h"
+#include <iostream>
 
 IncrementRegister::IncrementRegister(RegisterName registerName) : registerName(registerName){}
 

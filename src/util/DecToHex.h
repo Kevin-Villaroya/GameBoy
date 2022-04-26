@@ -5,5 +5,6 @@
 
 std::string shortToHex(unsigned short value);
 std::string charToHex(unsigned char value);
+std::string longToHex(long int value);
 
 #endif

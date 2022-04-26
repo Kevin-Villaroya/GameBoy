@@ -1,5 +1,6 @@
 #include "LoadAToImmediateAddress.h"
 #include "../../util/DecToHex.h"
+#include <iostream>
 
 void LoadAToImmediateAddress::execute(Memory& ram, Registers& registers) {
 	unsigned short absoluteAddress = 0xFF00 + this->address;

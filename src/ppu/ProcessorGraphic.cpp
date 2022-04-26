@@ -85,7 +85,6 @@ void ProcessorGraphic::hBlank(){
 }
 
 void ProcessorGraphic::vBlank(){
-    this->ram->requestInterupt(0); //set interruption vblank
     if(this->ticks == 1){
         this->ram->requestInterupt(0); //set interruption vblank
     }
@@ -113,6 +112,7 @@ void ProcessorGraphic::setLCDStatus(){
         this->ram->writeMemory(Memory::LY, 0);
         status &= 0b11111100;
         setBit(status, 0);
+
         this->ram->writeMemory(Memory::LCD, status);
     }else{
 
@@ -127,6 +127,8 @@ void ProcessorGraphic::setLCDStatus(){
             mode = 1;
             setBit(status, 0);
             resetBit(status, 1);
+            this->ram->writeMemory(Memory::LCD, status);
+
             reqInt = testBit(status, 4);
         }else{
 

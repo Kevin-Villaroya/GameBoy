@@ -18,7 +18,7 @@ Instruction* Processor::fetch(){
     return currentInstr;
 }
 
-Instruction* Processor::decodeAndLoad(){
+Instruction* Processor::decodeAndLoad(){	
     Instruction* instr = InstructionFactory::forCode(*this->memory, this->registers->getPC());
     instr->setParameters(*this->memory, this->registers->getPC() + 1);
 
@@ -201,8 +201,11 @@ void Processor::dumpRam(){
 
 	std::cout << "==============ATTRIBUTES================" << std::endl;	
 	std::cout <<"LY " << charToHex(this->memory->get(Memory::LY)) << std::endl;
-	std::cout <<"LE " << charToHex(this->memory->get(Memory::IF)) << std::endl;
-	std::cout <<"LF " << charToHex(this->memory->get(Memory::IE)) << std::endl;
+	std::cout <<"IE " << charToHex(this->memory->get(Memory::IE)) << std::endl;
+	std::cout <<"IF " << charToHex(this->memory->get(Memory::IF)) << std::endl;
+	std::cout <<"DIVIDER " << charToHex(this->memory->get(Memory::DIVIDER)) << std::endl;
+
+	std::cout << std::endl;
 
 }
 

@@ -31,7 +31,7 @@ private:
 	std::vector<unsigned short> opCodeBreak;
 	std::vector<unsigned short> pcValueBreak;
 
-	void updateTimers(bool instructionExecuted);
+	void updateTimers();
 	void debug(bool isInstructionExecuted);
 	void doInterrupts();
 	void serviceInterrupt(int interruption);
