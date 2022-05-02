@@ -17,13 +17,7 @@ void RrCarryA::execute(Memory& ram, Registers& registers){
 		registers.setFlagC(false);
 	}
 	
-	if(aValue == 0) {
-		registers.setFlagZ(true);
-	}
-	else {
-		registers.setFlagZ(false);
-	}
-	
+	registers.setFlagZ(false);	
     registers.setFlagH(0);
     registers.setFlagN(0);
     
@@ -38,7 +32,7 @@ unsigned int RrCarryA::getTiming(){
     return 4;
 }
 
-void RrCarryA::setParameters(const Memory&, unsigned short v){
+void RrCarryA::setParameters(Memory&, unsigned short v){
 }
 
 std::string RrCarryA::toString(){

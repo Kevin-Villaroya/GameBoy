@@ -48,7 +48,7 @@ unsigned int DaaToA::getTiming(){
     return 4;
 }
 
-void DaaToA::setParameters(const Memory&, unsigned short v){
+void DaaToA::setParameters(Memory&, unsigned short v){
 }
 
 std::string DaaToA::toString(){

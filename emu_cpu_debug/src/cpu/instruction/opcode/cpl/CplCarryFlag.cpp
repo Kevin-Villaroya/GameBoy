@@ -16,7 +16,7 @@ unsigned int CplCarryFlag::getTiming(){
     return 4;
 }
 
-void CplCarryFlag::setParameters(const Memory&, unsigned short v){
+void CplCarryFlag::setParameters(Memory&, unsigned short v){
 }
 
 std::string CplCarryFlag::toString(){

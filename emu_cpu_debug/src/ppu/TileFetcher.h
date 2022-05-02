@@ -8,49 +8,47 @@ enum class PixelFetcherState{
     ReadTileId,
     ReadTileData0,
     ReadTileData1,
+    Idle,
     PushToFIFO
 };
 
 class TileFetcher{
 private:
-    std::queue<unsigned char> fifo;
+    std::queue<unsigned int> fifo;
     PixelFetcherState currentState;
 
     Memory* ram;
 
-    bool hasToRenderTiles;
-
-    unsigned char ticks;
-
-    unsigned char pixel;
-    unsigned char yPos;
-    unsigned short tileData;
-    unsigned short tileLocation;
-    unsigned short tileRow;
-    unsigned char line;
-    unsigned short backgroundMemory;
-    bool unsignedValue;
-    bool usingWindow;
-
-    unsigned char scrollX;
-    unsigned char scrollY;
-    unsigned char windowX;
-    unsigned char windowY;
-
-    unsigned char pixelData[8];
-
-    void setFifoOfBlanks();
+    unsigned char pixelPushed;
+    unsigned char xLine;
+    unsigned char xFetch;
+    unsigned char bgwData[3];
+    unsigned char fetchOamData[6];
+    unsigned char yMap;
+    unsigned char xMap;
+    unsigned char yTile;
+    unsigned char xFifo;
+    
 
     void readTileId();
     void readTileData0();
     void readTileData1();
     void pushToFIFO();
+    void pushPixel(unsigned int* videoBuffer);
+    
 public:
+    TileFetcher();
     void tick();
-    void start(Memory* ram);
-
+    void start(Memory* ram, unsigned int ppuLineTicks, unsigned int* videoBuffer);
+    
     bool hasPixel();
     unsigned char popPixel();
+
+    void reset();
+    void clearFifo();
+
+    int getPixelPushed();
+
 };
 
 #endif

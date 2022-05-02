@@ -36,7 +36,7 @@ unsigned int AddHLToA::getTiming(){
     return 8;
 }
 
-void AddHLToA::setParameters(const Memory&, unsigned short v){
+void AddHLToA::setParameters(Memory&, unsigned short v){
 }
 
 std::string AddHLToA::toString(){

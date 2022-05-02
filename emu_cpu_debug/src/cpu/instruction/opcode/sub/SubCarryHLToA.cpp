@@ -36,7 +36,7 @@ unsigned int SubCarryHLToA::getTiming(){
     return 8;
 }
 
-void SubCarryHLToA::setParameters(const Memory&, unsigned short v){
+void SubCarryHLToA::setParameters(Memory&, unsigned short v){
 }
 
 std::string SubCarryHLToA::toString(){

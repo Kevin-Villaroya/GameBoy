@@ -14,7 +14,7 @@ unsigned int LoadHlToSp::getTiming(){
     return 4;
 }
 
-void LoadHlToSp::setParameters(const Memory&, unsigned short){
+void LoadHlToSp::setParameters(Memory&, unsigned short){
 
 }
 

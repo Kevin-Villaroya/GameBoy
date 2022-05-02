@@ -16,7 +16,7 @@ unsigned int DI::getTiming(){
     return 4;
 }
 
-void DI::setParameters(const Memory&, unsigned short){
+void DI::setParameters(Memory&, unsigned short){
 
 }
 

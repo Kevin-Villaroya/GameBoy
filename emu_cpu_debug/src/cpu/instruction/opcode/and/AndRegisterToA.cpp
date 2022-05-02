@@ -25,7 +25,7 @@ unsigned int AndRegisterToA::getTiming(){
     return 4;
 }
 
-void AndRegisterToA::setParameters(const Memory&, unsigned short){
+void AndRegisterToA::setParameters(Memory&, unsigned short){
 }
 
 std::string AndRegisterToA::toString(){

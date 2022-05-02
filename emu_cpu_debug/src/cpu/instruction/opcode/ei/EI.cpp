@@ -16,7 +16,7 @@ unsigned int EI::getTiming(){
     return 4;
 }
 
-void EI::setParameters(const Memory&, unsigned short){
+void EI::setParameters(Memory&, unsigned short){
 
 }
 

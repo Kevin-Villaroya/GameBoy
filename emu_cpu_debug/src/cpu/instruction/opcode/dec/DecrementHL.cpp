@@ -8,7 +8,7 @@ void DecrementHL::execute(Memory& ram, Registers& registers){
 
     ram.writeMemory(valueAddress, value);
 
-    if(oldValue>>4 != value>>3){
+    if(oldValue>>4 != value>>4){
         registers.setFlagH(1);
     }else{
         registers.setFlagH(0);
@@ -32,7 +32,7 @@ unsigned int DecrementHL::getTiming(){
     return 12;
 }
 
-void DecrementHL::setParameters(const Memory&, unsigned short){
+void DecrementHL::setParameters(Memory&, unsigned short){
 
 }
 

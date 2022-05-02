@@ -26,7 +26,7 @@ unsigned int RrHL::getTiming(){
     return 16;
 }
 
-void RrHL::setParameters(const Memory&, unsigned short v){
+void RrHL::setParameters(Memory&, unsigned short v){
 }
 
 std::string RrHL::toString(){

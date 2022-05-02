@@ -30,7 +30,7 @@ unsigned int LoadHlImmediateSp::getTiming(){
     return 8;
 }
 
-void LoadHlImmediateSp::setParameters(const Memory& memory, unsigned short val){
+void LoadHlImmediateSp::setParameters(Memory& memory, unsigned short val){
     this->value = (char)memory.get(val);
 }
 

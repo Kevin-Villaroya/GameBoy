@@ -26,7 +26,7 @@ unsigned int OrRegisterToA::getTiming(){
     return 4;
 }
 
-void OrRegisterToA::setParameters(const Memory&, unsigned short){
+void OrRegisterToA::setParameters(Memory&, unsigned short){
 }
 
 std::string OrRegisterToA::toString(){

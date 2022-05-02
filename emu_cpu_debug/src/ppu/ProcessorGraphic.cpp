@@ -1,15 +1,42 @@
 #include "ProcessorGraphic.h"
 #include "../util/BitMath.h"
+#include "../cpu/Processor.h"
 #include <iostream>
+#include <unistd.h>
+#define LCDS 0xFF41
 
 ProcessorGraphic::ProcessorGraphic(Display* screen, Memory* ram) : screen(screen), ram(ram){
-    this->x = 0;
+    this->currentFrame = 0;
     this->ticks = 0;
-    this->currentState = ProcessorGraphicState::OAMSearch;
+    this->setCurrentState(ProcessorGraphicState::OAMSearch);
+    
+    
+    for(int i=0 ; i<SIZE_SCREEN_X*SIZE_SCREEN_Y*4 ; i++){
+            this->videoBuffer[i] = 0;
+    }
+
+}
+
+void ProcessorGraphic::setCurrentState(ProcessorGraphicState state){
+    unsigned char lcdsVal = this->ram->get(LCDS) & 0b11111100;
+    this->currentState = state;
+    switch(state){
+        case(ProcessorGraphicState::OAMSearch):
+            this->ram->set(LCDS, lcdsVal|0b10);
+            break;
+        case(ProcessorGraphicState::PixelTransfer):
+            this->ram->set(LCDS, lcdsVal|0b11);
+            break;
+        case(ProcessorGraphicState::HBlank):
+            this->ram->set(LCDS, lcdsVal|0b00);
+            break;
+        case(ProcessorGraphicState::VBlank):
+            this->ram->set(LCDS, lcdsVal|0b01);
+            break;
+    }
 }
 
 void ProcessorGraphic::tick(){
-    this->setLCDStatus();
 
     this->ticks++;
 
@@ -36,16 +63,31 @@ void ProcessorGraphic::tick(){
 }
 
 void ProcessorGraphic::oamSearch(){
-    if(this->ticks == 40){
-        this->x = 0;
+    //printf("oamSearch\n");
+    if(this->ticks >= 80){
+        this->setCurrentState(ProcessorGraphicState::PixelTransfer);
 
-        this->tileFetcher.start(this->ram);
-        this->spriteFetcher.start(this->ram);
-        this->currentState = ProcessorGraphicState::PixelTransfer;
+        this->tileFetcher.reset();
     }
 }
 
 void ProcessorGraphic::pixelTransfer(){
+    //printf("pixelTransfer\n");
+
+    this->tileFetcher.start(this->ram,this->ticks, this->videoBuffer);
+
+    if(this->tileFetcher.getPixelPushed() >= SIZE_SCREEN_X){
+        this->tileFetcher.clearFifo();
+        this->setCurrentState(ProcessorGraphicState::HBlank);
+
+        if(this->ram->get(Memory::LCD) & (1 << 3)){
+                unsigned char interruptFlags = this->ram->get(Memory::IF);
+                this->ram->set(Memory::IF, interruptFlags|IT_LCD_STAT);
+        }
+    }
+
+
+    /*
     this->tileFetcher.tick();
 
     while(this->tileFetcher.hasPixel()){
@@ -68,9 +110,38 @@ void ProcessorGraphic::pixelTransfer(){
         this->screen->HBlank();
         this->currentState = ProcessorGraphicState::HBlank;
     }
+    */
 }
 
 void ProcessorGraphic::hBlank(){
+    //printf("hBlank\n");
+    if(this->ticks >= MAX_LINE_TICKS){
+        this->incrementLy();
+        unsigned char ly = this->ram->get(Memory::LY);
+
+        if(ly >= SIZE_SCREEN_Y){
+            this->setCurrentState(ProcessorGraphicState::VBlank);
+            unsigned char interruptFlags = this->ram->get(Memory::IF);
+            this->ram->set(Memory::IF, interruptFlags|IT_VBLANK);
+
+            if(this->ram->get(Memory::LCD) & (1 << 4)){
+                unsigned char interruptFlags = this->ram->get(Memory::IF);
+                this->ram->set(Memory::IF, interruptFlags|IT_LCD_STAT);
+            }
+
+            this->currentFrame++;
+
+            //if(currentFrame == 9) sleep(100);
+
+        }
+        else{
+            this->setCurrentState(ProcessorGraphicState::OAMSearch);
+        }
+        this->ticks = 0;
+
+    }
+
+    /*
      if(this->ticks == 456){
         this->ticks = 0;
         this->ram->set(Memory::LY, this->ram->get(Memory::LY) + 1);
@@ -82,9 +153,46 @@ void ProcessorGraphic::hBlank(){
             this->currentState = ProcessorGraphicState::OAMSearch;
         }
     }
+    */
 }
 
+void ProcessorGraphic::incrementLy(){
+    unsigned char lcds = this->ram->get(Memory::LCD);
+    unsigned char ly = this->ram->get(Memory::LY);
+    unsigned char lyc = this->ram->get(Memory::LYC);
+    
+    ly++;
+    this->ram->set(Memory::LY, ly);
+    
+    if(ly == lyc){
+        lcds |= 0b100;
+        this->ram->set(Memory::LCD, lcds);
+        if(lcds & (1 << 6)){
+            unsigned char interruptFlags = this->ram->get(Memory::IF);
+            this->ram->set(Memory::IF, interruptFlags|IT_LCD_STAT);
+        }
+    }
+    else{
+        lcds &= 0b11111011;
+        this->ram->set(Memory::LCD, lcds);
+    }
+}
+
+
 void ProcessorGraphic::vBlank(){
+    //printf("vblank\n");
+    if(this->ticks >= MAX_LINE_TICKS){
+        this->incrementLy();
+        
+        if(this->ram->get(Memory::LY) >= MAX_FRAME_LINE){
+            this->setCurrentState(ProcessorGraphicState::OAMSearch);
+            this->ram->set(Memory::LY, 0);
+        }
+        this->ticks = 0;
+
+    }
+
+    /*
     this->ram->requestInterupt(0); //set interruption vblank
     if(this->ticks == 1){
         this->ram->requestInterupt(0); //set interruption vblank
@@ -99,82 +207,17 @@ void ProcessorGraphic::vBlank(){
             this->currentState = ProcessorGraphicState::OAMSearch;
         }
     }
+    */
 }
 
-void ProcessorGraphic::setLCDStatus(){
-    unsigned char status = this->ram->get(Memory::LCD);
-    int nextScanLineCounter = 456 - this->x; //quantity pixels left in scanline
-
-    if (this->isLCDEnabled() == false){
-        // set the mode to 1 during lcd disabled and reset scanline
-        this->x = 0;
-        this->ticks = 0;
-        this->currentState = ProcessorGraphicState::OAMSearch;
-        this->ram->writeMemory(Memory::LY, 0);
-        status &= 0b11111100;
-        setBit(status, 0);
-        this->ram->writeMemory(Memory::LCD, status);
-    }else{
-
-        unsigned char currentline = this->ram->get(Memory::LY);
-        unsigned char currentmode = status & 0x3;
-
-        unsigned char mode = 0;
-        bool reqInt = false;
-
-        // in vblank so set mode to 1
-        if (currentline >= 144){      
-            mode = 1;
-            setBit(status, 0);
-            resetBit(status, 1);
-            reqInt = testBit(status, 4);
-        }else{
-
-            int mode2bounds = 456 - 80;
-            int mode3bounds = mode2bounds - 172;
-
-            // mode 2
-            if (nextScanLineCounter >= mode2bounds){
-                mode = 2;
-                setBit(status, 1);
-                resetBit(status, 0);
-                reqInt = testBit(status, 5);
-            }
-            // mode 3
-            else if(nextScanLineCounter >= mode3bounds){
-                mode = 3 ;
-                setBit(status, 1);
-                setBit(status, 0);
-            }
-            // mode 0
-            else{
-                mode = 0;
-                resetBit(status,1) ;
-                resetBit(status,0) ;
-                reqInt = testBit(status,3) ;
-            }
-        }
-
-        // just entered a new mode so request interupt
-        if (reqInt && (mode != currentmode)){
-            this->ram->requestInterupt(1);
-        }
-        // check the conincidence flag
-        if (currentline == this->ram->get(Memory::LYC)){
-            setBit(status, 2) ;
-            if (testBit(status, 6)){
-                this->ram->requestInterupt(1) ;
-            }
-        }else{
-            resetBit(status, 2);
-        }
-
-        this->ram->writeMemory(Memory::LCD, status);
-    }
+unsigned int* ProcessorGraphic::getVideoBuffer(){
+    return this->videoBuffer;
 }
 
-bool ProcessorGraphic::isLCDEnabled(){
-    return testBit(this->ram->get(Memory::LCDC), 7);
+
+unsigned int ProcessorGraphic::getCurrentFrame(){
+    return this->currentFrame;
 }
+
 
 ProcessorGraphic::~ProcessorGraphic(){}

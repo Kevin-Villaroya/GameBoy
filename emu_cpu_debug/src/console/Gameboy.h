@@ -5,6 +5,7 @@
 #include "../cpu/Processor.h"
 #include "../ppu/ProcessorGraphic.h"
 #include "../display/event/Event.h"
+#include "../ppu/OamDma.h"
 
 class Gameboy{
 private:
@@ -23,7 +24,7 @@ private:
 	uint32_t lastTimeFetch;
 
 	//context
-	bool isRunning;
+	bool running;
 	bool paused;
 	bool die;
 	uint64_t ticks;
@@ -45,6 +46,9 @@ private:
 	bool needBreak();
 
 	void gameboyKey(int key);
+	void launchCpuThread();
+
+	OamDma oamDma;
 	
 public:
 	Gameboy(char* path);
@@ -56,6 +60,10 @@ public:
 	void debugMode();
 
 	void printTest();
+	bool isRunning();
+	bool isPaused();
+	int getTicks();
+	Gameboy* getContext();
 
 	~Gameboy();
 };

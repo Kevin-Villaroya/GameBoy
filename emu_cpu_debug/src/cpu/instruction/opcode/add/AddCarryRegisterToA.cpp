@@ -35,7 +35,7 @@ unsigned int AddCarryRegisterToA::getTiming(){
     return 4;
 }
 
-void AddCarryRegisterToA::setParameters(const Memory&, unsigned short){
+void AddCarryRegisterToA::setParameters(Memory&, unsigned short){
 
 }
 

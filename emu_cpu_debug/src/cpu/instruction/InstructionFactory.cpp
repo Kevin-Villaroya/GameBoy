@@ -104,7 +104,7 @@
 #include "opcode/load/LoadHlImmediateSp.h"
 
 
-Instruction* InstructionFactory::forCode(void* context, const Memory& memory,unsigned short pc){
+Instruction* InstructionFactory::forCode(void* context, Memory& memory,unsigned short pc){
 	unsigned char byteInstr = memory[pc];
     Instruction* instruction;
 

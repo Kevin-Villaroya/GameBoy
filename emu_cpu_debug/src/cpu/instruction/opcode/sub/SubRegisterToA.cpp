@@ -34,7 +34,7 @@ unsigned int SubRegisterToA::getTiming(){
     return 4;
 }
 
-void SubRegisterToA::setParameters(const Memory&, unsigned short){
+void SubRegisterToA::setParameters(Memory&, unsigned short){
 
 }
 

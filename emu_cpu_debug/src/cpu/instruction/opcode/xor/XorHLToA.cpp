@@ -27,7 +27,7 @@ unsigned int XorHLToA::getTiming(){
     return 8;
 }
 
-void XorHLToA::setParameters(const Memory&, unsigned short){
+void XorHLToA::setParameters(Memory&, unsigned short){
 }
 
 std::string XorHLToA::toString(){

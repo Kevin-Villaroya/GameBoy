@@ -3,34 +3,34 @@
 
 #include <functional>
 
-typedef std::function<bool(const Memory&, const Registers&)> Condition;
+typedef std::function<bool(Memory&, const Registers&)> Condition;
 
 class InstructionCondition {
 	public:
-		static bool NZ(const Memory& ram, const Registers& registers) {
+		static bool NZ(Memory& ram, const Registers& registers) {
 			return !registers.isFlagZ();
 		}
 							   
-	   static bool Z(const Memory& ram, const Registers& registers) {
+	   static bool Z(Memory& ram, const Registers& registers) {
 			return registers.isFlagZ();
 		}
 							   
-	   static bool NC(const Memory& ram, const Registers& registers) {
+	   static bool NC(Memory& ram, const Registers& registers) {
 			return !registers.isFlagC();
 		}
 							   
-	   static bool C(const Memory& ram, const Registers& registers) {
+	   static bool C(Memory& ram, const Registers& registers) {
 			return registers.isFlagC();
 		}
 
 		static std::string getConditionName(Condition condition) {
-			if(*condition.target<bool(*)(const Memory&, const Registers&)>() == InstructionCondition::NZ){
+			if(*condition.target<bool(*)(Memory&, const Registers&)>() == InstructionCondition::NZ){
 				return "NZ";
-			}else if(*condition.target<bool(*)(const Memory&, const Registers&)>() == InstructionCondition::Z){
+			}else if(*condition.target<bool(*)(Memory&, const Registers&)>() == InstructionCondition::Z){
 				return "Z";
-			}else if(*condition.target<bool(*)(const Memory&, const Registers&)>() == InstructionCondition::NC){
+			}else if(*condition.target<bool(*)(Memory&, const Registers&)>() == InstructionCondition::NC){
 				return "NC";
-			}else if(*condition.target<bool(*)(const Memory&, const Registers&)>() == InstructionCondition::C){
+			}else if(*condition.target<bool(*)(Memory&, const Registers&)>() == InstructionCondition::C){
 				return "C";
 			}else{
 				return "";

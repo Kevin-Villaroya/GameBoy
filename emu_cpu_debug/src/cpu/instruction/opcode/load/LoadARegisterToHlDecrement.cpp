@@ -16,7 +16,7 @@ unsigned int LoadARegisterToHlDecrement::getTiming(){
     return 8;
 }
 
-void LoadARegisterToHlDecrement::setParameters(const Memory&, unsigned short){
+void LoadARegisterToHlDecrement::setParameters(Memory&, unsigned short){
 
 }
 

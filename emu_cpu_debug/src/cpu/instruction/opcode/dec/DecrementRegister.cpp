@@ -33,7 +33,7 @@ unsigned int DecrementRegister::getTiming(){
     return 4;
 }
 
-void DecrementRegister::setParameters(const Memory&, unsigned short){
+void DecrementRegister::setParameters(Memory&, unsigned short){
 
 }
 

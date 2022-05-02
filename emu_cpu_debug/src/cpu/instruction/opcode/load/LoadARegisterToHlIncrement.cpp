@@ -16,7 +16,7 @@ unsigned int LoadARegisterToHlIncrement::getTiming(){
     return 8;
 }
 
-void LoadARegisterToHlIncrement::setParameters(const Memory&, unsigned short){
+void LoadARegisterToHlIncrement::setParameters(Memory&, unsigned short){
 
 }
 

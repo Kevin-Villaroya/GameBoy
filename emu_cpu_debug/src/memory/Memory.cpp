@@ -36,12 +36,20 @@ Memory::Memory(char* path){
     romFile.close();
 }
 
-void Memory::init(){  
+void Memory::init(OamDma* o){ 
+    this->oamDma = o; 
     //this->setBootMemory();
     this->setMemory();
 }
 
-unsigned char Memory::get(unsigned short pos) const{
+
+unsigned char Memory::get(unsigned short pos){
+    if(pos >= 0xFE00 && pos < 0xFEA0){
+            if(this->oamDma->isActive()){
+                return 0xFF;
+            }
+    }
+
     return this->memory[pos];
     /*
     if(this->hasReadBootRom() && pos <= 256){
@@ -56,12 +64,35 @@ unsigned char Memory::get(unsigned short pos) const{
 
 void Memory::set(unsigned short pos, unsigned char value){
     if(pos > CARTRIGBE_SIZE){
-        this->memory[pos] = value;
 
         if(pos == DIVIDER){
             this->memory[DIVIDER] = 0;
             this->dividerClock = 0;
         }
+
+        if(pos == DMA){
+            this->oamDma->dmaStart();
+        }
+
+        if(pos == BGP){
+            //update apletta
+        }
+
+        if(pos == BGP + 1){
+            //update palatea
+        }
+
+        if(pos == BGP + 2){
+            //update palette
+        }
+
+        if(pos >= 0xFE00 && pos < 0xFEA0){
+            if(this->oamDma->isActive()){
+                return;
+            }
+        }
+
+        this->memory[pos] = value;
     }
 }
 
@@ -103,7 +134,7 @@ void Memory::writeMemory(unsigned short pos, unsigned char value){
     }
 }
 
-unsigned char Memory::operator[](unsigned short pos)const {
+unsigned char Memory::operator[](unsigned short pos) {
     return this->get(pos);
 }
 
@@ -117,7 +148,7 @@ void Memory::resetMemory(){
     }
 }
 
-unsigned short Memory::getDouble(unsigned short pos) const{
+unsigned short Memory::getDouble(unsigned short pos){
     unsigned short value;
     
     value = this->get(pos + 1);
@@ -135,7 +166,7 @@ unsigned char* Memory::getBootRom(){
     return this->bootRom;
 }
 
-bool Memory::hasReadBootRom() const{
+bool Memory::hasReadBootRom(){
     return this->memory[0xFF50] == 0;
 }
 
@@ -210,6 +241,7 @@ void Memory::setMemory(){
     this->memory[0xFF40] = 0x91; //LDC
     this->memory[0xFF42] = 0; //SCY
     this->memory[0xFF43] = 0; //SCX
+    this->memory[0xFF44] = 0; //LY
     this->memory[0xFF45] = 0; //LYC
     this->memory[0xFF47] = 0xFC; //BGP
     this->memory[0xFF48] = 0xFF; //OBP0
@@ -217,6 +249,12 @@ void Memory::setMemory(){
     this->memory[0xFF4A] = 0; //WY
     this->memory[0xFF4B] = 0; //WX
     this->memory[0xFFFF] = 0; //IE
+
+    for (int i=0 ; i<4 ; i++) {
+        this->bgpColors[i] = defaultColors[i];
+        this->sp1Colors[i] = defaultColors[i];
+        this->sp2Colors[i] = defaultColors[i];
+    }
 }
 
 bool Memory::isClockEnabled(){
@@ -257,7 +295,7 @@ void Memory::doDividerRegister(int cycles){ //every 256 cycles Divider value inc
     }
 }
 
-unsigned char Memory::getJoypadState() const{
+unsigned char Memory::getJoypadState(){
     unsigned char result = this->memory[0xFF00];
 
     //flip bits
@@ -331,3 +369,24 @@ std::string Memory::dump(){
     return res;
 }
 
+void Memory::updatePalette(unsigned char data, unsigned char palette){
+    uint32_t* palettePtr;
+    switch(palette){
+        case(0): palettePtr = this->bgpColors;
+            break;
+        case(1): palettePtr = this->sp1Colors;
+            break;
+        case(2): palettePtr = this->sp2Colors;
+            break;
+    }
+
+    palettePtr[0] = defaultColors[data & 0b11];
+    palettePtr[1] = defaultColors[(data >> 2) & 0b11];
+    palettePtr[2] = defaultColors[(data >> 4) & 0b11];
+    palettePtr[3] = defaultColors[(data >> 6) & 0b11];
+    
+}
+
+unsigned int Memory::getBgpColor(unsigned char i){
+    return this->bgpColors[i];
+}

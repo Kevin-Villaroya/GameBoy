@@ -12,7 +12,7 @@ class AddImmediateToA : public Instruction{
         void execute(Memory& ram, Registers& registers) override;
         unsigned int getSize() override;
         unsigned int getTiming() override;
-        void setParameters(const Memory& memory, unsigned short pc) override;
+        void setParameters(Memory& memory, unsigned short pc) override;
         std::string toString() override;
 };
 

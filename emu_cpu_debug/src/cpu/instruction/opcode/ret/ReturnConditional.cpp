@@ -28,7 +28,7 @@ unsigned int ReturnConditional::getTiming(){
  	return this->timing;
 }
 
-void ReturnConditional::setParameters(const Memory&, unsigned short){}
+void ReturnConditional::setParameters(Memory&, unsigned short){}
 
 std::string ReturnConditional::toString(){
     return "RET" + InstructionCondition::getConditionName(this->condition);

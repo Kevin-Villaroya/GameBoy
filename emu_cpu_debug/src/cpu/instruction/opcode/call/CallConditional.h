@@ -16,7 +16,7 @@ class CallConditional : public Instruction {
         void execute(Memory&, Registers&) override;
         unsigned int getSize() override;
         unsigned int getTiming() override;
-        void setParameters(const Memory&, unsigned short) override;
+        void setParameters(Memory&, unsigned short) override;
         std::string toString() override;
         
 };

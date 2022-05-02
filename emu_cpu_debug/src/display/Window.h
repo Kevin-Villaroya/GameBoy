@@ -4,6 +4,7 @@
 #include <SDL2/SDL.h>
 #include <vector>  
 #include "Display.h"
+#include "../memory/Memory.h"
 
 class Window : public Display{
     private:
@@ -14,6 +15,12 @@ class Window : public Display{
         SDL_Window* window;
         SDL_Renderer* renderer;
         SDL_Texture* texture;
+        SDL_Surface *screen;
+
+        SDL_Window* debugWindow;
+        SDL_Renderer* debugRenderer;
+        SDL_Texture* debugTexture;
+        SDL_Surface*  debugScreen;
 
         uint8_t* bufferTexture;
         unsigned int offset;
@@ -22,13 +29,18 @@ class Window : public Display{
         void setColorAt(unsigned int pos, uint8_t color);
 
         uint64_t time;
-    public:
-        Window();
 
+        Memory* memory;
+
+        void updateDebuger();
+        void debugerDisplay(SDL_Surface *surface, uint16_t startLocation, uint16_t tileNum, int x, int y);
+    public:
+        Window(Memory*);
+        void update(unsigned int* videoBuffer)override;
         void write(unsigned char color) override;
         void HBlank() override;
         void VBlank() override;
-        Event fetchEvent();
+        Event fetchEvent() override;
 
         ~Window();
 };

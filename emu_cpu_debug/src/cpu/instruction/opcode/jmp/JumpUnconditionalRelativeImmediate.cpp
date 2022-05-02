@@ -12,7 +12,7 @@ unsigned int JumpUnconditionalRelativeImmediate::getTiming(){
     return 12;
 }
 
-void JumpUnconditionalRelativeImmediate::setParameters(const Memory& rom, unsigned short parameterBegin){
+void JumpUnconditionalRelativeImmediate::setParameters(Memory& rom, unsigned short parameterBegin){
     this->parameter = rom[parameterBegin];
 }
 

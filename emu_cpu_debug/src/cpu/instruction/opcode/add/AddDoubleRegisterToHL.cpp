@@ -29,7 +29,7 @@ unsigned int AddDoubleRegisterToHL::getTiming(){
     return 8;
 }
 
-void AddDoubleRegisterToHL::setParameters(const Memory&, unsigned short v){
+void AddDoubleRegisterToHL::setParameters(Memory&, unsigned short v){
 }
 
 std::string AddDoubleRegisterToHL::toString(){

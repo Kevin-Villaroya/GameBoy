@@ -16,7 +16,7 @@ unsigned int Halt::getTiming(){
     return 4;
 }
 
-void Halt::setParameters(const Memory&, unsigned short){
+void Halt::setParameters(Memory&, unsigned short){
 
 }
 

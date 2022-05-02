@@ -22,7 +22,7 @@ unsigned int PopStackToDoubleRegister::getTiming(){
     return 12;
 }
 
-void PopStackToDoubleRegister::setParameters(const Memory&, unsigned short){
+void PopStackToDoubleRegister::setParameters(Memory&, unsigned short){
 }
 
 std::string PopStackToDoubleRegister::toString(){

@@ -19,7 +19,7 @@ unsigned int LoadAToImmediateAddress::getTiming() {
 	return 12;
 }
 
-void LoadAToImmediateAddress::setParameters(const Memory& memory, unsigned short pc) {
+void LoadAToImmediateAddress::setParameters(Memory& memory, unsigned short pc) {
 	this->address = memory[pc];
 }
 

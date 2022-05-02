@@ -7,7 +7,7 @@ void ShiftRightRegister::execute(Memory& ram, Registers& registers){
 	bool lastBit = aValue & 0b10000000;
 
 	registers.setFlagC(0b1 & aValue);
-	aValue = (aValue>>1) + lastBit ;
+	aValue = (aValue>>1) + (lastBit<<7) ;
     aValue == 0 ? registers.setFlagZ(1) : registers.setFlagZ(0);
     registers.setFlagH(0);
     registers.setFlagN(0);
@@ -22,7 +22,7 @@ unsigned int ShiftRightRegister::getTiming(){
     return 8;
 }
 
-void ShiftRightRegister::setParameters(const Memory&, unsigned short v){
+void ShiftRightRegister::setParameters(Memory&, unsigned short v){
 }
 
 std::string ShiftRightRegister::toString(){

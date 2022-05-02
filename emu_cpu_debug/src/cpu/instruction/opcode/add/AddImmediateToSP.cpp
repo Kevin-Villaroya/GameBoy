@@ -32,7 +32,7 @@ unsigned int AddImmediateToSP::getTiming(){
     return 12;
 }
 
-void AddImmediateToSP::setParameters(const Memory& memory, unsigned short pc){
+void AddImmediateToSP::setParameters(Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
 

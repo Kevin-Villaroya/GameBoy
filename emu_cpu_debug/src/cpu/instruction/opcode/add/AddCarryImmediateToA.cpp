@@ -34,7 +34,7 @@ unsigned int AddCarryImmediateToA::getTiming(){
     return 8;
 }
 
-void AddCarryImmediateToA::setParameters(const Memory& memory, unsigned short pc){
+void AddCarryImmediateToA::setParameters(Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
 

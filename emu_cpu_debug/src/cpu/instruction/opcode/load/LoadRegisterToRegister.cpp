@@ -14,7 +14,7 @@ unsigned int LoadRegisterToRegister::getTiming(){
     return 4;
 }
 
-void LoadRegisterToRegister::setParameters(const Memory&, unsigned short){
+void LoadRegisterToRegister::setParameters(Memory&, unsigned short){
 
 }
 

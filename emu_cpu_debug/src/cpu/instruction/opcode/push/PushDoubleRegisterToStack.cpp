@@ -22,7 +22,7 @@ unsigned int PushDoubleRegisterToStack::getTiming(){
     return 16;
 }
 
-void PushDoubleRegisterToStack::setParameters(const Memory&, unsigned short){
+void PushDoubleRegisterToStack::setParameters(Memory&, unsigned short){
 }
 
 std::string PushDoubleRegisterToStack::toString(){

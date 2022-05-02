@@ -34,7 +34,7 @@ unsigned int AddRegisterToA::getTiming(){
     return 4;
 }
 
-void AddRegisterToA::setParameters(const Memory&, unsigned short){
+void AddRegisterToA::setParameters(Memory&, unsigned short){
 
 }
 

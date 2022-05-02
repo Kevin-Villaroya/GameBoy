@@ -20,7 +20,7 @@ unsigned int JumpConditionalRelativeImmediate::getTiming(){
     return this->timing;
 }
 
-void JumpConditionalRelativeImmediate::setParameters(const Memory& ram, unsigned short pc){
+void JumpConditionalRelativeImmediate::setParameters(Memory& ram, unsigned short pc){
     this->address = ram.get(pc);
 }
 

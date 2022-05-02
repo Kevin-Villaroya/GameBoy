@@ -35,7 +35,7 @@ unsigned int SubHLToA::getTiming(){
     return 8;
 }
 
-void SubHLToA::setParameters(const Memory&, unsigned short v){
+void SubHLToA::setParameters(Memory&, unsigned short v){
 }
 
 std::string SubHLToA::toString(){

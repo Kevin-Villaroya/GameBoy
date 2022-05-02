@@ -1,5 +1,6 @@
 #ifndef __MEMORY_H__
 #define __MEMORY_H__
+#include "../ppu/OamDma.h"
 
 #include <cstdint>
 #include <string>
@@ -8,10 +9,16 @@
 #define RAM_SIZE 65536
 
 class Memory{
+    friend class OamDma;
     private:
         int timerCounter;
         int dividerCounter;
         unsigned char dividerClock;
+        uint32_t bgpColors[4];
+        uint32_t sp1Colors[4];
+        uint32_t sp2Colors[4];
+        void updatePalette(unsigned char, unsigned char);
+        const unsigned long defaultColors[4] = {0xFFFFFFFF, 0xFFAAAAAA, 0xFF555555, 0xFF000000}; 
 
         unsigned char memory[RAM_SIZE];
         unsigned char bootRom[256];
@@ -28,10 +35,14 @@ class Memory{
         void setClockFrequency();
         void doDividerRegister(int cycles);
 
-        unsigned char getJoypadState() const;
+        unsigned char getJoypadState();
         void dmaTransfer(unsigned char value);
         void printCartridgeHeader(unsigned char* memory);
-    
+
+        OamDma* oamDma;
+
+        void incrLy();
+            
     public:
         static const unsigned short JOYPAD = 0xFF00;
         static const unsigned short DIVIDER = 0xFF04;
@@ -53,15 +64,15 @@ class Memory{
 
         Memory(char* path);
 
-        void init();
-        unsigned char getInstructionByteInstr(unsigned short pos) const;
-        unsigned char get(unsigned short pos) const;
+        void init(OamDma*);
+        unsigned char getInstructionByteInstr(unsigned short pos);
+        unsigned char get(unsigned short pos);
 
         void writeMemory(unsigned short, unsigned char);
         void set(unsigned short, unsigned char);
 
-        unsigned char operator[](unsigned short) const;
-        unsigned short getDouble(unsigned short pos) const;
+        unsigned char operator[](unsigned short);
+        unsigned short getDouble(unsigned short pos);
 
         int getTimerCounter();
 
@@ -69,7 +80,7 @@ class Memory{
         void incrementTIMA();
 
         unsigned char* getBootRom();
-        bool hasReadBootRom() const;
+        bool hasReadBootRom();
 
         void updateTimers(int cycles);
         void requestInterupt(unsigned char bit);
@@ -79,6 +90,8 @@ class Memory{
 
         unsigned char getDividerClock();
         void incDividerClock();
+
+        unsigned int getBgpColor(unsigned char);
 
         std::string dump();
 };

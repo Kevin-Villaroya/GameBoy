@@ -25,7 +25,7 @@ unsigned int AndImmediateToA::getTiming(){
     return 8;
 }
 
-void AndImmediateToA::setParameters(const Memory& memory, unsigned short pc){
+void AndImmediateToA::setParameters(Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
 

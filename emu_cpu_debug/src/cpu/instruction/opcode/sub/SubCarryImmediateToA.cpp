@@ -35,7 +35,7 @@ unsigned int SubCarryImmediateToA::getTiming(){
     return 8;
 }
 
-void SubCarryImmediateToA::setParameters(const Memory& memory, unsigned short pc){
+void SubCarryImmediateToA::setParameters(Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
 

@@ -3,17 +3,17 @@
 #include "Gameboy.h"
 #include "../cpu/instruction/instructionError/UnknownInstructionException.h"
 #include "../display/Window.h"
-#include "../display/Terminal.h"
 #include "../util/BitMath.h"
 #include "../util/DecToHex.h"
 #include <unistd.h>
+#include <thread>
+#include <unistd.h>
 
-Gameboy::Gameboy(char* path) : memory(path), cpu(Processor(&memory, &registers)), view(new Window()), ppu(ProcessorGraphic(view, &cpu.getMemory())){
-	this->isRunning = true;
+Gameboy::Gameboy(char* path) : memory(path), cpu(Processor(&memory, &registers)), ppu(ProcessorGraphic(view, &cpu.getMemory())){
+	this->running = true;
 	this->paused = false;
 	this->ticks = 0;
-
-	this->memory.init();
+	this->memory.init(&this->oamDma);
 	this->registers.init(&this->memory);
 	this->registers.setPC(0x100);
 
@@ -27,52 +27,46 @@ Gameboy::Gameboy(char* path) : memory(path), cpu(Processor(&memory, &registers))
 	this->canContinue = false;
 	this->die = false;
 	this->cpu.printMetadata();
+	this->view = new Window(&this->memory);
 
 	//this->opCodeBreak.push_back(0x10);
 	this->pcValueBreak.push_back(0x0358);
 	//this->pcValueBreak.push_back(0x29BA);
 }
 
-bool Gameboy::run(){
+void Gameboy::launchCpuThread(){
 	int n = 0;
-    int stop = 0x150000;
-	int x = 0;
-	while(this->isRunning && (n <= stop)){
-		//printf("0X80: %04X 0x81: %04X 0x82: %04X 0x83: %04X\n", this->memory.get(0xFF80), this->memory.get(0xFF81), this->memory.get(0xFF82), this->memory.get(0xFF83));
-		//printf("SP = %04X\n", this->registers.getSP());
-
-		//if(this->cpu.isHalt()) x ++;
-		//if(!this->cpu.isHalt() && x>0){printf("Number of hlat : %04X", x);exit(0);}
-		//printf("0XFF0F = %02X TIMA = %02X TAC = %02X\n", this->memory.get(0xFF0F), this->memory.get(0xFF05), this->memory.get(0xFF07));
-		/*
-		if(n == 0x2da56 || n == 0x2da57){
-		printf("SP = %04X\n", this->registers.getSP());
-		for(int i = 0xDFFE ; i>=0xDFF0 ; i--)
-			printf("[%04X] = %02X\n", i, this->memory.get(i));
+    int stop = 0x10000;
+	while(this->running && (n <= stop)){
 		
-
-		}
-		*/
-		
-
 		if(this->paused){
 			SDL_Delay(10);
 			continue;
 		}
-		printf("%08x %08lX - ",n ,this->ticks);
-		int cpuTicks = 0;
-		if((cpuTicks = this->cpu.step()) != -1){
-			
-		}
-		this->gameboyTick(cpuTicks);
 		
+		int cpuTicks = this->cpu.step();;
+		this->gameboyTick(cpuTicks);
 
 	}
+	return;
+}
 
+bool Gameboy::run(){
+	
+	std::thread cpuThread(&Gameboy::launchCpuThread, this);
+
+	uint64_t prevFrame = 0;
 	while(!this->die){
-		sleep(1000);
-		this->view->fetchEvent();
+
+		if(this->view->fetchEvent() == Event::QUIT)
+			this->die = true;
+		if(this->ppu.getCurrentFrame() != prevFrame){
+			this->view->update(this->ppu.getVideoBuffer());
+		}
+		prevFrame = this->ppu.getCurrentFrame();
+		
 	}
+	return 0;
 
 	/*
 	uint32_t currentTime = 0;
@@ -102,7 +96,7 @@ bool Gameboy::run(){
 	*/
 
 	
-	return 0;
+	
 }
 
 void Gameboy::updateTimers(bool instructionExecuted){
@@ -180,7 +174,7 @@ void Gameboy::treatEvent(uint32_t currentTime){
 
 		switch (event){
 			case Event::QUIT:
-				this->isRunning = false;
+				this->running = false;
 				break;
 			
 			case Event::TICK:
@@ -295,12 +289,29 @@ void Gameboy::gameboyKey(int key){
 }
 
 void Gameboy::gameboyTick(unsigned int nb){
-	for(unsigned int i=0 ; i<nb ; i++){
-		this->ticks++;
-		this->cpu.timerTick();
+	for(unsigned int i=0 ; i<(nb/4) ; i++){
+		for(unsigned int j=0 ; j<4 ; j++){
+			this->ticks++;
+			this->cpu.timerTick();
+			this->ppu.tick();
+		}
+		this->oamDma.dmaTick(&this->memory);
 	}
 }
 
 Gameboy::~Gameboy(){
 	delete this->view;
+}
+
+bool Gameboy::isRunning(){
+	return running;
+}
+
+int Gameboy::getTicks(){
+	return ticks;
+}
+
+
+bool Gameboy::isPaused(){
+	return paused;
 }

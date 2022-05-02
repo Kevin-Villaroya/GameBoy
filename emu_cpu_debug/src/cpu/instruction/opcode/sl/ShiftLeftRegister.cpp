@@ -22,7 +22,7 @@ unsigned int ShiftLeftRegister::getTiming(){
     return 8;
 }
 
-void ShiftLeftRegister::setParameters(const Memory&, unsigned short v){
+void ShiftLeftRegister::setParameters(Memory&, unsigned short v){
 }
 
 std::string ShiftLeftRegister::toString(){

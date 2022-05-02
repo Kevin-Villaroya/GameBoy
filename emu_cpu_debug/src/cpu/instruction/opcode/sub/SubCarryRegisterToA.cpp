@@ -35,7 +35,7 @@ unsigned int SubCarryRegisterToA::getTiming(){
     return 4;
 }
 
-void SubCarryRegisterToA::setParameters(const Memory&, unsigned short){
+void SubCarryRegisterToA::setParameters(Memory&, unsigned short){
 
 }
 

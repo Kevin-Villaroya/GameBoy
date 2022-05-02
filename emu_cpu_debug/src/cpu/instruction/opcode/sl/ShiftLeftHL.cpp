@@ -23,7 +23,7 @@ unsigned int ShiftLeftHL::getTiming(){
     return 16;
 }
 
-void ShiftLeftHL::setParameters(const Memory&, unsigned short v){
+void ShiftLeftHL::setParameters(Memory&, unsigned short v){
 }
 
 std::string ShiftLeftHL::toString(){

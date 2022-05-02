@@ -27,7 +27,7 @@ unsigned int CallConditional::getTiming() {
 	return this->timing;
 }
 
-void CallConditional::setParameters(const Memory& memory, unsigned short pc) {
+void CallConditional::setParameters(Memory& memory, unsigned short pc) {
 	this->address = memory.getDouble(pc);
 }
 

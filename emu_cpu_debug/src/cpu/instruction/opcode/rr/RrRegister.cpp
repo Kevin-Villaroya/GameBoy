@@ -25,7 +25,7 @@ unsigned int RrRegister::getTiming(){
     return 8;
 }
 
-void RrRegister::setParameters(const Memory&, unsigned short v){
+void RrRegister::setParameters(Memory&, unsigned short v){
 }
 
 std::string RrRegister::toString(){

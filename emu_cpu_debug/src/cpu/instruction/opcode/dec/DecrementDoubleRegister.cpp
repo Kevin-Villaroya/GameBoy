@@ -17,7 +17,7 @@ unsigned int DecrementDoubleRegister::getTiming(){
     return 8;
 }
 
-void DecrementDoubleRegister::setParameters(const Memory&, unsigned short){
+void DecrementDoubleRegister::setParameters(Memory&, unsigned short){
 
 }
 

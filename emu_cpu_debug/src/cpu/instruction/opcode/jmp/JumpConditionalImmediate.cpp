@@ -22,7 +22,7 @@ unsigned int JumpConditionalImmediate::getTiming(){
     return this->timing;
 }
 
-void JumpConditionalImmediate::setParameters(const Memory& memory, unsigned short pc){
+void JumpConditionalImmediate::setParameters(Memory& memory, unsigned short pc){
 	this->address = memory.getDouble(pc);
 }
 

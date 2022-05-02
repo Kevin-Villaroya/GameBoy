@@ -3,7 +3,13 @@
 
 #include "TileFetcher.h"
 #include "SpriteFetcher.h"
+#include "../Processor.h"
 #include "../display/Display.h"
+#define SIZE_SCREEN_X 160
+#define SIZE_SCREEN_Y 144
+#define MAX_LINE_TICKS 456
+#define MAX_FRAME_LINE 154
+
 
 enum class ProcessorGraphicState{
 	OAMSearch,
@@ -14,15 +20,19 @@ enum class ProcessorGraphicState{
 
 class ProcessorGraphic{
 private:
-	const unsigned int SIZE_SCREEN_X = 160;
-	const unsigned int SIZE_SCREEN_Y = 144;
-
+	
 	TileFetcher tileFetcher;
 	SpriteFetcher spriteFetcher;
 	Display* screen;
 	Memory* ram;
+	void setCurrentState(ProcessorGraphicState);
+	void incrementLy();
+	
 
 	ProcessorGraphicState currentState;
+
+	unsigned int currentFrame;
+	unsigned int videoBuffer[SIZE_SCREEN_X * SIZE_SCREEN_Y * 4];
 
 	// Tick associated to the current line being drawed
 	unsigned int ticks;
@@ -41,11 +51,15 @@ private:
 	void setLCDStatus();
 	bool isLCDEnabled();
 
+
 public:
 	ProcessorGraphic(Display* screen, Memory* ram);
 	~ProcessorGraphic();
 
 	void tick();
+	unsigned int* getVideoBuffer();
+
+	unsigned int getCurrentFrame();
 };
 
 #endif

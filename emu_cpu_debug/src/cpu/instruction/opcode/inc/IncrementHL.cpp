@@ -34,7 +34,7 @@ unsigned int IncrementHL::getTiming(){
     return 12;
 }
 
-void IncrementHL::setParameters(const Memory&, unsigned short){
+void IncrementHL::setParameters(Memory&, unsigned short){
 
 }
 

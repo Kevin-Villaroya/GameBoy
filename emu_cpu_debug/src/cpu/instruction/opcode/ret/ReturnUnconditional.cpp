@@ -20,7 +20,7 @@ unsigned int ReturnUnconditional::getTiming(){
  return 16;
 }
 
-void ReturnUnconditional::setParameters(const Memory&, unsigned short){}
+void ReturnUnconditional::setParameters(Memory&, unsigned short){}
 
 std::string ReturnUnconditional::toString(){
     return "RET";

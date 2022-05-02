@@ -22,7 +22,7 @@ unsigned int ShiftRightRegisterResetMSB::getTiming(){
     return 8;
 }
 
-void ShiftRightRegisterResetMSB::setParameters(const Memory&, unsigned short v){
+void ShiftRightRegisterResetMSB::setParameters(Memory&, unsigned short v){
 }
 
 std::string ShiftRightRegisterResetMSB::toString(){

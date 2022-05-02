@@ -17,7 +17,7 @@ unsigned int LoadRegisterToAddressFromImmediate::getTiming() {
 	return 12;
 }
 
-void LoadRegisterToAddressFromImmediate::setParameters(const Memory& ram, unsigned short pc) {
+void LoadRegisterToAddressFromImmediate::setParameters(Memory& ram, unsigned short pc) {
     this->parameter = ram.get(pc);
 }
 

@@ -16,7 +16,7 @@ unsigned int SetCarryFlag::getTiming(){
     return 4;
 }
 
-void SetCarryFlag::setParameters(const Memory&, unsigned short v){
+void SetCarryFlag::setParameters(Memory&, unsigned short v){
 }
 
 std::string SetCarryFlag::toString(){

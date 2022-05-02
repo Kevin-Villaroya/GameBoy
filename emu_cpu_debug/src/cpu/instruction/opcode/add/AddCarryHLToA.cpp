@@ -36,7 +36,7 @@ unsigned int AddCarryHLToA::getTiming(){
     return 8;
 }
 
-void AddCarryHLToA::setParameters(const Memory&, unsigned short v){
+void AddCarryHLToA::setParameters(Memory&, unsigned short v){
 }
 
 std::string AddCarryHLToA::toString(){
