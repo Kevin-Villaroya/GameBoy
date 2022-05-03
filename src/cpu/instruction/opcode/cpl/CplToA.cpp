@@ -21,7 +21,7 @@ unsigned int CplToA::getTiming(){
     return 4;
 }
 
-void CplToA::setParameters(const Memory&, unsigned short v){
+void CplToA::setParameters(Memory&, unsigned short v){
 }
 
 std::string CplToA::toString(){

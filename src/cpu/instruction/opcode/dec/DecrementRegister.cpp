@@ -4,21 +4,18 @@
 DecrementRegister::DecrementRegister(RegisterName registerName) : registerName(registerName){}
 
 void DecrementRegister::execute(Memory& ram, Registers& registers){
-    bool byte3Before = registers.getRegister(this->registerName) & 0b00001000;
+    unsigned char regVal = registers.getRegister(this->registerName);
+    unsigned char nvalue = regVal - 1;
 
-    unsigned char value = registers.getRegister(this->registerName) - 1;
+    registers.setRegister(this->registerName, nvalue);
 
-    bool byte3After = value & 0b00001000;
-
-    registers.setRegister(this->registerName, value);
-
-    if(byte3Before && !byte3After){
+    if(regVal>>4 != nvalue>>4){
         registers.setFlagH(1);
     }else{
         registers.setFlagH(0);
     }
 
-    if(value == 0){
+    if(nvalue == 0){
         registers.setFlagZ(1);
     }else{
         registers.setFlagZ(0);
@@ -36,7 +33,7 @@ unsigned int DecrementRegister::getTiming(){
     return 4;
 }
 
-void DecrementRegister::setParameters(const Memory&, unsigned short){
+void DecrementRegister::setParameters(Memory&, unsigned short){
 
 }
 

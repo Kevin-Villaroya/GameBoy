@@ -26,7 +26,7 @@ unsigned int OrImmediateToA::getTiming(){
     return 8;
 }
 
-void OrImmediateToA::setParameters(const Memory& memory, unsigned short pc){
+void OrImmediateToA::setParameters(Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
 

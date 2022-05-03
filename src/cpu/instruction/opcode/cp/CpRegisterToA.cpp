@@ -32,7 +32,7 @@ unsigned int CpRegisterToA::getTiming(){
     return 4;
 }
 
-void CpRegisterToA::setParameters(const Memory&, unsigned short){
+void CpRegisterToA::setParameters(Memory&, unsigned short){
 }
 
 std::string CpRegisterToA::toString(){

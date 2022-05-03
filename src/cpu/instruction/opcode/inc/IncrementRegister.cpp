@@ -1,5 +1,4 @@
 #include "IncrementRegister.h"
-#include <iostream>
 
 IncrementRegister::IncrementRegister(RegisterName registerName) : registerName(registerName){}
 
@@ -36,7 +35,7 @@ unsigned int IncrementRegister::getTiming(){
     return 4;
 }
 
-void IncrementRegister::setParameters(const Memory&, unsigned short){
+void IncrementRegister::setParameters(Memory&, unsigned short){
 
 }
 

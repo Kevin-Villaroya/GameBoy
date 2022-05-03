@@ -26,7 +26,7 @@ unsigned int SwapRegister::getTiming(){
     return 8;
 }
 
-void SwapRegister::setParameters(const Memory&, unsigned short v){
+void SwapRegister::setParameters(Memory&, unsigned short v){
 }
 
 std::string SwapRegister::toString(){

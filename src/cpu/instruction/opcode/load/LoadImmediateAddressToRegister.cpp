@@ -17,7 +17,7 @@ unsigned int LoadImmediateAddressToRegister::getTiming(){
     return 16;
 }
 
-void LoadImmediateAddressToRegister::setParameters(const Memory& ram, unsigned short pc){
+void LoadImmediateAddressToRegister::setParameters(Memory& ram, unsigned short pc){
     this->address = ram.getDouble(pc);
 }
 

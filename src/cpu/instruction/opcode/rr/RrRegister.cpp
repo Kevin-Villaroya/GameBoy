@@ -4,9 +4,9 @@ RrRegister::RrRegister(RegisterName r):registerName(r){}
 
 void RrRegister::execute(Memory& ram, Registers& registers){
     unsigned char regValue = registers.getRegister(registerName);
-    unsigned char valueOf0bit = regValue&0b00000001;
+    bool valueOf0bit = regValue&0b00000001;
     regValue >>= 1;
-    regValue += (registers.isFlagC()?1:0)<<7;
+    regValue += ((unsigned char)(registers.isFlagC()?1:0))<<7;
     if(regValue == 0)
         registers.setFlagZ(1);
     else   
@@ -25,7 +25,7 @@ unsigned int RrRegister::getTiming(){
     return 8;
 }
 
-void RrRegister::setParameters(const Memory&, unsigned short v){
+void RrRegister::setParameters(Memory&, unsigned short v){
 }
 
 std::string RrRegister::toString(){

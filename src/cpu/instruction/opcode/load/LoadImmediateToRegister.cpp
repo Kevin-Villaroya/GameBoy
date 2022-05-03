@@ -17,7 +17,7 @@ unsigned int LoadImmediateToRegister::getTiming(){
     return 8;
 }
 
-void LoadImmediateToRegister::setParameters(const Memory& memory, unsigned short positionParameters){
+void LoadImmediateToRegister::setParameters(Memory& memory, unsigned short positionParameters){
     this->parameter = memory.get(positionParameters);
 }
 

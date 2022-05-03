@@ -27,7 +27,7 @@ unsigned int AndHLToA::getTiming(){
     return 8;
 }
 
-void AndHLToA::setParameters(const Memory&, unsigned short){
+void AndHLToA::setParameters(Memory&, unsigned short){
 }
 
 std::string AndHLToA::toString(){

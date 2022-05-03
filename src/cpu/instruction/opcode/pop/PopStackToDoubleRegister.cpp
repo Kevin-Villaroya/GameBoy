@@ -1,4 +1,5 @@
 #include "PopStackToDoubleRegister.h"
+#include <iostream>
 
 PopStackToDoubleRegister::PopStackToDoubleRegister(DoubleRegisterName r):doubleRegName(r){}
 
@@ -9,7 +10,6 @@ void PopStackToDoubleRegister::execute(Memory& ram, Registers& registers){
     doubleRegVal = ram.get(spValue+1);
     doubleRegVal <<= 8;
     doubleRegVal += ram.get(spValue);
-    
     registers.setSP(spValue+2);
     registers.setDoubleRegister(doubleRegName, doubleRegVal);
 }
@@ -22,7 +22,7 @@ unsigned int PopStackToDoubleRegister::getTiming(){
     return 12;
 }
 
-void PopStackToDoubleRegister::setParameters(const Memory&, unsigned short){
+void PopStackToDoubleRegister::setParameters(Memory&, unsigned short){
 }
 
 std::string PopStackToDoubleRegister::toString(){

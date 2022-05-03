@@ -13,6 +13,10 @@ void ReturnConditional::execute(Memory& ram, Registers& registers){
 		
 		registers.setSP(sp + 2);
 		registers.setPC(pc);
+		this->timing = 20;
+	}
+	else{
+		this->timing = 8;
 	}
 }
 
@@ -21,10 +25,10 @@ unsigned int ReturnConditional::getSize(){
 }
 
 unsigned int ReturnConditional::getTiming(){
- return 16;
+ 	return this->timing;
 }
 
-void ReturnConditional::setParameters(const Memory&, unsigned short){}
+void ReturnConditional::setParameters(Memory&, unsigned short){}
 
 std::string ReturnConditional::toString(){
     return "RET" + InstructionCondition::getConditionName(this->condition);

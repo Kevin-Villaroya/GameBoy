@@ -26,7 +26,7 @@ unsigned int XorImmediateToA::getTiming(){
     return 8;
 }
 
-void XorImmediateToA::setParameters(const Memory& memory, unsigned short pc){
+void XorImmediateToA::setParameters(Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
 

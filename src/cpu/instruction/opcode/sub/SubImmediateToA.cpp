@@ -1,11 +1,12 @@
 #include "SubImmediateToA.h"
 #include "../../util/DecToHex.h"
+#include <iostream>
 
 void SubImmediateToA::execute(Memory& ram, Registers& registers){
     unsigned char aValue = registers.getA();
-
-    if(this->parameter-aValue == 0)
-        registers.setFlagZ(1);
+    if(aValue - this->parameter == 0){
+        registers.setFlagZ(1);    printf("%hhu\n",aValue-this->parameter);
+}
     else
         registers.setFlagZ(0);
     
@@ -32,7 +33,7 @@ unsigned int SubImmediateToA::getTiming(){
     return 8;
 }
 
-void SubImmediateToA::setParameters(const Memory& memory, unsigned short pc){
+void SubImmediateToA::setParameters(Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
 

@@ -5,6 +5,10 @@ JumpConditionalRelativeImmediate::JumpConditionalRelativeImmediate(Condition con
 void JumpConditionalRelativeImmediate::execute(Memory& ram, Registers& registers){
     if(this->condition(ram, registers)){
         registers.setPC(registers.getPC() + this->address);
+        this->timing = 12;
+    }
+    else{
+        this->timing = 8;
     }
 }
 
@@ -13,10 +17,10 @@ unsigned int JumpConditionalRelativeImmediate::getSize(){
 }
 
 unsigned int JumpConditionalRelativeImmediate::getTiming(){
-    return 6;
+    return this->timing;
 }
 
-void JumpConditionalRelativeImmediate::setParameters(const Memory& ram, unsigned short pc){
+void JumpConditionalRelativeImmediate::setParameters(Memory& ram, unsigned short pc){
     this->address = ram.get(pc);
 }
 

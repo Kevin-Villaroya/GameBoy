@@ -27,7 +27,7 @@ unsigned int SwapHL::getTiming(){
     return 16;
 }
 
-void SwapHL::setParameters(const Memory&, unsigned short v){
+void SwapHL::setParameters(Memory&, unsigned short v){
 }
 
 std::string SwapHL::toString(){

@@ -26,7 +26,7 @@ unsigned int RrCarryRegister::getTiming(){
     return 8;
 }
 
-void RrCarryRegister::setParameters(const Memory&, unsigned short v){
+void RrCarryRegister::setParameters(Memory&, unsigned short v){
 }
 
 std::string RrCarryRegister::toString(){

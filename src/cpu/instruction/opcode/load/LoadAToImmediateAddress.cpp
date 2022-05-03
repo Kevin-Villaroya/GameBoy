@@ -1,11 +1,13 @@
 #include "LoadAToImmediateAddress.h"
 #include "../../util/DecToHex.h"
-#include <iostream>
 
 void LoadAToImmediateAddress::execute(Memory& ram, Registers& registers) {
 	unsigned short absoluteAddress = 0xFF00 + this->address;
 	unsigned char aValue = registers.getA();
-	
+
+	if(absoluteAddress == 0xFF05){
+		printf("ok\n");
+	}
 	ram.writeMemory(absoluteAddress, aValue);
 }
 
@@ -17,7 +19,7 @@ unsigned int LoadAToImmediateAddress::getTiming() {
 	return 12;
 }
 
-void LoadAToImmediateAddress::setParameters(const Memory& memory, unsigned short pc) {
+void LoadAToImmediateAddress::setParameters(Memory& memory, unsigned short pc) {
 	this->address = memory[pc];
 }
 

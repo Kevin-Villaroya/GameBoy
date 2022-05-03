@@ -19,7 +19,7 @@ unsigned int LoadFromRegisterToRelativeAddress::getTiming(){
     return 8;
 }
 
-void LoadFromRegisterToRelativeAddress::setParameters(const Memory&, unsigned short){
+void LoadFromRegisterToRelativeAddress::setParameters(Memory&, unsigned short){
 
 }
 

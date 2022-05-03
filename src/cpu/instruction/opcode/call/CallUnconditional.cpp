@@ -19,10 +19,10 @@ unsigned int CallUnconditional::getSize() {
 }
 
 unsigned int CallUnconditional::getTiming() {
-	return 12;
+	return 24;
 }
 
-void CallUnconditional::setParameters(const Memory& memory, unsigned short pc) {
+void CallUnconditional::setParameters(Memory& memory, unsigned short pc) {
 	this->address = memory.getDouble(pc);
 }
 

@@ -1,7 +1,11 @@
 #include <iostream>
 #include "Window.h"
+#include "SDL2/SDL_ttf.h"
 
-Window::Window(){
+
+Window::Window(Memory *m){
+    this->memory = m;
+    /*
     if(SDL_Init(SDL_INIT_VIDEO) < 0){         
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
         throw "Error"; 
@@ -27,7 +31,119 @@ void Window::write(unsigned char color){
     this->setColorAt(this->offset + 3, paletteColor.a);
 
     this->offset += 4;
+    */
+    SDL_Init(SDL_INIT_VIDEO);
+    TTF_Init();
+    SDL_CreateWindowAndRenderer(1024, 768 , 0, &this->window, &this->renderer);
+    this->screen = SDL_CreateRGBSurface(0, 1024, 768, 32,
+                                            0x00FF0000,
+                                            0x0000FF00,
+                                            0x000000FF,
+                                            0xFF000000);
+    this->texture = SDL_CreateTexture(this->renderer,
+                                                SDL_PIXELFORMAT_ARGB8888,
+                                                SDL_TEXTUREACCESS_STREAMING,
+                                                1024, 768);
+
+    SDL_CreateWindowAndRenderer(16*8*4, 32*8*4, 0, &this->debugWindow, &this->debugRenderer);
+    this->debugScreen = SDL_CreateRGBSurface(0,(16 * 8 * 4) + (16 * 4), 
+                                            (32 * 8 * 4) + (64 * 4), 32,
+                                            0x00FF0000,
+                                            0x0000FF00,
+                                            0x000000FF,
+                                            0xFF000000);
+    this->debugTexture = SDL_CreateTexture(this->debugRenderer,
+                                            SDL_PIXELFORMAT_ARGB8888,
+                                            SDL_TEXTUREACCESS_STREAMING,
+                                            (16 * 8 * 4) + (16 * 4), 
+                                            (32 * 8 * 4) + (64 * 4));
+
+    int x, y;
+    SDL_GetWindowPosition(this->window, &x, &y);
+    SDL_SetWindowPosition(this->debugWindow, x + INIT_SIZE_X_WINDOW*4 + 10, y);
+
 }
+
+void Window::update(unsigned int* videoBuffer){
+    SDL_Rect rc;
+    rc.x = rc.y = 0;
+    rc.w = rc.h = 2048;
+    for (int line_num = 0; line_num < INIT_SIZE_Y_WINDOW; line_num++) {
+        for (int x = 0; x < INIT_SIZE_X_WINDOW; x++) {
+            rc.x = x * 4;
+            rc.y = line_num * 4;
+            rc.w = 4;
+            rc.h = 4;
+            
+            SDL_FillRect(this->screen, &rc, videoBuffer[x + (line_num * INIT_SIZE_X_WINDOW)]);
+        }
+    }
+
+    SDL_UpdateTexture(this->texture, NULL, this->screen->pixels, this->screen->pitch);
+    SDL_RenderClear(this->renderer);
+    SDL_RenderCopy(this->renderer, this->texture, NULL, NULL);
+    SDL_RenderPresent(this->renderer);
+
+    updateDebuger();
+}
+
+void Window::debugerDisplay(SDL_Surface *surface, uint16_t startLocation, uint16_t tileNum, int x, int y){
+    unsigned long tile_colors[4] = {0xFFFFFFFF, 0xFFAAAAAA, 0xFF555555, 0xFF000000};
+    SDL_Rect rect;
+
+    for (int tileY=0; tileY<16; tileY += 2) {
+        uint8_t b1 = this->memory->get((startLocation + (tileNum * 16) + tileY));
+        uint8_t b2 = this->memory->get(startLocation + (tileNum * 16) + tileY + 1);
+
+        for (int bit=7; bit >= 0; bit--) {
+            uint8_t hi = !!(b1 & (1 << bit)) << 1;
+            uint8_t lo = !!(b2 & (1 << bit));
+
+            uint8_t color = hi | lo;
+
+            rect.x = x + ((7 - bit) * 4);    
+            rect.y = y + (tileY / 2 * 4);
+            rect.w = 4;
+            rect.h = 4;
+
+            SDL_FillRect(surface, &rect, tile_colors[color]);
+        }
+    }
+}
+
+void Window::updateDebuger(){
+    int xDraw = 0;
+    int yDraw = 0;
+    int tileNum = 0;
+
+    SDL_Rect rect;
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = this->debugScreen->w;
+    rect.h = this->debugScreen->h;
+    SDL_FillRect(this->debugScreen, &rect, 0xFF111111);
+
+    uint16_t addr = 0x8000;
+
+    //384 tiles, 24 x 16
+    for (int y=0; y<24; y++) {
+        for (int x=0; x<16; x++) {
+            debugerDisplay(this->debugScreen, addr, tileNum, xDraw + (x * 4), yDraw + (y * 4));
+            xDraw += (8 * 4);
+            tileNum++;
+        }
+
+        yDraw += (8 * 4);
+        xDraw = 0;
+    }
+
+	SDL_UpdateTexture(this->debugTexture, NULL, debugScreen->pixels, debugScreen->pitch);
+	SDL_RenderClear(this->debugRenderer);
+	SDL_RenderCopy(this->debugRenderer, this->debugTexture, NULL, NULL);
+	SDL_RenderPresent(this->debugRenderer);
+}
+
+
 
 void Window::HBlank(){
 
@@ -45,8 +161,13 @@ Event Window::fetchEvent(){
     SDL_Event events;
 
     bool findEvent = false;
+            
 
-    while(SDL_PollEvent(&events)){
+    while(SDL_PollEvent(&events) > 0){
+        if((events.type == SDL_WINDOWEVENT) && (events.window.event == SDL_WINDOWEVENT_CLOSE)){
+            return Event::QUIT;
+        }
+        /*
         if(!findEvent){
             findEvent = true;
             switch(events.type){
@@ -86,8 +207,9 @@ Event Window::fetchEvent(){
                     break;
             }
         }
+        */
     }
-
+    
     return Event::NONE;
 }
 
@@ -112,3 +234,4 @@ Window::~Window(){
     SDL_DestroyWindow(this->window);
     SDL_Quit();
 }
+void Window::write(unsigned char color){}

@@ -8,7 +8,7 @@ void ResImmediateOfHL::execute(Memory& ram, Registers& registers){
     unsigned short valueHL = registers.getHL();
     unsigned char valueHlAdress = ram.get(valueHL);
 
-    valueHlAdress &= 255 - (unsigned char)pow(2, bit);
+    valueHlAdress &= 0xFF - (unsigned char)pow(2, bit);
 
     ram.set(valueHL, valueHlAdress);
 }
@@ -18,10 +18,10 @@ unsigned int ResImmediateOfHL::getSize(){
 }
 
 unsigned int ResImmediateOfHL::getTiming(){
-    return 8;
+    return 16;
 }
 
-void ResImmediateOfHL::setParameters(const Memory&, unsigned short){
+void ResImmediateOfHL::setParameters(Memory&, unsigned short){
 }
 
 std::string ResImmediateOfHL::toString(){

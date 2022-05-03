@@ -17,7 +17,7 @@ unsigned int LoadImmediateToDoubleRegister::getTiming(){
     return 12;
 }
 
-void LoadImmediateToDoubleRegister::setParameters(const Memory& memory, unsigned short positionParameters){
+void LoadImmediateToDoubleRegister::setParameters(Memory& memory, unsigned short positionParameters){
     this->parameter = memory.getDouble(positionParameters);
 }
 

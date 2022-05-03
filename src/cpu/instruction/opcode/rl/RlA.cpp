@@ -22,12 +22,9 @@ void RlA::execute(Memory& ram, Registers& registers){
 		registers.setFlagC(false);
 	}
 	
-	if(aValue == 0) {
-		registers.setFlagZ(true);
-	}
-	else {
-		registers.setFlagZ(false);
-	}
+
+	registers.setFlagZ(false);
+
 	
     registers.setFlagH(0);
     registers.setFlagN(0);
@@ -43,7 +40,7 @@ unsigned int RlA::getTiming(){
     return 4;
 }
 
-void RlA::setParameters(const Memory&, unsigned short v){
+void RlA::setParameters(Memory&, unsigned short v){
 }
 
 std::string RlA::toString(){

@@ -17,7 +17,7 @@ unsigned int LoadFromRelativeAddressToRegister::getTiming() {
 	return 8;
 }
 
-void LoadFromRelativeAddressToRegister::setParameters(const Memory&, unsigned short) {}
+void LoadFromRelativeAddressToRegister::setParameters(Memory&, unsigned short) {}
 
 std::string LoadFromRelativeAddressToRegister::toString(){
     return "LD " + Registers::getRegisterName(this->addressRegister) + ", " + Registers::getRegisterName(this->dest);

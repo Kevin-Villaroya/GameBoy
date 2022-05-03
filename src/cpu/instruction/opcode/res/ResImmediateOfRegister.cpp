@@ -7,7 +7,7 @@ ResImmediateOfRegister::ResImmediateOfRegister(unsigned char bit, RegisterName r
 void ResImmediateOfRegister::execute(Memory& ram, Registers& registers){
     unsigned char valueRegister = registers.getRegister(this->registerName);
 
-    valueRegister &= 255 - (unsigned char)pow(2, bit);
+    valueRegister &= 0xFF - (unsigned char)pow(2, bit);
 
     registers.setRegister(this->registerName, valueRegister);
 }
@@ -20,7 +20,7 @@ unsigned int ResImmediateOfRegister::getTiming(){
     return 8;
 }
 
-void ResImmediateOfRegister::setParameters(const Memory&, unsigned short){
+void ResImmediateOfRegister::setParameters(Memory&, unsigned short){
 }
 
 std::string ResImmediateOfRegister::toString(){

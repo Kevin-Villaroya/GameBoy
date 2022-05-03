@@ -1,8 +1,11 @@
-
 #include "DI.h"
+#include "../../../Processor.h"
+
+DI::DI(void* context):cpuContext(context){}
 
 void DI::execute(Memory& ram, Registers& registers){
-    registers.disableIME();
+    ((Processor*)(this->cpuContext))->setEnableIME(false);
+    this->cpuContext = NULL;
 }
 
 unsigned int DI::getSize(){
@@ -13,7 +16,7 @@ unsigned int DI::getTiming(){
     return 4;
 }
 
-void DI::setParameters(const Memory&, unsigned short){
+void DI::setParameters(Memory&, unsigned short){
 
 }
 

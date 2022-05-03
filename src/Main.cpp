@@ -9,7 +9,7 @@ int main(int argc, char* argv[]){
     }
 
     Gameboy gameboy(argv[1]);
-
+    
     if(argc == 3 && std::string(argv[2]) == "-d"){
         gameboy.debugMode();
     }

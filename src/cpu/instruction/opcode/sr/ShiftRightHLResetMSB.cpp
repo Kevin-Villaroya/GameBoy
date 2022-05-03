@@ -8,7 +8,7 @@ void ShiftRightHLResetMSB::execute(Memory& ram, Registers& registers){
 
 	registers.setFlagC(0b1 & aValue);
 	aValue >>= 1;
-    aValue == 0 ? registers.setFlagZ(0) : registers.setFlagZ(1);
+    aValue == 0 ? registers.setFlagZ(1) : registers.setFlagZ(0);
     registers.setFlagH(0);
     registers.setFlagN(0);
     ram.writeMemory(hlValue, aValue);
@@ -22,7 +22,7 @@ unsigned int ShiftRightHLResetMSB::getTiming(){
     return 16;
 }
 
-void ShiftRightHLResetMSB::setParameters(const Memory&, unsigned short v){
+void ShiftRightHLResetMSB::setParameters(Memory&, unsigned short v){
 }
 
 std::string ShiftRightHLResetMSB::toString(){

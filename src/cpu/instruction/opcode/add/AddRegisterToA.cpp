@@ -6,7 +6,7 @@ void AddRegisterToA::execute(Memory& ram, Registers& registers){
     unsigned char regValue = registers.getRegister(registerName);
     unsigned char aValue = registers.getA();
 
-    if(regValue+aValue == 0)
+    if((unsigned char)(regValue+aValue) == 0)
         registers.setFlagZ(1);
     else
         registers.setFlagZ(0);
@@ -16,7 +16,7 @@ void AddRegisterToA::execute(Memory& ram, Registers& registers){
     else
         registers.setFlagH(0);
 
-    if(aValue > (aValue + regValue))
+    if(aValue > (unsigned char)(aValue + regValue))
         registers.setFlagC(1);
     else
         registers.setFlagC(0);
@@ -34,7 +34,7 @@ unsigned int AddRegisterToA::getTiming(){
     return 4;
 }
 
-void AddRegisterToA::setParameters(const Memory&, unsigned short){
+void AddRegisterToA::setParameters(Memory&, unsigned short){
 
 }
 

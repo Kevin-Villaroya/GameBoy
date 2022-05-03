@@ -3,13 +3,12 @@
 void DecrementHL::execute(Memory& ram, Registers& registers){
 	unsigned short valueAddress = registers.getDoubleRegister(DoubleRegisterName::HL);
 	
-    bool byte3Before = ram[valueAddress] & 0b00001000;
+    unsigned char oldValue = ram[valueAddress];
     unsigned char value = ram[valueAddress] - 1;
-    bool byte3After = value & 0b00001000;
 
     ram.writeMemory(valueAddress, value);
 
-    if(byte3Before && !byte3After){
+    if(oldValue>>4 != value>>4){
         registers.setFlagH(1);
     }else{
         registers.setFlagH(0);
@@ -33,7 +32,7 @@ unsigned int DecrementHL::getTiming(){
     return 12;
 }
 
-void DecrementHL::setParameters(const Memory&, unsigned short){
+void DecrementHL::setParameters(Memory&, unsigned short){
 
 }
 

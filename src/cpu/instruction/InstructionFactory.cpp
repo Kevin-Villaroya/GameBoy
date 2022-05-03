@@ -1,7 +1,7 @@
 #include <iostream>
 #include "InstructionFactory.h"
 #include "instructionError/UnknownInstructionException.h"
-
+#include "../Processor.h"
 #include "opcode/jmp/JumpUnconditionalImmediate.h"
 #include "opcode/nop/Nop.h"
 #include "opcode/inc/IncrementRegister.h"
@@ -100,13 +100,16 @@
 #include "opcode/stop/Stop.h"
 #include "opcode/load/LoadSpToImmediateAddress.h"
 #include "opcode/halt/Halt.h"
+#include "opcode/load/LoadHlToSp.h"
+#include "opcode/load/LoadHlImmediateSp.h"
 
-Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc){
+
+Instruction* InstructionFactory::forCode(void* context, Memory& memory,unsigned short pc){
 	unsigned char byteInstr = memory[pc];
     Instruction* instruction;
 
     switch(byteInstr){
-        case 0xc3:
+        case 0xC3:
             instruction = new JumpUnconditionalImmediate();
             break;
         case 0x00:
@@ -635,7 +638,7 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
         	instruction =  new DecrementRegister(RegisterName::H);
             break;
         case 0x2D:
-        	instruction =  new DecrementRegister(RegisterName::H);
+        	instruction =  new DecrementRegister(RegisterName::L);
             break;
         case 0x35:
         	instruction =  new DecrementHL();
@@ -749,7 +752,7 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             instruction =  new LoadFromAddressToRegister(RegisterName::A, DoubleRegisterName::DE);
             break;
         case 0xF3:
-            instruction =  new DI();
+            instruction =  new DI(context);
             break;
         case 0xEA:
             instruction =  new LoadRegisterToImmediateAddress(RegisterName::A);
@@ -776,7 +779,7 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             instruction = new DecrementDoubleRegister(DoubleRegisterName::SP);
             break;
         case 0xFB:
-            instruction = new EI();
+            instruction = new EI(context);
             break;
         case 0xC7:
             instruction = new RST(0x00);
@@ -827,10 +830,16 @@ Instruction* InstructionFactory::forCode(const Memory& memory,unsigned short pc)
             instruction = new Stop();
             break;
         case 0x76:
-            instruction = new Halt();
+            instruction = new Halt(context);
+            break;
+        case 0xF9:
+            instruction = new LoadHlToSp();
             break;
         case 0x08:
             instruction = new LoadSpToImmediateAddress();
+            break;
+        case 0xF8:
+            instruction = new LoadHlImmediateSp();
             break;
         case 0xCB:
         	instruction =  InstructionFactory::forCodeCb(memory[pc + 1]);
@@ -1400,6 +1409,9 @@ Instruction* InstructionFactory::forCodeCb(unsigned char byteInstr){
         case 0x2E:
             instruction = new ShiftRightHL();
             break;
+        case 0x3F:
+            instruction = new ShiftRightRegisterResetMSB(RegisterName::A);
+            break;
         case 0x38:
             instruction = new ShiftRightRegisterResetMSB(RegisterName::B);
             break;
@@ -1417,9 +1429,6 @@ Instruction* InstructionFactory::forCodeCb(unsigned char byteInstr){
             break;
         case 0x3D:
             instruction = new ShiftRightRegisterResetMSB(RegisterName::L);
-            break;
-        case 0x3F:
-            instruction = new ShiftRightRegisterResetMSB(RegisterName::A);
             break;
         case 0x3E:
             instruction = new ShiftRightHLResetMSB();

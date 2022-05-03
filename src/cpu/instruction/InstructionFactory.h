@@ -7,7 +7,7 @@ class InstructionFactory{
     private:
         static Instruction* forCodeCb(unsigned char byteInstr);
     public:
-        static Instruction* forCode(const Memory& memory ,unsigned short pc);
+        static Instruction* forCode(void* context, Memory& memory ,unsigned short pc);
         
 };
 

@@ -7,6 +7,10 @@ void JumpConditionalImmediate::execute(Memory& ram, Registers& registers){
 	if(this->test(ram, registers))
 	{
 		registers.setPC(this->address);	
+		this->timing = 16;
+	}
+	else{
+		this->timing = 12;
 	}
 }
 
@@ -15,10 +19,10 @@ unsigned int JumpConditionalImmediate::getSize(){
 }
 
 unsigned int JumpConditionalImmediate::getTiming(){
-    return 12;
+    return this->timing;
 }
 
-void JumpConditionalImmediate::setParameters(const Memory& memory, unsigned short pc){
+void JumpConditionalImmediate::setParameters(Memory& memory, unsigned short pc){
 	this->address = memory.getDouble(pc);
 }
 

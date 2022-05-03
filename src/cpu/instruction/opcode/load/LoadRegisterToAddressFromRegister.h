@@ -15,7 +15,7 @@ class LoadRegisterToAddressFromRegister : public Instruction
 		void execute(Memory& ram, Registers& registers) override;
 		unsigned int getSize() override;
 		unsigned int getTiming() override;
-		void setParameters(const Memory&, unsigned short) override;
+		void setParameters(Memory&, unsigned short) override;
 		std::string toString() override;
 
 };

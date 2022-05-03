@@ -1,7 +1,11 @@
 #include "Halt.h"
+#include "../../../Processor.h"
+
+Halt::Halt(void* c):context(c){}
 
 void Halt::execute(Memory& ram, Registers& registers){
-    registers.setHalt();
+    ((Processor*)(this->context))->setHalt(true);
+    this->context = NULL;
 }
 
 unsigned int Halt::getSize(){
@@ -9,10 +13,10 @@ unsigned int Halt::getSize(){
 }
 
 unsigned int Halt::getTiming(){
-    return 1;
+    return 4;
 }
 
-void Halt::setParameters(const Memory&, unsigned short){
+void Halt::setParameters(Memory&, unsigned short){
 
 }
 

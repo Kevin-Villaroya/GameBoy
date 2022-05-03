@@ -6,7 +6,7 @@ AddImmediateToA::AddImmediateToA(){}
 void AddImmediateToA::execute(Memory& ram, Registers& registers){
     unsigned char aValue = registers.getA();
 
-    if(this->parameter + aValue == 0)
+    if((unsigned char)(this->parameter + aValue) == 0)
         registers.setFlagZ(1);
     else
         registers.setFlagZ(0);
@@ -16,7 +16,7 @@ void AddImmediateToA::execute(Memory& ram, Registers& registers){
     else
         registers.setFlagH(0);
 
-    if(aValue > (aValue + this->parameter))
+    if(aValue > (unsigned char)(aValue + this->parameter))
         registers.setFlagC(1);
     else
         registers.setFlagC(0);
@@ -34,7 +34,7 @@ unsigned int AddImmediateToA::getTiming(){
     return 8;
 }
 
-void AddImmediateToA::setParameters(const Memory& memory, unsigned short pc){
+void AddImmediateToA::setParameters(Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
 

@@ -5,21 +5,30 @@
 #include <iostream>
 #include <sstream>
 #include <stdlib.h>
+#include <stdio.h>
+#define INTERRUPT_ENABLE 0xFFFF
+#define INTERRUPT_FLAGS 0xFF0F
+#define DIV 0xFF04
+#define TIMA 0xFF05
+#define TMA 0xFF06
+#define TAC 0xFF07 
 
 Processor::Processor(Memory* memory, Registers* registers) : memory(memory), registers(registers){
 	this->ticksDelayed = 0;
 	this->instruction = nullptr;
+	this->halted = false;
+	this->interruptMasterEnable = false;
+	this->enableIME = false;
 }
 
 Instruction* Processor::fetch(){
     Instruction* currentInstr = this->decodeAndLoad();
-    this->registers->incrementPc(currentInstr->getSize());
 
     return currentInstr;
 }
 
-Instruction* Processor::decodeAndLoad(){	
-    Instruction* instr = InstructionFactory::forCode(*this->memory, this->registers->getPC());
+Instruction* Processor::decodeAndLoad(){
+    Instruction* instr = InstructionFactory::forCode(this, *this->memory, this->registers->getPC());
     instr->setParameters(*this->memory, this->registers->getPC() + 1);
 
     return instr;
@@ -27,6 +36,45 @@ Instruction* Processor::decodeAndLoad(){
 
 void Processor::execute(Instruction& instr){
     instr.execute(*this->memory, *this->registers);
+}
+
+int Processor::step(){
+	int cpuTicks = this->memory->get(this->registers->getPC()) == 0xCB ? 4 : 0;
+	if(!this->halted){
+		if(this->instruction != nullptr){
+			delete this->instruction;
+		}
+
+		this->instruction = this->fetch();
+		//this->printRegisters();
+		this->registers->incrementPc(this->instruction->getSize());
+		
+		/*
+		this->dbgUpdate();
+		this->dbgPrint();
+		*/
+	
+		
+		this->execute(*this->instruction);
+		cpuTicks += this->instruction->getTiming();
+	}
+	else{
+		cpuTicks = 4;
+		if(this->memory->get(INTERRUPT_FLAGS)){
+			this->halted = false;
+		}
+	}
+
+	if(this->interruptMasterEnable){
+		this->doInterrupt();
+		this->enableIME = false;
+	}
+
+	if(this->enableIME){
+		this->interruptMasterEnable = true;
+	}
+
+	return cpuTicks;// à voir pour le timing
 }
 
 const std::string Processor::getNameForCartridgeType(unsigned char type) {
@@ -201,12 +249,26 @@ void Processor::dumpRam(){
 
 	std::cout << "==============ATTRIBUTES================" << std::endl;	
 	std::cout <<"LY " << charToHex(this->memory->get(Memory::LY)) << std::endl;
-	std::cout <<"IE " << charToHex(this->memory->get(Memory::IE)) << std::endl;
-	std::cout <<"IF " << charToHex(this->memory->get(Memory::IF)) << std::endl;
-	std::cout <<"DIVIDER " << charToHex(this->memory->get(Memory::DIVIDER)) << std::endl;
+	std::cout <<"LE " << charToHex(this->memory->get(Memory::IF)) << std::endl;
+	std::cout <<"LF " << charToHex(this->memory->get(Memory::IE)) << std::endl;
 
-	std::cout << std::endl;
+}
 
+void Processor::printRegisters(){
+	printf("%04X: ", this->registers->getPC());
+	std::cout<<this->instruction->toString();
+	int offSet = 15 - this->instruction->toString().size();
+	while(offSet-- > 0) printf(" ");
+	printf("(%02X %02X %02X)",
+		this->memory->get(this->registers->getPC()),
+		this->memory->get(this->registers->getPC()+1),
+		this->memory->get(this->registers->getPC()+2));
+	printf(" A: %02X F: %c%c%c%c BC: %02X%02X DE: %02X%02X HL: %02X%02X\n", 
+		this->registers->getA(), 
+		this->registers->isFlagZ() ? 'Z' : '-', this->registers->isFlagN() ? 'N' : '-', this->registers->isFlagH() ? 'H' : '-', this->registers->isFlagC() ? 'C' : '-',
+		this->registers->getB(), this->registers->getC(),
+		this->registers->getD(), this->registers->getE(),
+		this->registers->getH(), this->registers->getL());
 }
 
 Instruction* Processor::getInstruction(){
@@ -216,3 +278,123 @@ Instruction* Processor::getInstruction(){
 Memory& Processor::getMemory(){
 	return *this->memory;
 }
+
+void Processor::dbgUpdate(){
+	if(this->memory->get(0xFF02) == 0x81){
+		char c = this->memory->get(0xFF01);
+		this->dbgMsg[this->dbgMsgSize++] = c;
+		this->memory->set(0xFF02, 0);
+	}
+}
+
+void Processor::dbgPrint(){
+	if(this->dbgMsg[0]){
+		printf("DBG : %s\n", this->dbgMsg);
+	}
+}
+
+void Processor::setIME(bool b){
+	this->interruptMasterEnable = b;
+}
+
+void Processor::setEnableIME(bool b){
+	this->enableIME = b;
+}
+
+void Processor::setHalt(bool b){
+	this->halted = b;
+}
+
+void Processor::interruptHandle(unsigned short address){
+	unsigned char loPC = this->registers->getPC();
+	unsigned char hiPC = this->registers->getPC()>>8;
+	unsigned short sp = this->registers->getSP();
+
+	this->memory->set(sp-1, hiPC);
+	this->memory->set(sp-2, loPC);
+	this->registers->setSP(sp-2);
+	this->registers->setPC(address);
+}	
+
+bool Processor::interruptCheck(unsigned short address,int interruptType){
+	unsigned char interruptFlags = this->memory->get(INTERRUPT_FLAGS);
+	unsigned char interruptEnable = this->memory->get(INTERRUPT_ENABLE);
+
+	if( (interruptFlags & (unsigned char)interruptType)  && (interruptEnable & (unsigned char)interruptType)){
+		//printf("triggered\n");
+		this->interruptHandle(address);
+
+		interruptFlags &= ~(unsigned char)interruptType;
+		this->memory->set(INTERRUPT_FLAGS, interruptFlags);
+		this->halted = false;
+		this->interruptMasterEnable = false;
+
+		return true;
+	}
+	return false;
+}
+
+void Processor::doInterrupt(){
+	if(this->interruptCheck(0x40, IT_VBLANK)){
+
+	}
+	else if(this->interruptCheck(0x48, IT_LCD_STAT)){
+
+	}
+	else if(this->interruptCheck(0x50, IT_TIMER)){
+		
+	}
+	else if(this->interruptCheck(0x58, IT_SERIAL)){
+		
+	}
+	else if(this->interruptCheck(0x60, IT_JOYPAD)){
+		
+	}
+}
+
+void Processor::timerTick(){
+	unsigned char tacValue = this->memory->get(TAC);
+
+	unsigned short divValue = this->memory->get(DIV)<<8;
+	divValue += this->memory->getDividerClock();
+	this->memory->incDividerClock();
+	unsigned short ndivValue = divValue + 1;
+
+	bool timaIncr;
+
+	switch(tacValue & 0b11){
+		case 0b00:
+			timaIncr = (ndivValue & (1<<9)) && !(divValue & (1<<9));
+			break;
+		case 0b01:
+			timaIncr = (ndivValue & (1<<3)) && !(divValue & (1<<3));
+			break;
+		case 0b10:
+			timaIncr = (ndivValue & (1<<5)) && !(divValue & (1<<5));
+			break;
+		case 0b11:
+			timaIncr = (ndivValue & (1<<7)) && !(divValue & (1<<7));
+			break;
+	}
+
+	if(timaIncr && (tacValue & (0b100))){
+		unsigned char tima;
+		unsigned char tma = this->memory->get(TMA);
+		this->memory->set(TIMA, tima = this->memory->get(TIMA)+1);
+		
+		if(tima == 0xFF){
+			this->memory->set(TIMA, tma);
+			
+			//interrupt request
+			unsigned char interruptFlags = this->memory->get(INTERRUPT_FLAGS);
+			this->memory->set(INTERRUPT_FLAGS, interruptFlags|IT_TIMER);
+		}
+	}
+
+}
+
+bool Processor::isHalt(){
+	return this->halted;
+}
+
+

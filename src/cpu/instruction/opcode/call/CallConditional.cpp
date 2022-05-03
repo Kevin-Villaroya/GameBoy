@@ -14,7 +14,9 @@ void CallConditional::execute(Memory& ram, Registers& registers) {
 		
 		registers.setSP(sp-2);
 		registers.setPC(this->address); 
+		this->timing = 24;
 	}
+	else this->timing = 12;
 }
 
 unsigned int CallConditional::getSize() {
@@ -22,10 +24,10 @@ unsigned int CallConditional::getSize() {
 }
 
 unsigned int CallConditional::getTiming() {
-	return 8;
+	return this->timing;
 }
 
-void CallConditional::setParameters(const Memory& memory, unsigned short pc) {
+void CallConditional::setParameters(Memory& memory, unsigned short pc) {
 	this->address = memory.getDouble(pc);
 }
 

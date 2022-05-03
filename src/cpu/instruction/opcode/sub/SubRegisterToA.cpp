@@ -6,7 +6,7 @@ void SubRegisterToA::execute(Memory& ram, Registers& registers){
     unsigned char regValue = registers.getRegister(registerName);
     unsigned char aValue = registers.getA();
 
-    if(regValue-aValue == 0)
+    if(aValue - regValue == 0)
         registers.setFlagZ(1);
     else
         registers.setFlagZ(0);
@@ -34,7 +34,7 @@ unsigned int SubRegisterToA::getTiming(){
     return 4;
 }
 
-void SubRegisterToA::setParameters(const Memory&, unsigned short){
+void SubRegisterToA::setParameters(Memory&, unsigned short){
 
 }
 

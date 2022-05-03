@@ -26,7 +26,7 @@ unsigned int XorRegisterToA::getTiming(){
     return 4;
 }
 
-void XorRegisterToA::setParameters(const Memory&, unsigned short){
+void XorRegisterToA::setParameters(Memory&, unsigned short){
 }
 
 std::string XorRegisterToA::toString(){

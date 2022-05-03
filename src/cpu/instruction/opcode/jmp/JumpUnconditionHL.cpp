@@ -11,10 +11,10 @@ unsigned int JumpUnconditionHL::getSize(){
 }
 
 unsigned int JumpUnconditionHL::getTiming(){
-    return 4;
+    return 8;
 }
 
-void JumpUnconditionHL::setParameters(const Memory& rom, unsigned short parameterBegin){}
+void JumpUnconditionHL::setParameters(Memory& rom, unsigned short parameterBegin){}
 
 std::string JumpUnconditionHL::toString(){
     return "JP HL";

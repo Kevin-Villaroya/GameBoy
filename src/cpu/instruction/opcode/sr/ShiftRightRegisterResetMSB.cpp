@@ -4,11 +4,11 @@ ShiftRightRegisterResetMSB::ShiftRightRegisterResetMSB(RegisterName r):registerN
 
 void ShiftRightRegisterResetMSB::execute(Memory& ram, Registers& registers){
     unsigned char aValue = registers.getRegister(this->registerName);
-	bool lastBit = aValue & 0b10000000;
+	bool lastBit = aValue & 0b00000001;
 
 	registers.setFlagC(lastBit);
 	aValue >>= 1;
-    aValue == 0 ? registers.setFlagZ(0) : registers.setFlagZ(1);
+    aValue == 0 ? registers.setFlagZ(1) : registers.setFlagZ(0);
     registers.setFlagH(0);
     registers.setFlagN(0);
     registers.setRegister(registerName, aValue);
@@ -22,7 +22,7 @@ unsigned int ShiftRightRegisterResetMSB::getTiming(){
     return 8;
 }
 
-void ShiftRightRegisterResetMSB::setParameters(const Memory&, unsigned short v){
+void ShiftRightRegisterResetMSB::setParameters(Memory&, unsigned short v){
 }
 
 std::string ShiftRightRegisterResetMSB::toString(){

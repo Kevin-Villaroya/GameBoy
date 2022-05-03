@@ -19,7 +19,7 @@ unsigned int LoadSpToImmediateAddress::getTiming(){
     return 20;
 }
 
-void LoadSpToImmediateAddress::setParameters(const Memory& ram, unsigned short pc){
+void LoadSpToImmediateAddress::setParameters(Memory& ram, unsigned short pc){
     this->address = ram.getDouble(pc);
 }
 

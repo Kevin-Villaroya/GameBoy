@@ -40,7 +40,7 @@ private:
 	unsigned short sp;
 	unsigned short pc;
 
-    unsigned char flags;
+    //unsigned char flags;
 
     //Interrupt Master Enable Flag
     bool IME;

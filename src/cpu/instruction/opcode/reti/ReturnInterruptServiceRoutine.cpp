@@ -22,7 +22,7 @@ unsigned int ReturnInterruptServiceRoutine::getTiming(){
  return 16;
 }
 
-void ReturnInterruptServiceRoutine::setParameters(const Memory&, unsigned short){}
+void ReturnInterruptServiceRoutine::setParameters(Memory&, unsigned short){}
 
 std::string ReturnInterruptServiceRoutine::toString(){
     return "RETI";

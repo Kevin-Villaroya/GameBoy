@@ -27,7 +27,7 @@ unsigned int OrHLToA::getTiming(){
     return 8;
 }
 
-void OrHLToA::setParameters(const Memory&, unsigned short){
+void OrHLToA::setParameters(Memory&, unsigned short){
 }
 
 std::string OrHLToA::toString(){

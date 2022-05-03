@@ -7,14 +7,12 @@
 
 class Instruction{
     private:
-        
     public:
         virtual void execute(Memory& ram, Registers& registers) = 0;
         virtual unsigned int getSize() = 0;
         virtual unsigned int getTiming() = 0;
-        virtual void setParameters(const Memory&, unsigned short pc) = 0;
+        virtual void setParameters(Memory&, unsigned short pc) = 0;
         virtual std::string toString() = 0;
-        virtual ~Instruction(){}
 
         unsigned short opCode;
 };

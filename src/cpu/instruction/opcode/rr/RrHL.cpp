@@ -7,7 +7,7 @@ void RrHL::execute(Memory& ram, Registers& registers){
     unsigned char memValue = ram.get(hlValue);
     unsigned char valueOf0bit = memValue&0b00000001;
     memValue >>= 1;
-    memValue += (registers.isFlagC()?1:0)<<7;
+    memValue += ((unsigned char)(registers.isFlagC()?1:0))<<7;
     if(memValue == 0)
         registers.setFlagZ(1);
     else   
@@ -26,7 +26,7 @@ unsigned int RrHL::getTiming(){
     return 16;
 }
 
-void RrHL::setParameters(const Memory&, unsigned short v){
+void RrHL::setParameters(Memory&, unsigned short v){
 }
 
 std::string RrHL::toString(){

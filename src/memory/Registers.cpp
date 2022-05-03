@@ -43,7 +43,7 @@ std::string Registers::getDoubleRegisterName(DoubleRegisterName registerName){
         case DoubleRegisterName::BC:
             return "BC";
             break;
-        case DoubleRegisterName::DE:
+        case DoubleRegisterName::DE:    
             return "DE";
             break;
         case DoubleRegisterName::HL:
@@ -62,19 +62,19 @@ std::string Registers::getDoubleRegisterName(DoubleRegisterName registerName){
 }
 
 void Registers::init(Memory* ram){
-    this->setA(ram->get(0x01));
-    this->setF(ram->get(0xB0));
+    this->setA(0x01);
+    this->setF(0xB0);
 
-    this->setB(ram->get(0x0013));
-    this->setC(ram->get(0x0014));
+    this->setB(0x00);
+    this->setC(0x13);
 
-    this->setD(ram->get(0x00D8));
-    this->setE(ram->get(0x00D9));
+    this->setD(0x00);
+    this->setE(0xD8);
 
-    this->setH(ram->get(0x014D));
-    this->setL(ram->get(0x014E));
+    this->setH(0x01);
+    this->setL(0x4D);
 
-    this->setSP(ram->get(0xFFFE));
+    this->setSP(0xFFFE);
 }
 
 void Registers::incrementPc(unsigned short incr){
@@ -102,7 +102,7 @@ unsigned char Registers::getE() const{
 }
 
 unsigned char Registers::getF() const{
-    return this->f;
+    return this->f & 0b11110000;
 }
 
 unsigned char Registers::getL() const{
@@ -197,50 +197,50 @@ unsigned short Registers::getDoubleRegister(DoubleRegisterName registerName) con
 }
 
 bool Registers::isFlagZ() const{
-    return this->flags & 0b10000000;
+    return this->f & 0b10000000;
 }
 
 bool Registers::isFlagN() const{
-    return this->flags & 0b01000000;
+    return this->f & 0b01000000;
 }
 
 bool Registers::isFlagH() const{
-    return this->flags & 0b00100000;
+    return this->f & 0b00100000;
 }
 
 bool Registers::isFlagC() const{
-    return this->flags & 0b00010000;
+    return this->f & 0b00010000;
 }
 
 void Registers::setFlagZ(bool value){
     if(value == true){
-        this->flags = this->flags | 0b10000000;
+        this->f = this->f | 0b10000000;
     }else{
-        this->flags = this->flags & 0b01111111;
+        this->f = this->f & 0b01111111;
     }
 }
 
 void Registers::setFlagN(bool value){
     if(value == true){
-        this->flags = this->flags | 0b01000000;
+        this->f = this->f | 0b01000000;
     }else{
-        this->flags = this->flags & 0b10111111;
+        this->f = this->f & 0b10111111;
     }
 }
 
 void Registers::setFlagH(bool value){
     if(value == true){
-        this->flags = this->flags | 0b00100000;
+        this->f = this->f | 0b00100000;
     }else{
-        this->flags = this->flags & 0b11011111;
+        this->f = this->f & 0b11011111;
     }
 }
 
 void Registers::setFlagC(bool value){
     if(value == true){
-        this->flags = this->flags | 0b00010000;
+        this->f = this->f | 0b00010000;
     }else{
-        this->flags = this->flags & 0b11101111;
+        this->f = this->f & 0b11101111;
     }
 }
 

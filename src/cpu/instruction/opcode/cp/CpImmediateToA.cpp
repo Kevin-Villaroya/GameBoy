@@ -33,7 +33,7 @@ unsigned int CpImmediateToA::getTiming(){
     return 8;
 }
 
-void CpImmediateToA::setParameters(const Memory& memory, unsigned short pc){
+void CpImmediateToA::setParameters(Memory& memory, unsigned short pc){
     this->parameter = memory[pc];
 }
 

@@ -12,7 +12,7 @@ unsigned int Nop::getTiming(){
     return 4;
 }
 
-void Nop::setParameters(const Memory&, unsigned short){
+void Nop::setParameters(Memory&, unsigned short){
 
 }
 

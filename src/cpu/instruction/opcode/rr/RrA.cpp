@@ -21,14 +21,8 @@ void RrA::execute(Memory& ram, Registers& registers){
 	else {
 		registers.setFlagC(false);
 	}
-	
-	if(aValue == 0) {
-		registers.setFlagZ(true);
-	}
-	else {
-		registers.setFlagZ(false);
-	}
-	
+
+	registers.setFlagZ(false);
     registers.setFlagH(0);
     registers.setFlagN(0);
     
@@ -43,7 +37,7 @@ unsigned int RrA::getTiming(){
     return 4;
 }
 
-void RrA::setParameters(const Memory&, unsigned short v){
+void RrA::setParameters(Memory&, unsigned short v){
 }
 
 std::string RrA::toString(){

@@ -1,4 +1,5 @@
 #include "ReturnUnconditional.h"
+#include <iostream>
 
 void ReturnUnconditional::execute(Memory& ram, Registers& registers){
 	unsigned short sp = registers.getSP();
@@ -6,8 +7,7 @@ void ReturnUnconditional::execute(Memory& ram, Registers& registers){
 	
 	pc = ram[sp + 1];
 	pc <<= 8;
-	pc += ram[sp];
-	
+	pc += ram[sp];	
 	registers.setSP(sp + 2);
 	registers.setPC(pc);
 }
@@ -20,7 +20,7 @@ unsigned int ReturnUnconditional::getTiming(){
  return 16;
 }
 
-void ReturnUnconditional::setParameters(const Memory&, unsigned short){}
+void ReturnUnconditional::setParameters(Memory&, unsigned short){}
 
 std::string ReturnUnconditional::toString(){
     return "RET";

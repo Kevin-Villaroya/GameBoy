@@ -18,7 +18,7 @@ void AddHLToA::execute(Memory& ram, Registers& registers){
     else
         registers.setFlagH(0);
 
-    if(aValue > (aValue+addValue))
+    if(aValue > (unsigned char)(aValue+addValue))
         registers.setFlagC(1);
     else
         registers.setFlagC(0);
@@ -36,7 +36,7 @@ unsigned int AddHLToA::getTiming(){
     return 8;
 }
 
-void AddHLToA::setParameters(const Memory&, unsigned short v){
+void AddHLToA::setParameters(Memory&, unsigned short v){
 }
 
 std::string AddHLToA::toString(){

@@ -12,6 +12,7 @@ public:
     virtual void VBlank() = 0;
     virtual Event fetchEvent() = 0;
     virtual ~Display(){}
+    virtual void update(unsigned int*) = 0;
 };
 
 #endif

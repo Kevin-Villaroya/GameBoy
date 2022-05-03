@@ -5,7 +5,7 @@ SetBitRegister::SetBitRegister(int b, RegisterName r):bit(b),registerName(r){}
 void SetBitRegister::execute(Memory& ram, Registers& registers){
     unsigned char registerValue = registers.getRegister(registerName);
     unsigned char compare = 0b1<<this->bit;
-    registerValue &= compare;
+    registerValue |= compare;
     
     registers.setRegister(registerName, registerValue);
 }
@@ -18,7 +18,7 @@ unsigned int SetBitRegister::getTiming(){
     return 8;
 }
 
-void SetBitRegister::setParameters(const Memory&, unsigned short v){
+void SetBitRegister::setParameters(Memory&, unsigned short v){
 }
 
 std::string SetBitRegister::toString(){

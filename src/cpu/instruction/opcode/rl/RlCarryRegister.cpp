@@ -10,8 +10,9 @@ void RlCarryRegister::execute(Memory& ram, Registers& registers){
 
     if(regValue == 0)
         registers.setFlagZ(1);
-    else   
+    else 
         registers.setFlagZ(0);
+
     registers.setFlagN(0);
     registers.setFlagH(0);
     registers.setFlagC(valueOf7bit);
@@ -26,7 +27,7 @@ unsigned int RlCarryRegister::getTiming(){
     return 8;
 }
 
-void RlCarryRegister::setParameters(const Memory&, unsigned short v){
+void RlCarryRegister::setParameters(Memory&, unsigned short v){
 }
 
 std::string RlCarryRegister::toString(){

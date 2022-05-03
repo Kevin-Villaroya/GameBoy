@@ -15,11 +15,3 @@ std::string charToHex(unsigned char value){
 
     return res;
 }
-
-std::string longToHex(long int value){
-    char res[16];
-
-	sprintf(res, "%#lx\n", value);
-
-    return res;
-}

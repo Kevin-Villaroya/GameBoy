@@ -14,7 +14,7 @@ unsigned int JumpUnconditionalImmediate::getTiming(){
     return 16;
 }
 
-void JumpUnconditionalImmediate::setParameters(const Memory& rom, unsigned short parameterBegin){
+void JumpUnconditionalImmediate::setParameters(Memory& rom, unsigned short parameterBegin){
     this->parameter = rom.getDouble(parameterBegin);
 }
 

@@ -7,7 +7,7 @@ void SubHLToA::execute(Memory& ram, Registers& registers){
     unsigned char toSubValue = ram.get(hlValue);
     unsigned char aValue = registers.getA();
 
-    if(toSubValue-aValue == 0)
+    if(aValue - toSubValue == 0)
         registers.setFlagZ(1);
     else
         registers.setFlagZ(0);
@@ -35,7 +35,7 @@ unsigned int SubHLToA::getTiming(){
     return 8;
 }
 
-void SubHLToA::setParameters(const Memory&, unsigned short v){
+void SubHLToA::setParameters(Memory&, unsigned short v){
 }
 
 std::string SubHLToA::toString(){

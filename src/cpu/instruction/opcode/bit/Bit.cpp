@@ -5,7 +5,7 @@ Bit::Bit(unsigned char bit, RegisterName registerName) : bit(bit), registerName(
 void Bit::execute(Memory& ram, Registers& registers){
     unsigned char valueRegister = registers.getRegister(registerName);
 
-    registers.setFlagZ((valueRegister >> bit) & 0b00000001);
+    registers.setFlagZ(!(valueRegister & (1<<this->bit)));
     registers.setFlagN(0);
     registers.setFlagH(1);
 }
@@ -18,7 +18,7 @@ unsigned int Bit::getTiming(){
     return 8;
 }
 
-void Bit::setParameters(const Memory&, unsigned short){
+void Bit::setParameters(Memory&, unsigned short){
 
 }
 

@@ -25,7 +25,7 @@ unsigned int RST::getTiming(){
     return 16;
 }
 
-void RST::setParameters(const Memory&, unsigned short){
+void RST::setParameters(Memory&, unsigned short){
 }
 
 std::string RST::toString(){

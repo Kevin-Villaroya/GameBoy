@@ -12,7 +12,7 @@ unsigned int Stop::getTiming(){
     return 4;
 }
 
-void Stop::setParameters(const Memory&, unsigned short v){
+void Stop::setParameters(Memory&, unsigned short v){
 }
 
 std::string Stop::toString(){

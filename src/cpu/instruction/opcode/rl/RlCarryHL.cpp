@@ -27,7 +27,7 @@ unsigned int RlCarryHL::getTiming(){
     return 16;
 }
 
-void RlCarryHL::setParameters(const Memory&, unsigned short v){
+void RlCarryHL::setParameters(Memory&, unsigned short v){
 }
 
 std::string RlCarryHL::toString(){

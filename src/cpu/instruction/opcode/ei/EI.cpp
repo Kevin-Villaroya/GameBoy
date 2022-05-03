@@ -1,7 +1,11 @@
 #include "EI.h"
+#include "../../../Processor.h"
+
+EI::EI(void* c):context(c){}
 
 void EI::execute(Memory& ram, Registers& registers){
-    registers.enableIME();
+    ((Processor*)(this->context))->setIME(true);
+    this->context = NULL;
 }
 
 unsigned int EI::getSize(){
@@ -12,7 +16,7 @@ unsigned int EI::getTiming(){
     return 4;
 }
 
-void EI::setParameters(const Memory&, unsigned short){
+void EI::setParameters(Memory&, unsigned short){
 
 }
 
