@@ -1,6 +1,7 @@
 #ifndef __MEMORY_H__
 #define __MEMORY_H__
 #include "../ppu/OamDma.h"
+#include "../ppu/SpriteFetcher.h"
 
 #include <cstdint>
 #include <string>
@@ -10,6 +11,7 @@
 
 class Memory{
     friend class OamDma;
+    friend class SpriteFetcher;
     private:
         int timerCounter;
         int dividerCounter;
@@ -92,6 +94,8 @@ class Memory{
         void incDividerClock();
 
         unsigned int getBgpColor(unsigned char);
+        unsigned int getSp1Color(unsigned char);
+        unsigned int getSp2Color(unsigned char);
 
         std::string dump();
 };

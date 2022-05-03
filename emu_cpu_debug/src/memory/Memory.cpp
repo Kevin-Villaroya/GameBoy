@@ -75,15 +75,13 @@ void Memory::set(unsigned short pos, unsigned char value){
         }
 
         if(pos == BGP){
-            //update apletta
+            this->updatePalette(value, 0);
         }
-
         if(pos == BGP + 1){
-            //update palatea
+            updatePalette(value & 0b11111100, 1);
         }
-
         if(pos == BGP + 2){
-            //update palette
+            updatePalette(value & 0b11111100, 1);
         }
 
         if(pos >= 0xFE00 && pos < 0xFEA0){
@@ -389,4 +387,12 @@ void Memory::updatePalette(unsigned char data, unsigned char palette){
 
 unsigned int Memory::getBgpColor(unsigned char i){
     return this->bgpColors[i];
+}
+
+unsigned int Memory::getSp1Color(unsigned char i){
+    return this->sp1Colors[i];
+}
+
+unsigned int Memory::getSp2Color(unsigned char i){
+    return this->sp2Colors[i];
 }

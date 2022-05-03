@@ -1,13 +1,13 @@
 #include "TileFetcher.h"
 #include "../util/BitMath.h"
 #include "../util/DecToHex.h"
+#include "../memory/Memory.h"
 #include <iostream>
 
-TileFetcher::TileFetcher(){
+TileFetcher::TileFetcher(SpriteFetcher* sp):spriteFetcher(sp){
     this->currentState = PixelFetcherState::ReadTileId;
     this->pixelPushed = 0;
     this->xLine = 0;
-    this->xFetch = 0;
     this->clearFifo();
 }
 
@@ -44,6 +44,7 @@ void TileFetcher::reset(){
     this->pixelPushed = 0;
     this->xLine = 0;
     this->xFetch = 0;
+    this->xPtr = 0;
 }
 
 void TileFetcher::clearFifo(){
@@ -91,6 +92,7 @@ void TileFetcher::pushPixel(unsigned int* videoBuffer){
 }
 
 void TileFetcher::readTileId(){
+    this->spriteFetcher->setOamEntriesCounter(0);
     if (this->ram->get(Memory::LCDC) & 0b1) {
         this->bgwData[0] = this->ram->get(
             ((this->ram->get(Memory::LCDC) & 0b1000) ? 0x9C00 : 0x9800) + 
@@ -101,6 +103,12 @@ void TileFetcher::readTileId(){
             this->bgwData[0] += 128;
         }
     }
+
+    if((this->ram->get(Memory::LCDC) & 0b10) && this->spriteFetcher->spritesOnLine()){
+        //printf("%i\n",this->spriteFetcher->spritesOnLine() );
+        this->spriteFetcher->loadSpriteTile(this);
+    }
+    
 
     this->currentState = PixelFetcherState::ReadTileData0;
     this->xFetch += 8;
@@ -113,6 +121,7 @@ void TileFetcher::readTileData0(){
         (this->bgwData[0] * 16) + 
         this->yTile);
 
+    this->spriteFetcher->loadSpriteData(this, 0);    
     this->currentState = PixelFetcherState::ReadTileData1;
     //printf("readTileData0 bgw_fectch[1]: %02X\n", this->bgwData[1]);
 }
@@ -122,6 +131,8 @@ void TileFetcher::readTileData1(){
         ((this->ram->get(Memory::LCDC)&0b10000) ? 0x8000 : 0x8800) +
         (this->bgwData[0] * 16) + 
         this->yTile + 1);
+
+    this->spriteFetcher->loadSpriteData(this, 1);    
     this->currentState = PixelFetcherState::Idle;
     //printf("readTileData0 bgw_fectch[2]: %02X\n", this->bgwData[2]);
 }
@@ -141,8 +152,18 @@ void TileFetcher::pushToFIFO(){
         
         unsigned int color = this->ram->getBgpColor(hi | lo);
 
+        if(!(this->ram->get(Memory::LCDC) & 0b1)){
+            color = this->ram->getBgpColor(0);
+        }
+
+        if(this->ram->get(Memory::LCDC) & 0b10){
+            color = this->spriteFetcher->fetch(this, bit, color, hi|lo);
+            //printf("%08X\n", color);
+        }
+
         if (x >= 0) {
             this->fifo.push(color);
+            this->xPtr++;
             //printf("color pushed: %08X\n", color);
         }
     }   
@@ -152,4 +173,16 @@ void TileFetcher::pushToFIFO(){
 
 int TileFetcher::getPixelPushed(){
     return this->pixelPushed;
+}
+
+unsigned char TileFetcher::getXptr(){
+    return this->xPtr;
+}
+
+unsigned char* TileFetcher::getFetchOamData(){
+    return this->fetchOamData;
+}
+
+unsigned char TileFetcher::getXfetch(){
+    return this->xFetch;
 }

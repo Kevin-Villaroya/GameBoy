@@ -2,7 +2,6 @@
 #define __PIXEL_FETCHER_H__
 
 #include <queue>
-#include "../memory/Memory.h"
 
 enum class PixelFetcherState{
     ReadTileId,
@@ -12,12 +11,16 @@ enum class PixelFetcherState{
     PushToFIFO
 };
 
+class SpriteFetcher;
+class Memory;
+
 class TileFetcher{
 private:
     std::queue<unsigned int> fifo;
     PixelFetcherState currentState;
 
     Memory* ram;
+    SpriteFetcher* spriteFetcher;
 
     unsigned char pixelPushed;
     unsigned char xLine;
@@ -27,7 +30,7 @@ private:
     unsigned char yMap;
     unsigned char xMap;
     unsigned char yTile;
-    unsigned char xFifo;
+    unsigned char xPtr;
     
 
     void readTileId();
@@ -37,7 +40,7 @@ private:
     void pushPixel(unsigned int* videoBuffer);
     
 public:
-    TileFetcher();
+    TileFetcher(SpriteFetcher*);
     void tick();
     void start(Memory* ram, unsigned int ppuLineTicks, unsigned int* videoBuffer);
     
@@ -48,6 +51,10 @@ public:
     void clearFifo();
 
     int getPixelPushed();
+
+    unsigned char getXptr();
+    unsigned char* getFetchOamData();
+    unsigned char getXfetch();
 
 };
 

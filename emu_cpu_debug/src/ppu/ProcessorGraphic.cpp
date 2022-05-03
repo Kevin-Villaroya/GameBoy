@@ -5,7 +5,7 @@
 #include <unistd.h>
 #define LCDS 0xFF41
 
-ProcessorGraphic::ProcessorGraphic(Display* screen, Memory* ram) : screen(screen), ram(ram){
+ProcessorGraphic::ProcessorGraphic(Display* screen, Memory* ram) : screen(screen), ram(ram), spriteFetcher(ram), tileFetcher(&spriteFetcher){
     this->currentFrame = 0;
     this->ticks = 0;
     this->setCurrentState(ProcessorGraphicState::OAMSearch);
@@ -69,6 +69,9 @@ void ProcessorGraphic::oamSearch(){
 
         this->tileFetcher.reset();
     }
+
+    if(this->ticks == 1)
+        this->spriteFetcher.loadSprites();
 }
 
 void ProcessorGraphic::pixelTransfer(){
@@ -218,6 +221,7 @@ unsigned int* ProcessorGraphic::getVideoBuffer(){
 unsigned int ProcessorGraphic::getCurrentFrame(){
     return this->currentFrame;
 }
+
 
 
 ProcessorGraphic::~ProcessorGraphic(){}
