@@ -1,5 +1,5 @@
 CFLAG = -g -Wall -ansi -pedantic -std=c++17 -lstdc++fs -Wno-psabi
-CLIB = -lSDL2main -lSDL2 -lSDL2_ttf
+CLIB = -lSDL2main -lSDL2 -lSDL2_ttf -lpthread
 
 CC = g++
 TARGET_EXEC ?= GameBoy

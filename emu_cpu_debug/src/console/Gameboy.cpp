@@ -17,8 +17,7 @@ Gameboy::Gameboy(char* path) : memory(path), cpu(Processor(&memory, &registers))
 	this->registers.init(&this->memory);
 	this->registers.setPC(0x100);
 
-	this->frequency = 4096;	
-	this->lastTimeFetch = 0;
+	this->frequency = 4096;
 
 	this->canTick = true;
 	this->canSkip = false;
@@ -46,6 +45,7 @@ void Gameboy::launchCpuThread(){
 		
 		int cpuTicks = this->cpu.step();;
 		this->gameboyTick(cpuTicks);
+		this->doInterrupts();
 
 	}
 	return;
@@ -167,63 +167,60 @@ void Gameboy::serviceInterrupt(int interruption){
 	}
 }
 
-void Gameboy::treatEvent(uint32_t currentTime){
-	if(this->lastTimeFetch + Gameboy::DELAY_FETCH <= currentTime){
-		Event event = this->view->fetchEvent();
-		this->lastTimeFetch = currentTime;
+void Gameboy::treatEvent(){
+	Event event = this->view->fetchEvent();
 
-		switch (event){
-			case Event::QUIT:
-				this->running = false;
-				break;
-			
-			case Event::TICK:
-				this->canTick = true;
-				break;
-			case Event::SKIP:
-				this->canSkip = true;
-				this->canTick = true;
-				break;
-			case Event::WAIT_OPCODE_BREAKER:
-				this->waitingBreakingOpCode = true;
-				this->canTick = true;
-				break;
-			case Event::DUMP_RAM:
-				if(this->isDebugMode){
-					this->cpu.dumpRam();
-				}
-				break;
-			case Event::CONTINUE:
-				this->canContinue = !this->canContinue;
-				this->canTick = true;
-				break;
-			case Event::A:
-				this->gameboyKey(4);
-				break;
-			case Event::S:
-				this->gameboyKey(5);
-				break;
-			case Event::RETURN:
-				this->gameboyKey(7);
-				break;
-			case Event::SPACE:
-				this->gameboyKey(6);
-				break;
-			case Event::RIGHT:
-				this->gameboyKey(0);
-				break;
-			case Event::LEFT:
-				this->gameboyKey(1);
-				break;
-			case Event::UP:
-				this->gameboyKey(2);
-				break;
-			case Event::DOWN:
-				this->gameboyKey(3);
-				break;
-			default:
-				break;
-		}
+	switch (event){
+		case Event::QUIT:
+			this->running = false;
+			break;
+		
+		case Event::TICK:
+			this->canTick = true;
+			break;
+		case Event::SKIP:
+			this->canSkip = true;
+			this->canTick = true;
+			break;
+		case Event::WAIT_OPCODE_BREAKER:
+			this->waitingBreakingOpCode = true;
+			this->canTick = true;
+			break;
+		case Event::DUMP_RAM:
+			if(this->isDebugMode){
+				this->cpu.dumpRam();
+			}
+			break;
+		case Event::CONTINUE:
+			this->canContinue = !this->canContinue;
+			this->canTick = true;
+			break;
+		case Event::A:
+			this->gameboyKey(4);
+			break;
+		case Event::S:
+			this->gameboyKey(5);
+			break;
+		case Event::RETURN:
+			this->gameboyKey(7);
+			break;
+		case Event::SPACE:
+			this->gameboyKey(6);
+			break;
+		case Event::RIGHT:
+			this->gameboyKey(0);
+			break;
+		case Event::LEFT:
+			this->gameboyKey(1);
+			break;
+		case Event::UP:
+			this->gameboyKey(2);
+			break;
+		case Event::DOWN:
+			this->gameboyKey(3);
+			break;
+		default:
+			break;
 	}
 }
 

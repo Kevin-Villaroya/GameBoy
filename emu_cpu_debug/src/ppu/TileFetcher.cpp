@@ -70,13 +70,13 @@ void TileFetcher::start(Memory* ram, unsigned int ppuLineTicks, unsigned int* vi
     
     this->pushPixel(videoBuffer);
 
+#include "TileFetcher.h"
 }
 
 void TileFetcher::pushPixel(unsigned int* videoBuffer){
-    unsigned int p = 0;
     if (this->fifo.size() > 8) {
         unsigned int pixelData = this->fifo.front();
-        p = pixelData;
+        unsigned int p = pixelData;
         this->fifo.pop();
 
         if (this->xLine >= (ram->get(Memory::SCX) % 8)) {

@@ -21,10 +21,11 @@ enum class ProcessorGraphicState{
 class ProcessorGraphic{
 private:
 	
-	TileFetcher tileFetcher;
-	SpriteFetcher spriteFetcher;
 	Display* screen;
 	Memory* ram;
+	SpriteFetcher spriteFetcher;
+	TileFetcher tileFetcher;
+	
 	void setCurrentState(ProcessorGraphicState);
 	void incrementLy();
 	

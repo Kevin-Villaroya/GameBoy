@@ -19,9 +19,6 @@ private:
 	ProcessorGraphic ppu;
 	
 	int frequency;
-	
-
-	uint32_t lastTimeFetch;
 
 	//context
 	bool running;
@@ -56,7 +53,7 @@ public:
 	
 	void gameboyTick(unsigned int n);
 	
-	void treatEvent(uint32_t currentTime);
+	void treatEvent();
 	void debugMode();
 
 	void printTest();

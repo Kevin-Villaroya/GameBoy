@@ -4,12 +4,15 @@
 #include <deque>
 #include "../memory/Memory.h"
 #include "TileFetcher.h"
+
 struct Oam{
     unsigned char yPos;
     unsigned char xPos;
     unsigned char tileIndex;
     unsigned char flags;
 };
+
+class TileFetcher;
 
 class SpriteFetcher{
     private:

@@ -1,7 +1,6 @@
 #ifndef __MEMORY_H__
 #define __MEMORY_H__
 #include "../ppu/OamDma.h"
-#include "../ppu/SpriteFetcher.h"
 
 #include <cstdint>
 #include <string>
@@ -11,7 +10,6 @@
 
 class Memory{
     friend class OamDma;
-    friend class SpriteFetcher;
     private:
         int timerCounter;
         int dividerCounter;

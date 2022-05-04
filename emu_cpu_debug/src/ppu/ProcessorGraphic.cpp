@@ -195,22 +195,9 @@ void ProcessorGraphic::vBlank(){
 
     }
 
-    /*
-    this->ram->requestInterupt(0); //set interruption vblank
     if(this->ticks == 1){
         this->ram->requestInterupt(0); //set interruption vblank
     }
-    
-    if(this->ticks == 456){
-        this->ticks = 0;
-        this->ram->set(Memory::LY, this->ram->get(Memory::LY) + 1);
-
-        if(this->ram->get(Memory::LY) == 153){
-            this->ram->set(Memory::LY, 0);
-            this->currentState = ProcessorGraphicState::OAMSearch;
-        }
-    }
-    */
 }
 
 unsigned int* ProcessorGraphic::getVideoBuffer(){
