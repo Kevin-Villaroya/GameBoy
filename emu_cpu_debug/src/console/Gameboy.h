@@ -41,8 +41,6 @@ private:
 	void serviceInterrupt(int interruption);
 
 	bool needBreak();
-
-	void gameboyKey(int key);
 	void launchCpuThread();
 
 	OamDma oamDma;

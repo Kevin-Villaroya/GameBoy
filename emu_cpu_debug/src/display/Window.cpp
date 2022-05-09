@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Window.h"
+#include "../gamepad/Gamepad.h"
 #include "SDL2/SDL_ttf.h"
 
 
@@ -157,57 +158,63 @@ void Window::VBlank(){
     SDL_RenderPresent(this->renderer);
 }
 
-Event Window::fetchEvent(){
-    SDL_Event events;
+void Window::uiKey(bool down, SDL_Keycode key){
+    if(key == SDLK_UP){
+        Gamepad::getInstance()->getState()->up = down;
+    }
 
-    bool findEvent = false;
-            
+    if(key == SDLK_DOWN){
+        Gamepad::getInstance()->getState()->down = down;
+    }
+
+    if(key == SDLK_LEFT){
+        Gamepad::getInstance()->getState()->left = down;
+    }
+
+    if(key == SDLK_RIGHT){
+        Gamepad::getInstance()->getState()->right = down;
+    }
+
+    if(key == SDLK_a){
+        Gamepad::getInstance()->getState()->a = down;
+    }
+
+    if(key == SDLK_s){
+        Gamepad::getInstance()->getState()->b = down;
+    }
+
+    if(key == SDLK_RETURN){
+        Gamepad::getInstance()->getState()->start = down;
+    }
+
+    if(key == SDLK_TAB){
+        Gamepad::getInstance()->getState()->select = down;
+    }
+}
+
+Event Window::fetchEvent(){
+    SDL_Event events;            
 
     while(SDL_PollEvent(&events) > 0){
         if((events.type == SDL_WINDOWEVENT) && (events.window.event == SDL_WINDOWEVENT_CLOSE)){
             return Event::QUIT;
         }
-        /*
-        if(!findEvent){
-            findEvent = true;
-            switch(events.type){
-                case SDL_QUIT:
-                    return Event::QUIT;
-                    break;
-                case SDL_KEYUP:
-                    if(events.key.keysym.sym == SDLK_i){
-                        return Event::SKIP;
-                    }else if(events.key.keysym.sym == SDLK_t){
-                        return Event::TICK;
-                    }else if(events.key.keysym.sym == SDLK_b){
-                        return Event::WAIT_OPCODE_BREAKER;
-                    }else if(events.key.keysym.sym == SDLK_d){
-                        return Event::DUMP_RAM;
-                    }else if(events.key.keysym.sym == SDLK_g){
-                        return Event::CONTINUE;
-                    }else if(events.key.keysym.sym == SDLK_a){
-                        return Event::A;
-                    }else if(events.key.keysym.sym == SDLK_s){
-                        return Event::S;
-                    }else if(events.key.keysym.sym == SDLK_RETURN){
-                        return Event::RETURN;
-                    }else if(events.key.keysym.sym == SDLK_SPACE){
-                        return Event::SPACE;
-                    }else if(events.key.keysym.sym == SDLK_RIGHT){
-                        return Event::RIGHT;
-                    }else if(events.key.keysym.sym == SDLK_LEFT){
-                        return Event::LEFT;
-                    }else if(events.key.keysym.sym == SDLK_UP){
-                        return Event::UP;
-                    }else if(events.key.keysym.sym == SDLK_DOWN){
-                        return Event::DOWN;
-                    }
-                default:
-                    return Event::NONE;
-                    break;
-            }
+
+        switch(events.type){
+            case SDL_QUIT:
+                return Event::QUIT;
+                break;
+            case SDL_KEYUP:
+                this->uiKey(false, events.key.keysym.sym);
+                break;
+            case SDL_KEYDOWN:
+                this->uiKey(true, events.key.keysym.sym);
+                break;
+            default:
+                return Event::NONE;
+                break;
         }
-        */
+        
     }
     
     return Event::NONE;

@@ -1,6 +1,9 @@
 #include <iostream>
 #include "console/Gameboy.h"
 
+#define mycout std::cout <<  __FILE__  << "(" << __LINE__ << ") "
+#define cout mycout
+
 int main(int argc, char* argv[]){
 
     if(argc < 2){

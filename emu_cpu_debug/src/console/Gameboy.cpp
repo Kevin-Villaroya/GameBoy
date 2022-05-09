@@ -27,10 +27,6 @@ Gameboy::Gameboy(char* path) : memory(path), cpu(Processor(&memory, &registers))
 	this->die = false;
 	this->cpu.printMetadata();
 	this->view = new Window(&this->memory);
-
-	//this->opCodeBreak.push_back(0x10);
-	this->pcValueBreak.push_back(0x0358);
-	//this->pcValueBreak.push_back(0x29BA);
 }
 
 void Gameboy::launchCpuThread(){
@@ -57,7 +53,6 @@ bool Gameboy::run(){
 
 	uint64_t prevFrame = 0;
 	while(!this->die){
-
 		if(this->view->fetchEvent() == Event::QUIT)
 			this->die = true;
 		if(this->ppu.getCurrentFrame() != prevFrame){
@@ -110,11 +105,6 @@ void Gameboy::doInterrupts(){
 		unsigned char requests = this->memory.get(Memory::IF);
 		unsigned char enabled = this->memory.get(Memory::IE);
 
-		if(testBit(requests, 0)){
-			//std::cout << charToHex(enabled) << std::endl;
-			//std::cout << shortToHex(this->registers.getPC()) << std::endl;
-		}
-
 		if(requests > 0){
 			for(int i = 0; i < 5; i++){
 				if(testBit(requests,i)){
@@ -145,7 +135,10 @@ void Gameboy::serviceInterrupt(int interruption){
 	
 	registers.setSP(sp-2);
 
-	//std::cout << "doing interrupt " << interruption << std::endl;
+	if(interruption == 4){
+		std::cout << "doing interrupt " << interruption << std::endl;
+	}
+	
 
 	//call a interrupt-service routine
 	switch (interruption){
@@ -168,7 +161,7 @@ void Gameboy::serviceInterrupt(int interruption){
 }
 
 void Gameboy::treatEvent(){
-	Event event = this->view->fetchEvent();
+	/*Event event = this->view->fetchEvent();
 
 	switch (event){
 		case Event::QUIT:
@@ -221,7 +214,7 @@ void Gameboy::treatEvent(){
 			break;
 		default:
 			break;
-	}
+	}*/
 }
 
 void Gameboy::debugMode(){
@@ -230,7 +223,6 @@ void Gameboy::debugMode(){
 
 void Gameboy::debug(bool isInstructionExecuted){
 	if(this->isDebugMode){
-		//std::cout << "--tick--" << std::endl;
 
 		if(isInstructionExecuted){
 			if(this->waitingBreakingOpCode){
@@ -254,35 +246,6 @@ bool Gameboy::needBreak(){
 	bool pcCodeBreak = std::find(this->pcValueBreak.begin(), this->pcValueBreak.end(), this->registers.getPC()) != this->pcValueBreak.end();
 
 	return opCodeBreak || pcCodeBreak;
-}
-
-void Gameboy::gameboyKey(int key){
-	bool previouslyUnset = false;
-
-	if(testBit(this->memory.getJoypad(), key) == false){
-		previouslyUnset = true;
-	}
-
-	this->memory.setJoypad(returnResetBit(this->memory.getJoypad(), key));
-
-	bool buttonPressed = true;
-
-	if(key < 3){
-		buttonPressed = false;
-	}
-
-	unsigned char keyRequest = this->memory.get(Memory::JOYPAD);
-	bool requestInterrupt = false;
-
-	if(buttonPressed && !testBit(keyRequest, 5)){
-		requestInterrupt = true;
-	}else if(!buttonPressed && !testBit(keyRequest, 4)){
-		requestInterrupt = true;
-	}
-
-	if(requestInterrupt && !previouslyUnset){
-		this->memory.requestInterupt(4);
-	}
 }
 
 void Gameboy::gameboyTick(unsigned int nb){

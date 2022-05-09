@@ -44,6 +44,9 @@ private:
 	// All pixels in the current scanline
 	unsigned char pixelLine[160];
 
+	int windowY;
+	int windowLine;
+
 	void oamSearch();
 	void pixelTransfer();
 	void vBlank();
@@ -52,7 +55,7 @@ private:
 	void setLCDStatus();
 	bool isLCDEnabled();
 
-
+	bool isWindowVisible();
 public:
 	ProcessorGraphic(Display* screen, Memory* ram);
 	~ProcessorGraphic();

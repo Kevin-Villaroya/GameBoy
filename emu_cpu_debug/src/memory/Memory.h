@@ -23,8 +23,6 @@ class Memory{
         unsigned char memory[RAM_SIZE];
         unsigned char bootRom[256];
 
-        unsigned char joypadState;
-
         void resetMemory();
 
         void setBootMemory();
@@ -62,6 +60,8 @@ class Memory{
         static const unsigned short WX = 0xFF4B;
         static const unsigned short IE = 0xFFFF;
 
+        unsigned char joypadState;
+
         Memory(char* path);
 
         void init(OamDma*);
@@ -84,9 +84,6 @@ class Memory{
 
         void updateTimers(int cycles);
         void requestInterupt(unsigned char bit);
-
-        void setJoypad(unsigned char value);
-        unsigned char getJoypad();
 
         unsigned char getDividerClock();
         void incDividerClock();

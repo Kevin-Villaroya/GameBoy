@@ -8,11 +8,12 @@
 ProcessorGraphic::ProcessorGraphic(Display* screen, Memory* ram) : screen(screen), ram(ram), spriteFetcher(ram), tileFetcher(&spriteFetcher){
     this->currentFrame = 0;
     this->ticks = 0;
+    this->windowY = 0;
     this->setCurrentState(ProcessorGraphicState::OAMSearch);
     
     
     for(int i=0 ; i<SIZE_SCREEN_X*SIZE_SCREEN_Y*4 ; i++){
-            this->videoBuffer[i] = 0;
+        this->videoBuffer[i] = 0;
     }
 
 }
@@ -164,6 +165,10 @@ void ProcessorGraphic::incrementLy(){
     unsigned char ly = this->ram->get(Memory::LY);
     unsigned char lyc = this->ram->get(Memory::LYC);
     
+    if(isWindowVisible() && ly >= windowY && ly < windowY + SIZE_SCREEN_Y){
+        windowLine++;
+    }
+
     ly++;
     this->ram->set(Memory::LY, ly);
     
@@ -190,6 +195,7 @@ void ProcessorGraphic::vBlank(){
         if(this->ram->get(Memory::LY) >= MAX_FRAME_LINE){
             this->setCurrentState(ProcessorGraphicState::OAMSearch);
             this->ram->set(Memory::LY, 0);
+            this->windowLine = 0;
         }
         this->ticks = 0;
 
@@ -209,6 +215,12 @@ unsigned int ProcessorGraphic::getCurrentFrame(){
     return this->currentFrame;
 }
 
+bool ProcessorGraphic::isLCDEnabled(){
+   return testBit(this->ram->get(Memory::LCDC), 7) ;
+}
 
+bool ProcessorGraphic::isWindowVisible(){
+    return this->isLCDEnabled() && this->x >= 0 && this->x <= 166 && this->windowY >= 0 && this->windowY < SIZE_SCREEN_Y;
+}
 
 ProcessorGraphic::~ProcessorGraphic(){}
