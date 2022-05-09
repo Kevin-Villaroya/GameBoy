@@ -58,7 +58,6 @@ unsigned char Gamepad::get(){
         }
     }
 
-    std::cout << charToHex(output) << std::endl;
     return output;
 }
 

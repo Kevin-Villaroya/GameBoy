@@ -27,22 +27,32 @@ Gameboy::Gameboy(char* path) : memory(path), cpu(Processor(&memory, &registers))
 	this->die = false;
 	this->cpu.printMetadata();
 	this->view = new Window(&this->memory);
+
+	this->start = SDL_GetTicks();
+	this->instructionDone = 0;
 }
 
 void Gameboy::launchCpuThread(){
 	int n = 0;
     int stop = 0x10000;
 	while(this->running && (n <= stop)){
-		
-		if(this->paused){
-			SDL_Delay(10);
-			continue;
-		}
-		
 		int cpuTicks = this->cpu.step();;
 		this->gameboyTick(cpuTicks);
 		this->doInterrupts();
 
+		this->instructionDone += cpuTicks;
+
+		if(this->instructionDone >= CLOCKSPEED){
+			int currentTime = SDL_GetTicks();
+			float timeWait = 1 - ((currentTime - start) / 1000.0);
+
+			if(timeWait < 1){
+				SDL_Delay(1 - timeWait);
+			}
+			
+			start = currentTime;
+			this->instructionDone = 0;
+		}
 	}
 	return;
 }
@@ -61,37 +71,7 @@ bool Gameboy::run(){
 		prevFrame = this->ppu.getCurrentFrame();
 		
 	}
-	return 0;
-
-	/*
-	uint32_t currentTime = 0;
-
-	while(this->isRunning){
-		currentTime = SDL_GetTicks();
-		
-		this->treatEvent(currentTime);
-
-		if(canTick){
-			try{
-				this->doInterrupts();
-
-				if(!this->registers.isHalt()){
-					bool instructionExecuted = this->cpu.tick();
-					this->updateTimers(instructionExecuted);
-					this->debug(instructionExecuted);
-				}
-
-				this->ppu.tick();
-			}catch(UnknownInstructionException &error){
-				std::cerr << error.what() << std::endl;
-				return 1;
-			}			
-		}		
-	}
-	*/
-
-	
-	
+	return 0;	
 }
 
 void Gameboy::updateTimers(bool instructionExecuted){
@@ -158,63 +138,6 @@ void Gameboy::serviceInterrupt(int interruption){
 		default:
 			break;
 	}
-}
-
-void Gameboy::treatEvent(){
-	/*Event event = this->view->fetchEvent();
-
-	switch (event){
-		case Event::QUIT:
-			this->running = false;
-			break;
-		
-		case Event::TICK:
-			this->canTick = true;
-			break;
-		case Event::SKIP:
-			this->canSkip = true;
-			this->canTick = true;
-			break;
-		case Event::WAIT_OPCODE_BREAKER:
-			this->waitingBreakingOpCode = true;
-			this->canTick = true;
-			break;
-		case Event::DUMP_RAM:
-			if(this->isDebugMode){
-				this->cpu.dumpRam();
-			}
-			break;
-		case Event::CONTINUE:
-			this->canContinue = !this->canContinue;
-			this->canTick = true;
-			break;
-		case Event::A:
-			this->gameboyKey(4);
-			break;
-		case Event::S:
-			this->gameboyKey(5);
-			break;
-		case Event::RETURN:
-			this->gameboyKey(7);
-			break;
-		case Event::SPACE:
-			this->gameboyKey(6);
-			break;
-		case Event::RIGHT:
-			this->gameboyKey(0);
-			break;
-		case Event::LEFT:
-			this->gameboyKey(1);
-			break;
-		case Event::UP:
-			this->gameboyKey(2);
-			break;
-		case Event::DOWN:
-			this->gameboyKey(3);
-			break;
-		default:
-			break;
-	}*/
 }
 
 void Gameboy::debugMode(){

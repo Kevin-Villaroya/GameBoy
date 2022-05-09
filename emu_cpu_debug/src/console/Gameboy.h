@@ -10,7 +10,9 @@
 class Gameboy{
 private:
 	const int CLOCKSPEED = 4194304;
-	const uint32_t DELAY_FETCH = 30;
+
+	int start;
+	int instructionDone;
 
 	Memory memory;
 	Registers registers;
@@ -50,8 +52,6 @@ public:
 	bool run();
 	
 	void gameboyTick(unsigned int n);
-	
-	void treatEvent();
 	void debugMode();
 
 	void printTest();
