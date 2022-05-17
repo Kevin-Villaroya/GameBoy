@@ -5,8 +5,8 @@
 void SubImmediateToA::execute(Memory& ram, Registers& registers){
     unsigned char aValue = registers.getA();
     if(aValue - this->parameter == 0){
-        registers.setFlagZ(1);    printf("%hhu\n",aValue-this->parameter);
-}
+        registers.setFlagZ(1);
+    }
     else
         registers.setFlagZ(0);
     
