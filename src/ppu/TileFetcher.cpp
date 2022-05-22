@@ -57,12 +57,6 @@ void TileFetcher::start(Memory* ram, unsigned int ppuLineTicks, unsigned int* vi
     this->yMap = (ram->get(Memory::LY) + ram->get(Memory::SCY));
     this->xMap = (this->xFetch + ram->get(Memory::SCX));
     this->yTile = ((ram->get(Memory::LY) + ram->get(Memory::SCY)) % 8) * 2;
-    /*printf("tileFetch yMap: %02X xMap: %02X yTile: %02X\n", 
-        this->yMap, 
-        this->xMap, 
-        this->yTile);
-    */
-
 
     if(!(ppuLineTicks & 1)){
         this->tick();
@@ -70,13 +64,13 @@ void TileFetcher::start(Memory* ram, unsigned int ppuLineTicks, unsigned int* vi
     
     this->pushPixel(videoBuffer);
 
+#include "TileFetcher.h"
 }
 
 void TileFetcher::pushPixel(unsigned int* videoBuffer){
-    unsigned int p = 0;
     if (this->fifo.size() > 8) {
         unsigned int pixelData = this->fifo.front();
-        p = pixelData;
+        unsigned int p = pixelData;
         this->fifo.pop();
 
         if (this->xLine >= (ram->get(Memory::SCX) % 8)) {
@@ -88,7 +82,6 @@ void TileFetcher::pushPixel(unsigned int* videoBuffer){
 
         this->xLine++;
     }
-    //printf("push pixel fifoSize: %i pixelData: %08X pixelPushed:%02X xLine:%02X\n", this->fifo.size(), p, this->pixelPushed, this->xLine);
 }
 
 void TileFetcher::readTileId(){
@@ -105,14 +98,12 @@ void TileFetcher::readTileId(){
     }
 
     if((this->ram->get(Memory::LCDC) & 0b10) && this->spriteFetcher->spritesOnLine()){
-        //printf("%i\n",this->spriteFetcher->spritesOnLine() );
         this->spriteFetcher->loadSpriteTile(this);
     }
     
 
     this->currentState = PixelFetcherState::ReadTileData0;
     this->xFetch += 8;
-    //printf("readTile bgw_fetch[0]: %02X fetchX: %02X\n", this->bgwData[0], this->xFetch);
 }
 
 void TileFetcher::readTileData0(){
@@ -123,7 +114,6 @@ void TileFetcher::readTileData0(){
 
     this->spriteFetcher->loadSpriteData(this, 0);    
     this->currentState = PixelFetcherState::ReadTileData1;
-    //printf("readTileData0 bgw_fectch[1]: %02X\n", this->bgwData[1]);
 }
 
 void TileFetcher::readTileData1(){
@@ -134,13 +124,10 @@ void TileFetcher::readTileData1(){
 
     this->spriteFetcher->loadSpriteData(this, 1);    
     this->currentState = PixelFetcherState::Idle;
-    //printf("readTileData0 bgw_fectch[2]: %02X\n", this->bgwData[2]);
 }
 
 void TileFetcher::pushToFIFO(){
-    //printf("pushToFIFIO\n");
     if(this->fifo.size() > 8){
-        //printf("fifo full\n");
         return;
     }
     int x = this->xFetch - (8 - (this->ram->get(Memory::SCX) % 8));
@@ -158,13 +145,11 @@ void TileFetcher::pushToFIFO(){
 
         if(this->ram->get(Memory::LCDC) & 0b10){
             color = this->spriteFetcher->fetch(this, bit, color, hi|lo);
-            //printf("%08X\n", color);
         }
 
         if (x >= 0) {
             this->fifo.push(color);
             this->xPtr++;
-            //printf("color pushed: %08X\n", color);
         }
     }   
 

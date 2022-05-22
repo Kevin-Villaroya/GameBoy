@@ -17,8 +17,7 @@ Gameboy::Gameboy(char* path) : memory(path), cpu(Processor(&memory, &registers))
 	this->registers.init(&this->memory);
 	this->registers.setPC(0x100);
 
-	this->frequency = 4096;	
-	this->lastTimeFetch = 0;
+	this->frequency = 4096;
 
 	this->canTick = true;
 	this->canSkip = false;
@@ -29,24 +28,31 @@ Gameboy::Gameboy(char* path) : memory(path), cpu(Processor(&memory, &registers))
 	this->cpu.printMetadata();
 	this->view = new Window(&this->memory);
 
-	//this->opCodeBreak.push_back(0x10);
-	this->pcValueBreak.push_back(0x0358);
-	//this->pcValueBreak.push_back(0x29BA);
+	this->start = SDL_GetTicks();
+	this->instructionDone = 0;
 }
 
 void Gameboy::launchCpuThread(){
 	int n = 0;
     int stop = 0x10000;
 	while(this->running && (n <= stop)){
-		
-		if(this->paused){
-			SDL_Delay(10);
-			continue;
-		}
-		
 		int cpuTicks = this->cpu.step();;
 		this->gameboyTick(cpuTicks);
+		this->doInterrupts();
 
+		this->instructionDone += cpuTicks;
+
+		if(this->instructionDone >= CLOCKSPEED){
+			int currentTime = SDL_GetTicks();
+			float timeWait = 1 - ((currentTime - start) / 1000.0);
+
+			if(timeWait < 1){
+				SDL_Delay(1 - timeWait);
+			}
+			
+			start = currentTime;
+			this->instructionDone = 0;
+		}
 	}
 	return;
 }
@@ -57,7 +63,6 @@ bool Gameboy::run(){
 
 	uint64_t prevFrame = 0;
 	while(!this->die){
-
 		if(this->view->fetchEvent() == Event::QUIT)
 			this->die = true;
 		if(this->ppu.getCurrentFrame() != prevFrame){
@@ -66,37 +71,7 @@ bool Gameboy::run(){
 		prevFrame = this->ppu.getCurrentFrame();
 		
 	}
-	return 0;
-
-	/*
-	uint32_t currentTime = 0;
-
-	while(this->isRunning){
-		currentTime = SDL_GetTicks();
-		
-		this->treatEvent(currentTime);
-
-		if(canTick){
-			try{
-				this->doInterrupts();
-
-				if(!this->registers.isHalt()){
-					bool instructionExecuted = this->cpu.tick();
-					this->updateTimers(instructionExecuted);
-					this->debug(instructionExecuted);
-				}
-
-				this->ppu.tick();
-			}catch(UnknownInstructionException &error){
-				std::cerr << error.what() << std::endl;
-				return 1;
-			}			
-		}		
-	}
-	*/
-
-	
-	
+	return 0;	
 }
 
 void Gameboy::updateTimers(bool instructionExecuted){
@@ -109,11 +84,6 @@ void Gameboy::doInterrupts(){
 	if(this->registers.isIME()){
 		unsigned char requests = this->memory.get(Memory::IF);
 		unsigned char enabled = this->memory.get(Memory::IE);
-
-		if(testBit(requests, 0)){
-			//std::cout << charToHex(enabled) << std::endl;
-			//std::cout << shortToHex(this->registers.getPC()) << std::endl;
-		}
 
 		if(requests > 0){
 			for(int i = 0; i < 5; i++){
@@ -145,7 +115,10 @@ void Gameboy::serviceInterrupt(int interruption){
 	
 	registers.setSP(sp-2);
 
-	//std::cout << "doing interrupt " << interruption << std::endl;
+	if(interruption == 4){
+		std::cout << "doing interrupt " << interruption << std::endl;
+	}
+	
 
 	//call a interrupt-service routine
 	switch (interruption){
@@ -167,73 +140,12 @@ void Gameboy::serviceInterrupt(int interruption){
 	}
 }
 
-void Gameboy::treatEvent(uint32_t currentTime){
-	if(this->lastTimeFetch + Gameboy::DELAY_FETCH <= currentTime){
-		Event event = this->view->fetchEvent();
-		this->lastTimeFetch = currentTime;
-
-		switch (event){
-			case Event::QUIT:
-				this->running = false;
-				break;
-			
-			case Event::TICK:
-				this->canTick = true;
-				break;
-			case Event::SKIP:
-				this->canSkip = true;
-				this->canTick = true;
-				break;
-			case Event::WAIT_OPCODE_BREAKER:
-				this->waitingBreakingOpCode = true;
-				this->canTick = true;
-				break;
-			case Event::DUMP_RAM:
-				if(this->isDebugMode){
-					this->cpu.dumpRam();
-				}
-				break;
-			case Event::CONTINUE:
-				this->canContinue = !this->canContinue;
-				this->canTick = true;
-				break;
-			case Event::A:
-				this->gameboyKey(4);
-				break;
-			case Event::S:
-				this->gameboyKey(5);
-				break;
-			case Event::RETURN:
-				this->gameboyKey(7);
-				break;
-			case Event::SPACE:
-				this->gameboyKey(6);
-				break;
-			case Event::RIGHT:
-				this->gameboyKey(0);
-				break;
-			case Event::LEFT:
-				this->gameboyKey(1);
-				break;
-			case Event::UP:
-				this->gameboyKey(2);
-				break;
-			case Event::DOWN:
-				this->gameboyKey(3);
-				break;
-			default:
-				break;
-		}
-	}
-}
-
 void Gameboy::debugMode(){
 	this->isDebugMode = true;
 }
 
 void Gameboy::debug(bool isInstructionExecuted){
 	if(this->isDebugMode){
-		//std::cout << "--tick--" << std::endl;
 
 		if(isInstructionExecuted){
 			if(this->waitingBreakingOpCode){
@@ -257,35 +169,6 @@ bool Gameboy::needBreak(){
 	bool pcCodeBreak = std::find(this->pcValueBreak.begin(), this->pcValueBreak.end(), this->registers.getPC()) != this->pcValueBreak.end();
 
 	return opCodeBreak || pcCodeBreak;
-}
-
-void Gameboy::gameboyKey(int key){
-	bool previouslyUnset = false;
-
-	if(testBit(this->memory.getJoypad(), key) == false){
-		previouslyUnset = true;
-	}
-
-	this->memory.setJoypad(returnResetBit(this->memory.getJoypad(), key));
-
-	bool buttonPressed = true;
-
-	if(key < 3){
-		buttonPressed = false;
-	}
-
-	unsigned char keyRequest = this->memory.get(Memory::JOYPAD);
-	bool requestInterrupt = false;
-
-	if(buttonPressed && !testBit(keyRequest, 5)){
-		requestInterrupt = true;
-	}else if(!buttonPressed && !testBit(keyRequest, 4)){
-		requestInterrupt = true;
-	}
-
-	if(requestInterrupt && !previouslyUnset){
-		this->memory.requestInterupt(4);
-	}
 }
 
 void Gameboy::gameboyTick(unsigned int nb){

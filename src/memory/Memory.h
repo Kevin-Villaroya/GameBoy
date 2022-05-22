@@ -1,7 +1,6 @@
 #ifndef __MEMORY_H__
 #define __MEMORY_H__
 #include "../ppu/OamDma.h"
-#include "../ppu/SpriteFetcher.h"
 
 #include <cstdint>
 #include <string>
@@ -11,7 +10,6 @@
 
 class Memory{
     friend class OamDma;
-    friend class SpriteFetcher;
     private:
         int timerCounter;
         int dividerCounter;
@@ -24,8 +22,6 @@ class Memory{
 
         unsigned char memory[RAM_SIZE];
         unsigned char bootRom[256];
-
-        unsigned char joypadState;
 
         void resetMemory();
 
@@ -64,6 +60,8 @@ class Memory{
         static const unsigned short WX = 0xFF4B;
         static const unsigned short IE = 0xFFFF;
 
+        unsigned char joypadState;
+
         Memory(char* path);
 
         void init(OamDma*);
@@ -86,9 +84,6 @@ class Memory{
 
         void updateTimers(int cycles);
         void requestInterupt(unsigned char bit);
-
-        void setJoypad(unsigned char value);
-        unsigned char getJoypad();
 
         unsigned char getDividerClock();
         void incDividerClock();

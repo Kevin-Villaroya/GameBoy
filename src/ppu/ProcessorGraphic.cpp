@@ -8,11 +8,12 @@
 ProcessorGraphic::ProcessorGraphic(Display* screen, Memory* ram) : screen(screen), ram(ram), spriteFetcher(ram), tileFetcher(&spriteFetcher){
     this->currentFrame = 0;
     this->ticks = 0;
+    this->windowY = 0;
     this->setCurrentState(ProcessorGraphicState::OAMSearch);
     
     
     for(int i=0 ; i<SIZE_SCREEN_X*SIZE_SCREEN_Y*4 ; i++){
-            this->videoBuffer[i] = 0;
+        this->videoBuffer[i] = 0;
     }
 
 }
@@ -88,32 +89,6 @@ void ProcessorGraphic::pixelTransfer(){
                 this->ram->set(Memory::IF, interruptFlags|IT_LCD_STAT);
         }
     }
-
-
-    /*
-    this->tileFetcher.tick();
-
-    while(this->tileFetcher.hasPixel()){
-        unsigned char pixelRaw = this->tileFetcher.popPixel();
-        this->pixelLine[x] = pixelRaw;
-        this->x++;
-    }
-    
-
-    if(this->x == 160){        
-        this->spriteFetcher.fetch(this->pixelLine);
-
-        while(this->spriteFetcher.hasPixel()){
-            unsigned char pixelRaw = this->spriteFetcher.popPixel();
-            unsigned char pixel = (this->ram->get(Memory::BGP) >> ((uint8_t)pixelRaw * 2)) & 3;
-
-            this->screen->write(pixel);
-        }
-
-        this->screen->HBlank();
-        this->currentState = ProcessorGraphicState::HBlank;
-    }
-    */
 }
 
 void ProcessorGraphic::hBlank(){
@@ -134,8 +109,6 @@ void ProcessorGraphic::hBlank(){
 
             this->currentFrame++;
 
-            //if(currentFrame == 9) sleep(100);
-
         }
         else{
             this->setCurrentState(ProcessorGraphicState::OAMSearch);
@@ -143,20 +116,6 @@ void ProcessorGraphic::hBlank(){
         this->ticks = 0;
 
     }
-
-    /*
-     if(this->ticks == 456){
-        this->ticks = 0;
-        this->ram->set(Memory::LY, this->ram->get(Memory::LY) + 1);
-
-        if(this->ram->get(Memory::LY) == 144){
-            this->screen->VBlank();
-            this->currentState = ProcessorGraphicState::VBlank;
-        }else{
-            this->currentState = ProcessorGraphicState::OAMSearch;
-        }
-    }
-    */
 }
 
 void ProcessorGraphic::incrementLy(){
@@ -164,6 +123,10 @@ void ProcessorGraphic::incrementLy(){
     unsigned char ly = this->ram->get(Memory::LY);
     unsigned char lyc = this->ram->get(Memory::LYC);
     
+    if(isWindowVisible() && ly >= windowY && ly < windowY + SIZE_SCREEN_Y){
+        windowLine++;
+    }
+
     ly++;
     this->ram->set(Memory::LY, ly);
     
@@ -190,27 +153,15 @@ void ProcessorGraphic::vBlank(){
         if(this->ram->get(Memory::LY) >= MAX_FRAME_LINE){
             this->setCurrentState(ProcessorGraphicState::OAMSearch);
             this->ram->set(Memory::LY, 0);
+            this->windowLine = 0;
         }
         this->ticks = 0;
 
     }
 
-    /*
-    this->ram->requestInterupt(0); //set interruption vblank
     if(this->ticks == 1){
         this->ram->requestInterupt(0); //set interruption vblank
     }
-    
-    if(this->ticks == 456){
-        this->ticks = 0;
-        this->ram->set(Memory::LY, this->ram->get(Memory::LY) + 1);
-
-        if(this->ram->get(Memory::LY) == 153){
-            this->ram->set(Memory::LY, 0);
-            this->currentState = ProcessorGraphicState::OAMSearch;
-        }
-    }
-    */
 }
 
 unsigned int* ProcessorGraphic::getVideoBuffer(){
@@ -222,6 +173,12 @@ unsigned int ProcessorGraphic::getCurrentFrame(){
     return this->currentFrame;
 }
 
+bool ProcessorGraphic::isLCDEnabled(){
+   return testBit(this->ram->get(Memory::LCDC), 7) ;
+}
 
+bool ProcessorGraphic::isWindowVisible(){
+    return this->isLCDEnabled() && this->x >= 0 && this->x <= 166 && this->windowY >= 0 && this->windowY < SIZE_SCREEN_Y;
+}
 
 ProcessorGraphic::~ProcessorGraphic(){}

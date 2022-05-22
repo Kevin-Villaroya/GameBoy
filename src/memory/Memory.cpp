@@ -3,6 +3,7 @@
 #include "Memory.h"
 #include "../util/BitMath.h"
 #include "../util/DecToHex.h"
+#include "Gamepad.h"
 
 
 Memory::Memory(char* path){
@@ -38,7 +39,7 @@ Memory::Memory(char* path){
 
 void Memory::init(OamDma* o){ 
     this->oamDma = o; 
-    //this->setBootMemory();
+    this->setBootMemory();
     this->setMemory();
 }
 
@@ -48,18 +49,11 @@ unsigned char Memory::get(unsigned short pos){
             if(this->oamDma->isActive()){
                 return 0xFF;
             }
+    }else if(pos == Memory::JOYPAD){
+        return Gamepad::getInstance()->get();
     }
 
     return this->memory[pos];
-    /*
-    if(this->hasReadBootRom() && pos <= 256){
-        return this->bootRom[pos];
-    }else if(pos == Memory::JOYPAD){
-        return this->getJoypadState();
-    }else{
-        return this->memory[pos];
-    }*/
-    
 }
 
 void Memory::set(unsigned short pos, unsigned char value){
@@ -126,8 +120,9 @@ void Memory::writeMemory(unsigned short pos, unsigned char value){
 
     }else if(pos == Memory::DMA){
         this->dmaTransfer(value);
-    }
-    else{
+    }else if(pos == Memory::JOYPAD){
+        Gamepad::getInstance()->set(value);
+    }else{
         this->set(pos, value);
     }
 }
@@ -204,7 +199,7 @@ void Memory::setBootMemory(){
     while (romFile.good()) {
         char character = romFile.get();
         if(!romFile.eof()){
-            this->bootRom[current] = character;        
+            this->bootRom[current] = character;  
             current++;
         }
     }
@@ -293,38 +288,11 @@ void Memory::doDividerRegister(int cycles){ //every 256 cycles Divider value inc
     }
 }
 
-unsigned char Memory::getJoypadState(){
-    unsigned char result = this->memory[0xFF00];
-
-    //flip bits
-    result ^= 0xFF;
-
-    if(testBit(result, 4)){
-        unsigned char topJoypad = this->joypadState >> 4;
-        topJoypad |= 0xF0; //set 4 first bits on
-        result &= topJoypad;
-    }else if(!testBit(result, 5)){
-        unsigned char bottomJoypad = this->joypadState & 0xF;
-        bottomJoypad |= 0xF0;
-        result &= bottomJoypad;
-    }
-
-    return result;
-}
-
 void Memory::dmaTransfer(unsigned char value){
     unsigned short address = value << 8;
     for (int i = 0 ; i < 0xA0; i++){
         this->writeMemory(0xFE00 + i, this->get(address + i));
     }
-}
-
-void Memory::setJoypad(unsigned char value){
-    this->joypadState = value;
-}
-
-unsigned char Memory::getJoypad(){
-    return this->joypadState;
 }
 
 void Memory::printCartridgeHeader(unsigned char* header){    

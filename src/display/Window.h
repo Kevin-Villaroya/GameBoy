@@ -34,6 +34,8 @@ class Window : public Display{
 
         void updateDebuger();
         void debugerDisplay(SDL_Surface *surface, uint16_t startLocation, uint16_t tileNum, int x, int y);
+
+        void uiKey(bool down, SDL_Keycode);
     public:
         Window(Memory*);
         void update(unsigned int* videoBuffer)override;

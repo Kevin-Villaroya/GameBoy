@@ -18,15 +18,15 @@ void SpriteFetcher::loadSprites(){
             spriteList[i].pop_front();
     }
     
-    unsigned char ly = ram->memory[Memory::LY];
-    unsigned char height = ram->memory[Memory::LCDC] & 0b100 ? 16 : 8;
+    unsigned char ly = ram->get(Memory::LY);
+    unsigned char height = ram->get(Memory::LCDC) & 0b100 ? 16 : 8;
 
     for(int i=0 ; i< 40 ; i++){
         Oam oam;
-        oam.yPos = this->ram->memory[0xFE00 + (i*4) + 0];
-        oam.xPos = this->ram->memory[0xFE00 + (i*4) + 1];
-        oam.tileIndex = this->ram->memory[0xFE00 + (i*4) + 2];
-        oam.flags = this->ram->memory[0xFE00 + (i*4) + 3];
+        oam.yPos = this->ram->get(0xFE00 + (i*4) + 0);
+        oam.xPos = this->ram->get(0xFE00 + (i*4) + 1);
+        oam.tileIndex = this->ram->get(0xFE00 + (i*4) + 2);
+        oam.flags = this->ram->get(0xFE00 + (i*4) + 3);
         if(!oam.xPos)
             continue;
 
@@ -40,7 +40,7 @@ void SpriteFetcher::loadSprites(){
                 this->currentSpritesOnLine.push_front(oam);
                 continue;
             }
-            int i = 0;
+            unsigned int i = 0;
             for(; i<this->currentSpritesOnLine.size() ; i++){
                 if(this->currentSpritesOnLine.front().xPos > oam.xPos){
                     break;
@@ -50,13 +50,12 @@ void SpriteFetcher::loadSprites(){
             }
             this->currentSpritesOnLine.push_front(oam);
             
-            for(int j=0 ; j<i ; j++){
+            for(unsigned int j=0 ; j<i ; j++){
                 this->currentSpritesOnLine.push_front(this->currentSpritesOnLine.back());
                 this->currentSpritesOnLine.pop_back();   
             }
         }
     }
-    //printf("load sprites: %i\n", this->currentSpritesOnLine.size());
     
 }
 
@@ -100,79 +99,11 @@ unsigned int SpriteFetcher::fetch(TileFetcher* tf, int bitPos, unsigned int colo
     }
 
     return color;
-
-
-
-    /*
-    this->pixelLine = pixelLine;
-    this->size = 160;
-
-    bool use8x16 = false;
-    if(testBit(this->ram->get(Memory::LCDC), 2)){
-        use8x16 = true;
-    }
-
-    int scanline = this->ram->get(Memory::LY);
-
-    for(int sprite = 0; sprite < 40; sprite++){
-        unsigned char index = sprite * 4;
-        unsigned char yPos = this->ram->get(0xFE00 + index) - 16;
-        unsigned char xPos = this->ram->get(0xFE00 + index + 1) - 8;
-        unsigned char tileLocation = this->ram->get(0xFE00 + index + 2);
-        unsigned char attributes = this->ram->get(0xFE00 + index + 3);
-
-        bool yFlip = testBit(attributes, 6);
-        bool xFlip = testBit(attributes, 5);
-
-        int ySize = 8;
-        if(use8x16){
-            ySize = 16;
-        }
-
-        //if in this scanline we have to draw the sprite
-        if(scanline >= yPos && scanline < (yPos + ySize)){
-            int line = scanline - yPos;
-
-            //read in reverse
-            if(yFlip){
-                line -= ySize;
-                line *= -1;
-            }
-
-            line *= 2;
-
-            unsigned short dataAddress = (0x8000 + (tileLocation * 16)) + line;
-
-            unsigned char data1 = this->ram->get(dataAddress);
-            unsigned char data2 = this->ram->get(dataAddress + 1);
-
-            for(int tilePixel = 7; tilePixel >= 0; tilePixel--){
-                int colourBit = tilePixel;
-
-                if(xFlip){
-                    colourBit -= 7;
-                    colourBit *= -1;
-                }
-
-                int xPix = 0 - tilePixel;
-                xPix += 7;
-
-                int pixel = xPos+xPix;
-
-                int colourNum = bitGetVal(data2, colourBit);
-                colourNum <<= 1;
-                colourNum |= bitGetVal(data1, colourBit);
-
-                this->pixelLine[pixel] = colourNum;
-            }
-        }
-    }
-    */
 }
 
 void SpriteFetcher::loadSpriteTile(TileFetcher* tf){    
     std::queue<Oam> copy;
-    for(int i=0 ; i<this->currentSpritesOnLine.size() ; i++)
+    for(unsigned int i=0 ; i<this->currentSpritesOnLine.size() ; i++)
         copy.push(this->currentSpritesOnLine.at(i));
 
     while(!copy.empty()){

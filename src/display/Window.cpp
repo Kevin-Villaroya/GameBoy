@@ -1,37 +1,12 @@
 #include <iostream>
 #include "Window.h"
+#include "../gamepad/Gamepad.h"
 #include "SDL2/SDL_ttf.h"
 
 
 Window::Window(Memory *m){
     this->memory = m;
-    /*
-    if(SDL_Init(SDL_INIT_VIDEO) < 0){         
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "[DEBUG] > %s", SDL_GetError());
-        throw "Error"; 
-    }
-
-    this->window = SDL_CreateWindow("Gameboy Emulator", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, INIT_SIZE_X_WINDOW * 2, INIT_SIZE_Y_WINDOW * 2, SDL_WINDOW_SHOWN);
-    this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
-    this->texture = SDL_CreateTexture(this->renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, INIT_SIZE_X_WINDOW, INIT_SIZE_Y_WINDOW);
-
-    this->initPalette();
-    this->offset = 0;
-    this->time = 0;
-
-    this->bufferTexture = (uint8_t*)malloc(INIT_SIZE_X_WINDOW * INIT_SIZE_Y_WINDOW * 4 * sizeof(uint8_t));
-}
-
-void Window::write(unsigned char color){
-    SDL_Color paletteColor = this->palette[color];
-
-    this->setColorAt(this->offset + 0, paletteColor.r);
-    this->setColorAt(this->offset + 1, paletteColor.g);
-    this->setColorAt(this->offset + 2, paletteColor.b);
-    this->setColorAt(this->offset + 3, paletteColor.a);
-
-    this->offset += 4;
-    */
+    
     SDL_Init(SDL_INIT_VIDEO);
     TTF_Init();
     SDL_CreateWindowAndRenderer(1024, 768 , 0, &this->window, &this->renderer);
@@ -157,57 +132,63 @@ void Window::VBlank(){
     SDL_RenderPresent(this->renderer);
 }
 
-Event Window::fetchEvent(){
-    SDL_Event events;
+void Window::uiKey(bool down, SDL_Keycode key){
+    if(key == SDLK_UP){
+        Gamepad::getInstance()->getState()->up = down;
+    }
 
-    bool findEvent = false;
-            
+    if(key == SDLK_DOWN){
+        Gamepad::getInstance()->getState()->down = down;
+    }
+
+    if(key == SDLK_LEFT){
+        Gamepad::getInstance()->getState()->left = down;
+    }
+
+    if(key == SDLK_RIGHT){
+        Gamepad::getInstance()->getState()->right = down;
+    }
+
+    if(key == SDLK_a){
+        Gamepad::getInstance()->getState()->a = down;
+    }
+
+    if(key == SDLK_s){
+        Gamepad::getInstance()->getState()->b = down;
+    }
+
+    if(key == SDLK_RETURN){
+        Gamepad::getInstance()->getState()->start = down;
+    }
+
+    if(key == SDLK_TAB){
+        Gamepad::getInstance()->getState()->select = down;
+    }
+}
+
+Event Window::fetchEvent(){
+    SDL_Event events;            
 
     while(SDL_PollEvent(&events) > 0){
         if((events.type == SDL_WINDOWEVENT) && (events.window.event == SDL_WINDOWEVENT_CLOSE)){
             return Event::QUIT;
         }
-        /*
-        if(!findEvent){
-            findEvent = true;
-            switch(events.type){
-                case SDL_QUIT:
-                    return Event::QUIT;
-                    break;
-                case SDL_KEYUP:
-                    if(events.key.keysym.sym == SDLK_i){
-                        return Event::SKIP;
-                    }else if(events.key.keysym.sym == SDLK_t){
-                        return Event::TICK;
-                    }else if(events.key.keysym.sym == SDLK_b){
-                        return Event::WAIT_OPCODE_BREAKER;
-                    }else if(events.key.keysym.sym == SDLK_d){
-                        return Event::DUMP_RAM;
-                    }else if(events.key.keysym.sym == SDLK_g){
-                        return Event::CONTINUE;
-                    }else if(events.key.keysym.sym == SDLK_a){
-                        return Event::A;
-                    }else if(events.key.keysym.sym == SDLK_s){
-                        return Event::S;
-                    }else if(events.key.keysym.sym == SDLK_RETURN){
-                        return Event::RETURN;
-                    }else if(events.key.keysym.sym == SDLK_SPACE){
-                        return Event::SPACE;
-                    }else if(events.key.keysym.sym == SDLK_RIGHT){
-                        return Event::RIGHT;
-                    }else if(events.key.keysym.sym == SDLK_LEFT){
-                        return Event::LEFT;
-                    }else if(events.key.keysym.sym == SDLK_UP){
-                        return Event::UP;
-                    }else if(events.key.keysym.sym == SDLK_DOWN){
-                        return Event::DOWN;
-                    }
-                default:
-                    return Event::NONE;
-                    break;
-            }
+
+        switch(events.type){
+            case SDL_QUIT:
+                return Event::QUIT;
+                break;
+            case SDL_KEYUP:
+                this->uiKey(false, events.key.keysym.sym);
+                break;
+            case SDL_KEYDOWN:
+                this->uiKey(true, events.key.keysym.sym);
+                break;
+            default:
+                return Event::NONE;
+                break;
         }
-        */
+        
     }
     
     return Event::NONE;

@@ -46,15 +46,8 @@ int Processor::step(){
 		}
 
 		this->instruction = this->fetch();
-		//this->printRegisters();
 		this->registers->incrementPc(this->instruction->getSize());
-		
-		/*
-		this->dbgUpdate();
-		this->dbgPrint();
-		*/
 	
-		
 		this->execute(*this->instruction);
 		cpuTicks += this->instruction->getTiming();
 	}

@@ -21,10 +21,11 @@ enum class ProcessorGraphicState{
 class ProcessorGraphic{
 private:
 	
-	TileFetcher tileFetcher;
-	SpriteFetcher spriteFetcher;
 	Display* screen;
 	Memory* ram;
+	SpriteFetcher spriteFetcher;
+	TileFetcher tileFetcher;
+	
 	void setCurrentState(ProcessorGraphicState);
 	void incrementLy();
 	
@@ -43,6 +44,9 @@ private:
 	// All pixels in the current scanline
 	unsigned char pixelLine[160];
 
+	int windowY;
+	int windowLine;
+
 	void oamSearch();
 	void pixelTransfer();
 	void vBlank();
@@ -51,7 +55,7 @@ private:
 	void setLCDStatus();
 	bool isLCDEnabled();
 
-
+	bool isWindowVisible();
 public:
 	ProcessorGraphic(Display* screen, Memory* ram);
 	~ProcessorGraphic();

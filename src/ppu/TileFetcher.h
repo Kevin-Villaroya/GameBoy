@@ -2,6 +2,7 @@
 #define __PIXEL_FETCHER_H__
 
 #include <queue>
+#include "SpriteFetcher.h"
 
 enum class PixelFetcherState{
     ReadTileId,
