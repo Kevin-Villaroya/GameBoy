@@ -1,7 +1,6 @@
 .vscode/
 build/
 GameBoy
-*.gb
 /*.bin
 
 *.fuse*
